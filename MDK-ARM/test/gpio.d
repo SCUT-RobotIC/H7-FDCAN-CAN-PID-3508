@@ -36,3 +36,10 @@ test\gpio.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pwr.h
 test\gpio.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pwr_ex.h
 test\gpio.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h
 test\gpio.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h
+test\gpio.o: ../USER/MATLAB_PID/PID_MODEL.h
+test\gpio.o: ../USER/MATLAB_PID/rtwtypes.h
+test\gpio.o: ../USER/bsp_can/bsp_can.h
+test\gpio.o: ../USER/motor_control/motorctrl.h
+test\gpio.o: ../Inc/main.h
+test\gpio.o: ../USER/motor_control/motorctrl.h
+test\gpio.o: D:\keil\ARM\ARMCC\Bin\..\include\stdio.h

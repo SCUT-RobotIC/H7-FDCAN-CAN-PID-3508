@@ -39,6 +39,6 @@ test\motorctrl.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h
 test\motorctrl.o: ../USER/MATLAB_PID/PID_MODEL.h
 test\motorctrl.o: ../USER/MATLAB_PID/rtwtypes.h
 test\motorctrl.o: ../USER/bsp_can/bsp_can.h
-test\motorctrl.o: ..\USER\motor_control\motorctrl.h
+test\motorctrl.o: ../USER/motor_control/motorctrl.h
 test\motorctrl.o: D:\keil\ARM\ARMCC\Bin\..\include\stdio.h
 test\motorctrl.o: ../USER/UPPER_LOCATION/UPPER_LOCATION.h

@@ -35,3 +35,10 @@ test\stm32h7xx_hal_msp.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pwr.
 test\stm32h7xx_hal_msp.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pwr_ex.h
 test\stm32h7xx_hal_msp.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h
 test\stm32h7xx_hal_msp.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h
+test\stm32h7xx_hal_msp.o: ../USER/MATLAB_PID/PID_MODEL.h
+test\stm32h7xx_hal_msp.o: ../USER/MATLAB_PID/rtwtypes.h
+test\stm32h7xx_hal_msp.o: ../USER/bsp_can/bsp_can.h
+test\stm32h7xx_hal_msp.o: ../USER/motor_control/motorctrl.h
+test\stm32h7xx_hal_msp.o: ../Inc/main.h
+test\stm32h7xx_hal_msp.o: ../USER/motor_control/motorctrl.h
+test\stm32h7xx_hal_msp.o: D:\keil\ARM\ARMCC\Bin\..\include\stdio.h

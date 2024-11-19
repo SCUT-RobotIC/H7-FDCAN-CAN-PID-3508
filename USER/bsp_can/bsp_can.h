@@ -4,7 +4,7 @@
 
 typedef enum
 {
-    CAN_CHASSIS_ALL_ID = 0x200,
+    CAN_motor_ALL_ID = 0x200,
     CAN_3508_M1_ID = 0x201,
     CAN_3508_M2_ID = 0x202,
     CAN_3508_M3_ID = 0x203,
@@ -39,16 +39,16 @@ typedef struct
     int circle;
 } motor_measure_t;
 
-void CAN1_cmd_chassis(int16_t motor1, int16_t motor2, int16_t motor3, int16_t motor4, int16_t motor5, int16_t motor6, int16_t motor7, int16_t motor8);
-void CAN2_cmd_chassis(int16_t motor1, int16_t motor2, int16_t motor3, int16_t motor4, int16_t motor5, int16_t motor6, int16_t motor7, int16_t motor8);
+void CAN1_cmd_motor(int16_t motor1, int16_t motor2, int16_t motor3, int16_t motor4, int16_t motor5, int16_t motor6, int16_t motor7, int16_t motor8);
+void CAN2_cmd_motor(int16_t motor1, int16_t motor2, int16_t motor3, int16_t motor4, int16_t motor5, int16_t motor6, int16_t motor7, int16_t motor8);
 
 void FDCAN1_RX_Filter_Init(void);
 void can_filter_init(void);
 
-extern motor_measure_t *get_chassis_motor_measure_point(uint8_t i);
-extern motor_measure_t *get_chassis_motor_measure_point1(uint8_t i);
+extern motor_measure_t *get_motor_motor_measure_point(uint8_t i);
+extern motor_measure_t *get_motor_motor_measure_point1(uint8_t i);
 
 void motor_state_update(void);
-void motor_state_update1(void);
+
 
 #endif

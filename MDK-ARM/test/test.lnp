@@ -3,6 +3,7 @@
 "test\main.o"
 "test\gpio.o"
 "test\fdcan.o"
+"test\memorymap.o"
 "test\tim.o"
 "test\stm32h7xx_it.o"
 "test\stm32h7xx_hal_msp.o"

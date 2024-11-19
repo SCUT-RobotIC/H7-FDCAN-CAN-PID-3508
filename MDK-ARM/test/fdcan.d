@@ -36,3 +36,10 @@ test\fdcan.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pwr.h
 test\fdcan.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pwr_ex.h
 test\fdcan.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h
 test\fdcan.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h
+test\fdcan.o: ../USER/MATLAB_PID/PID_MODEL.h
+test\fdcan.o: ../USER/MATLAB_PID/rtwtypes.h
+test\fdcan.o: ../USER/bsp_can/bsp_can.h
+test\fdcan.o: ../USER/motor_control/motorctrl.h
+test\fdcan.o: ../Inc/main.h
+test\fdcan.o: ../USER/motor_control/motorctrl.h
+test\fdcan.o: D:\keil\ARM\ARMCC\Bin\..\include\stdio.h

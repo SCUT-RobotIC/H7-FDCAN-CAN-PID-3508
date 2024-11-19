@@ -31,12 +31,19 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "PID_MODEL.h"
+#include "rtwtypes.h"
+#include <math.h>
+#include "bsp_can.h"
+#include "motorctrl.h"
+#include "stdio.h"
+#include "math.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
-
+extern motor_measure_t *motor_data_can1[8];
+extern motor_measure_t *motor_data_can2[8];
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/

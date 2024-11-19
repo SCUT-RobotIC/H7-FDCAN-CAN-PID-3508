@@ -19,23 +19,19 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "fdcan.h"
+#include "memorymap.h"
 #include "tim.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "PID_MODEL.h"
-#include "rtwtypes.h"
-#include <math.h>
-#include "bsp_can.h"
-#include "motorctrl.h"
-#include "stdio.h"
-#include "math.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 extern FDCAN_HandleTypeDef hfdcan1;
+extern FDCAN_HandleTypeDef hfdcan2;
 
 #define VEL      1
 #define ANG      2
@@ -107,6 +103,7 @@ int main(void)
   MX_GPIO_Init();
   MX_FDCAN1_Init();
   MX_TIM6_Init();
+  MX_FDCAN2_Init();
   /* USER CODE BEGIN 2 */
 	HAL_TIM_Base_Start_IT(&htim6);
   can_filter_init();
@@ -115,6 +112,10 @@ int main(void)
 	PID_Speed_Para_Init(1, 2, 10 , 3 , 0.01);
 	PID_Speed_Para_Init(1, 3, 10 , 3 , 0.01);
 	PID_Speed_Para_Init(1, 4, 10 , 3 , 0.01);
+	PID_Speed_Para_Init(2, 1, 10 , 3 , 0.01);
+	PID_Speed_Para_Init(2, 2, 10 , 3 , 0.01);
+	PID_Speed_Para_Init(2, 3, 10 , 3 , 0.01);
+	PID_Speed_Para_Init(2, 4, 10 , 3 , 0.01);
 	set_mode(VEL, VEL, VEL, VEL, VEL, VEL, VEL,
              VEL, VEL, VEL, VEL, VEL, VEL, VEL); 
   /* USER CODE END 2 */
@@ -194,13 +195,17 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   if (htim->Instance == TIM6)
   {
+		if(motor_data_can2[0]->temperate==0)
+			rtDW.Integrator_DSTATE_ee=0;//can2_1 ’≤ªµΩŒ¬∂»÷µæÕ“ª÷±÷ÿ÷√iµƒ¿€º∆
     cnt[0]++;
     rtU.yaw_target_CH1_1=1000;
+		rtU.yaw_target_CH2_1=1000;
 		get_msgn();
 		assign_output();
     motor_state_update();
     PID_MODEL_step();
-        // ÂÆöÊó∂ÔøΩ?1‰∏≠Êñ≠Â§ÑÁêÜ‰ª£Á†Å
+		HAL_GPIO_WritePin(GPIOD,GPIO_PIN_15,(GPIO_PinState)1);
+
   }
 }
 /* USER CODE END 4 */

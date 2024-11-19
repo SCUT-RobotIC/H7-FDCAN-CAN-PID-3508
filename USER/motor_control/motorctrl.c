@@ -1,8 +1,8 @@
 #include "motorctrl.h"
 #include "UPPER_LOCATION.h"
 ang_dir MotorSignal[4];
-extern motor_measure_t *motor_data[8];
-extern motor_measure_t *motor_data1[8];
+extern motor_measure_t *motor_data_can1[8];
+extern motor_measure_t *motor_data_can2[8];
 double output[16] = {0};
 int BrakeFlag = 0;
 int BrakeAng[4] = {0};
@@ -23,10 +23,10 @@ void ctrlmotor(double Vx, double Vy, double omega,int dir1,int dir2,int dir3,int
 	// 				MotorSignal[i].thetas=-270+(int)MotorSignal[i].thetas/360*360;
 	// }
 	// 	if(flag==1&&
-	// 		(fabs(motor_data1[0]->ecd+motor_data1[0]->circle*8191-rtU.yaw_target_CH2_1)<45*19*8191/360*93/35&&
-	// 		fabs(motor_data1[1]->ecd+motor_data1[1]->circle*8191-rtU.yaw_target_CH2_2)<45*19*8191/360*93/35&&
-	// 		fabs(motor_data1[2]->ecd+motor_data1[2]->circle*8191-rtU.yaw_target_CH2_3)<45*19*8191/360*93/35&&
-	// 		fabs(motor_data1[3]->ecd+motor_data1[3]->circle*8191-rtU.yaw_target_CH2_4)<45*19*8191/360*93/35)||omega!=0){
+	// 		(fabs(motor_data_can2[0]->ecd+motor_data_can2[0]->circle*8191-rtU.yaw_target_CH2_1)<45*19*8191/360*93/35&&
+	// 		fabs(motor_data_can2[1]->ecd+motor_data_can2[1]->circle*8191-rtU.yaw_target_CH2_2)<45*19*8191/360*93/35&&
+	// 		fabs(motor_data_can2[2]->ecd+motor_data_can2[2]->circle*8191-rtU.yaw_target_CH2_3)<45*19*8191/360*93/35&&
+	// 		fabs(motor_data_can2[3]->ecd+motor_data_can2[3]->circle*8191-rtU.yaw_target_CH2_4)<45*19*8191/360*93/35)||omega!=0){
 	// 		while(  (fabs(sqrt(pow((Vy-omega*cos(atan(1))),2)+pow((Vx-omega*sin(atan(1))),2))*mult)>MAXVEL)||
 	// 					(fabs(sqrt(pow((Vy+omega*cos(atan(1))),2)+pow((Vx-omega*sin(atan(1))),2))*mult)>MAXVEL)||
 	// 					(fabs(sqrt(pow((Vy+omega*cos(atan(1))),2)+pow((Vx+omega*sin(atan(1))),2))*mult)>MAXVEL)||
@@ -84,8 +84,8 @@ void ctrlmotor(double Vx, double Vy, double omega,int dir1,int dir2,int dir3,int
 	// 				{
 	
 	
-	// 				if(BrakeFlag==0&&motor_data[0]->ecd<8191&&motor_data[1]->ecd<8191
-	// 		&&motor_data[2]->ecd<8191&&motor_data[3]->ecd<8191)
+	// 				if(BrakeFlag==0&&motor_data_can1[0]->ecd<8191&&motor_data_can1[1]->ecd<8191
+	// 		&&motor_data_can1[2]->ecd<8191&&motor_data_can1[3]->ecd<8191)
 	// 				{
 							
 	// 						rtDW.Integrator_DSTATE_lm=0;
@@ -96,10 +96,10 @@ void ctrlmotor(double Vx, double Vy, double omega,int dir1,int dir2,int dir3,int
 	// 						rtU.yaw_status_CH1_2=2;
 	// 						rtU.yaw_status_CH1_3=2;
 	// 						rtU.yaw_status_CH1_4=2;
-	// 						BrakeAng[0]=motor_data[0]->ecd+motor_data[0]->circle*8191;
-	// 						BrakeAng[1]=motor_data[1]->ecd+motor_data[1]->circle*8191;
-	// 						BrakeAng[2]=motor_data[2]->ecd+motor_data[2]->circle*8191;
-	// 						BrakeAng[3]=motor_data[3]->ecd+motor_data[3]->circle*8191;
+	// 						BrakeAng[0]=motor_data_can1[0]->ecd+motor_data_can1[0]->circle*8191;
+	// 						BrakeAng[1]=motor_data_can1[1]->ecd+motor_data_can1[1]->circle*8191;
+	// 						BrakeAng[2]=motor_data_can1[2]->ecd+motor_data_can1[2]->circle*8191;
+	// 						BrakeAng[3]=motor_data_can1[3]->ecd+motor_data_can1[3]->circle*8191;
 	// 						BrakeFlag=1;
 	// 				}
 	// 				rtU.yaw_target_CH1_1=BrakeAng[0];
@@ -171,75 +171,75 @@ void cala_d(int i){
 
 void get_msgn(void)
 {
-  rtU.yaw_speed_rpm_CH1_1 = motor_data[0]->speed_rpm;
-  rtU.yaw_ecd_CH1_1 = motor_data[0]->ecd;
-  rtU.yaw_last_ecd_CH1_1 = motor_data[0]->last_ecd;
-  rtU.yaw_circle_CH1_1 = motor_data[0]->circle;
+  rtU.yaw_speed_rpm_CH1_1 = motor_data_can1[0]->speed_rpm;
+  rtU.yaw_ecd_CH1_1 = motor_data_can1[0]->ecd;
+  rtU.yaw_last_ecd_CH1_1 = motor_data_can1[0]->last_ecd;
+  rtU.yaw_circle_CH1_1 = motor_data_can1[0]->circle;
 
-  rtU.yaw_speed_rpm_CH1_2 = motor_data[1]->speed_rpm;
-  rtU.yaw_ecd_CH1_2 = motor_data[1]->ecd;
-  rtU.yaw_last_ecd_CH1_2 = motor_data[1]->last_ecd;
-  rtU.yaw_circle_CH1_2 = motor_data[1]->circle;
+  rtU.yaw_speed_rpm_CH1_2 = motor_data_can1[1]->speed_rpm;
+  rtU.yaw_ecd_CH1_2 = motor_data_can1[1]->ecd;
+  rtU.yaw_last_ecd_CH1_2 = motor_data_can1[1]->last_ecd;
+  rtU.yaw_circle_CH1_2 = motor_data_can1[1]->circle;
 
-  rtU.yaw_speed_rpm_CH1_3 = motor_data[2]->speed_rpm;
-  rtU.yaw_ecd_CH1_3 = motor_data[2]->ecd;
-  rtU.yaw_last_ecd_CH1_3 = motor_data[2]->last_ecd;
-  rtU.yaw_circle_CH1_3 = motor_data[2]->circle;
+  rtU.yaw_speed_rpm_CH1_3 = motor_data_can1[2]->speed_rpm;
+  rtU.yaw_ecd_CH1_3 = motor_data_can1[2]->ecd;
+  rtU.yaw_last_ecd_CH1_3 = motor_data_can1[2]->last_ecd;
+  rtU.yaw_circle_CH1_3 = motor_data_can1[2]->circle;
 
-  rtU.yaw_speed_rpm_CH1_4 = motor_data[3]->speed_rpm;
-  rtU.yaw_ecd_CH1_4 = motor_data[3]->ecd;
-  rtU.yaw_last_ecd_CH1_4 = motor_data[3]->last_ecd;
-  rtU.yaw_circle_CH1_4 = motor_data[3]->circle;
+  rtU.yaw_speed_rpm_CH1_4 = motor_data_can1[3]->speed_rpm;
+  rtU.yaw_ecd_CH1_4 = motor_data_can1[3]->ecd;
+  rtU.yaw_last_ecd_CH1_4 = motor_data_can1[3]->last_ecd;
+  rtU.yaw_circle_CH1_4 = motor_data_can1[3]->circle;
 
-  rtU.yaw_speed_rpm_CH1_5 = motor_data[4]->speed_rpm;
-  rtU.yaw_ecd_CH1_5 = motor_data[4]->ecd;
-  rtU.yaw_last_ecd_CH1_5 = motor_data[4]->last_ecd;
-  rtU.yaw_circle_CH1_5 = motor_data[4]->circle;
+  rtU.yaw_speed_rpm_CH1_5 = motor_data_can1[4]->speed_rpm;
+  rtU.yaw_ecd_CH1_5 = motor_data_can1[4]->ecd;
+  rtU.yaw_last_ecd_CH1_5 = motor_data_can1[4]->last_ecd;
+  rtU.yaw_circle_CH1_5 = motor_data_can1[4]->circle;
 
-  rtU.yaw_speed_rpm_CH1_6 = motor_data[5]->speed_rpm;
-  rtU.yaw_ecd_CH1_6 = motor_data[5]->ecd;
-  rtU.yaw_last_ecd_CH1_6 = motor_data[5]->last_ecd;
-  rtU.yaw_circle_CH1_6 = motor_data[5]->circle;
+  rtU.yaw_speed_rpm_CH1_6 = motor_data_can1[5]->speed_rpm;
+  rtU.yaw_ecd_CH1_6 = motor_data_can1[5]->ecd;
+  rtU.yaw_last_ecd_CH1_6 = motor_data_can1[5]->last_ecd;
+  rtU.yaw_circle_CH1_6 = motor_data_can1[5]->circle;
 
-  rtU.yaw_speed_rpm_CH1_7 = motor_data[6]->speed_rpm;
-  rtU.yaw_ecd_CH1_7 = motor_data[6]->ecd;
-  rtU.yaw_last_ecd_CH1_7 = motor_data[6]->last_ecd;
-  rtU.yaw_circle_CH1_7 = motor_data[6]->circle;
+  rtU.yaw_speed_rpm_CH1_7 = motor_data_can1[6]->speed_rpm;
+  rtU.yaw_ecd_CH1_7 = motor_data_can1[6]->ecd;
+  rtU.yaw_last_ecd_CH1_7 = motor_data_can1[6]->last_ecd;
+  rtU.yaw_circle_CH1_7 = motor_data_can1[6]->circle;
 
-  // rtU.yaw_speed_rpm_CH2_1 = motor_data1[0]->speed_rpm;
-  // rtU.yaw_ecd_CH2_1 = motor_data1[0]->ecd;
-  // rtU.yaw_last_ecd_CH2_1 = motor_data1[0]->last_ecd;
-  // rtU.yaw_circle_CH2_1 = motor_data1[0]->circle;
+  rtU.yaw_speed_rpm_CH2_1 = motor_data_can2[0]->speed_rpm;
+  rtU.yaw_ecd_CH2_1 = motor_data_can2[0]->ecd;
+  rtU.yaw_last_ecd_CH2_1 = motor_data_can2[0]->last_ecd;
+  rtU.yaw_circle_CH2_1 = motor_data_can2[0]->circle;
 
-  // rtU.yaw_speed_rpm_CH2_2 = motor_data1[1]->speed_rpm;
-  // rtU.yaw_ecd_CH2_2 = motor_data1[1]->ecd;
-  // rtU.yaw_last_ecd_CH2_2 = motor_data1[1]->last_ecd;
-  // rtU.yaw_circle_CH2_2 = motor_data1[1]->circle;
+  rtU.yaw_speed_rpm_CH2_2 = motor_data_can2[1]->speed_rpm;
+  rtU.yaw_ecd_CH2_2 = motor_data_can2[1]->ecd;
+  rtU.yaw_last_ecd_CH2_2 = motor_data_can2[1]->last_ecd;
+  rtU.yaw_circle_CH2_2 = motor_data_can2[1]->circle;
 
-  // rtU.yaw_speed_rpm_CH2_3 = motor_data1[2]->speed_rpm;
-  // rtU.yaw_ecd_CH2_3 = motor_data1[2]->ecd;
-  // rtU.yaw_last_ecd_CH2_3 = motor_data1[2]->last_ecd;
-  // rtU.yaw_circle_CH2_3 = motor_data1[2]->circle;
+  rtU.yaw_speed_rpm_CH2_3 = motor_data_can2[2]->speed_rpm;
+  rtU.yaw_ecd_CH2_3 = motor_data_can2[2]->ecd;
+  rtU.yaw_last_ecd_CH2_3 = motor_data_can2[2]->last_ecd;
+  rtU.yaw_circle_CH2_3 = motor_data_can2[2]->circle;
 
-  // rtU.yaw_speed_rpm_CH2_4 = motor_data1[3]->speed_rpm;
-  // rtU.yaw_ecd_CH2_4 = motor_data1[3]->ecd;
-  // rtU.yaw_last_ecd_CH2_4 = motor_data1[3]->last_ecd;
-  // rtU.yaw_circle_CH2_4 = motor_data1[3]->circle;
+  rtU.yaw_speed_rpm_CH2_4 = motor_data_can2[3]->speed_rpm;
+  rtU.yaw_ecd_CH2_4 = motor_data_can2[3]->ecd;
+  rtU.yaw_last_ecd_CH2_4 = motor_data_can2[3]->last_ecd;
+  rtU.yaw_circle_CH2_4 = motor_data_can2[3]->circle;
 
-  // rtU.yaw_speed_rpm_CH2_5 = motor_data1[4]->speed_rpm;
-  // rtU.yaw_ecd_CH2_5 = motor_data1[4]->ecd;
-  // rtU.yaw_last_ecd_CH2_5 = motor_data1[4]->last_ecd;
-  // rtU.yaw_circle_CH2_5 = motor_data1[4]->circle;
+  rtU.yaw_speed_rpm_CH2_5 = motor_data_can2[4]->speed_rpm;
+  rtU.yaw_ecd_CH2_5 = motor_data_can2[4]->ecd;
+  rtU.yaw_last_ecd_CH2_5 = motor_data_can2[4]->last_ecd;
+  rtU.yaw_circle_CH2_5 = motor_data_can2[4]->circle;
 
-  // rtU.yaw_speed_rpm_CH2_6 = motor_data1[5]->speed_rpm;
-  // rtU.yaw_ecd_CH2_6 = motor_data1[5]->ecd;
-  // rtU.yaw_last_ecd_CH2_6 = motor_data1[5]->last_ecd;
-  // rtU.yaw_circle_CH2_6 = motor_data1[5]->circle;
+  rtU.yaw_speed_rpm_CH2_6 = motor_data_can2[5]->speed_rpm;
+  rtU.yaw_ecd_CH2_6 = motor_data_can2[5]->ecd;
+  rtU.yaw_last_ecd_CH2_6 = motor_data_can2[5]->last_ecd;
+  rtU.yaw_circle_CH2_6 = motor_data_can2[5]->circle;
 
-  // rtU.yaw_speed_rpm_CH2_7 = motor_data1[6]->speed_rpm;
-  // rtU.yaw_ecd_CH2_7 = motor_data1[6]->ecd;
-  // rtU.yaw_last_ecd_CH2_7 = motor_data1[6]->last_ecd;
-  // rtU.yaw_circle_CH2_7 = motor_data1[6]->circle;
+  rtU.yaw_speed_rpm_CH2_7 = motor_data_can2[6]->speed_rpm;
+  rtU.yaw_ecd_CH2_7 = motor_data_can2[6]->ecd;
+  rtU.yaw_last_ecd_CH2_7 = motor_data_can2[6]->last_ecd;
+  rtU.yaw_circle_CH2_7 = motor_data_can2[6]->circle;
 }
 
 void assign_output(void)
@@ -314,8 +314,8 @@ void assign_output(void)
   else
     output[CH2_7] = rtY.yaw_ANG_OUT_CH2_7;
 
-  CAN1_cmd_chassis(output[CH1_1], output[CH1_2], output[CH1_3], output[CH1_4], output[CH1_5], output[CH1_6], output[CH1_7], 0);
-//  CAN2_cmd_chassis(output[CH2_1], output[CH2_2], output[CH2_3], output[CH2_4], output[CH2_5], output[CH2_6], output[CH2_7], 0);
+  CAN1_cmd_motor(output[CH1_1], output[CH1_2], output[CH1_3], output[CH1_4], output[CH1_5], output[CH1_6], output[CH1_7], 0);
+  CAN2_cmd_motor(output[CH2_1], output[CH2_2], output[CH2_3], output[CH2_4], output[CH2_5], output[CH2_6], output[CH2_7], 0);
 }
 void set_mode(int mode_CH1_1, int mode_CH1_2, int mode_CH1_3, int mode_CH1_4, int mode_CH1_5, int mode_CH1_6, int mode_CH1_7,
               int mode_CH2_1, int mode_CH2_2, int mode_CH2_3, int mode_CH2_4, int mode_CH2_5, int mode_CH2_6, int mode_CH2_7)
