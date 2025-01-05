@@ -19,7 +19,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "fdcan.h"
-#include "memorymap.h"
 #include "tim.h"
 #include "gpio.h"
 
@@ -32,7 +31,7 @@
 /* USER CODE BEGIN PTD */
 extern FDCAN_HandleTypeDef hfdcan1;
 extern FDCAN_HandleTypeDef hfdcan2;
-
+extern uint8_t CAN_RECEIVE[3];
 #define VEL      1
 #define ANG      2
 
@@ -46,6 +45,9 @@ extern FDCAN_HandleTypeDef hfdcan2;
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
 FDCAN_RxHeaderTypeDef rx_headertemp;
+vehicle_state vehicle_test={
+0,0,0,0
+};
 uint8_t rx_datatemp[8];
 
 /* USER CODE END PM */
@@ -112,19 +114,35 @@ int main(void)
 	PID_Speed_Para_Init(1, 2, 10 , 3 , 0.01);
 	PID_Speed_Para_Init(1, 3, 10 , 3 , 0.01);
 	PID_Speed_Para_Init(1, 4, 10 , 3 , 0.01);
+	
 	PID_Speed_Para_Init(2, 1, 10 , 3 , 0.01);
 	PID_Speed_Para_Init(2, 2, 10 , 3 , 0.01);
 	PID_Speed_Para_Init(2, 3, 10 , 3 , 0.01);
 	PID_Speed_Para_Init(2, 4, 10 , 3 , 0.01);
+	PID_Speed_Para_Init(2, 5, 10 , 3 , 0.01);
+	
+	PID_Angle_S_Para_Init(2, 1 , 5 , 3 , 0.01);
+  PID_Angle_A_Para_Init(2, 1 , 1.5 , 1 , 0.1);
+	
+	PID_Angle_S_Para_Init(2, 5 , 50 , 5 , 0.1);
+  PID_Angle_A_Para_Init(2, 5 , 0.5 , 0.5 , 0);
+	PID_Angle_S_Para_Init(2, 6 , 50 , 5 , 0.1);
+  PID_Angle_A_Para_Init(2, 6 , 0.5 , 0.5 , 0);
+	PID_Angle_S_Para_Init(2, 7 , 50 , 5 , 0.1);
+  PID_Angle_A_Para_Init(2, 7 , 0.5 , 0.5 , 0);
+	
+	Set_6020_Mode( 0 );
 	set_mode(VEL, VEL, VEL, VEL, VEL, VEL, VEL,
-             VEL, VEL, VEL, VEL, VEL, VEL, VEL); 
+             VEL, VEL, VEL, VEL, ANG, ANG, ANG); 
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
+		ctrlmotor(vehicle_test.Vx,vehicle_test.Vy,vehicle_test.omega,vehicle_test.Park);
+//		ctrlmotor(0,1000,0,0);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -195,15 +213,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   if (htim->Instance == TIM6)
   {
-		if(motor_data_can2[0]->temperate==0)
-			rtDW.Integrator_DSTATE_ee=0;//can2_1收不到温度值就一直重置i的累计
     cnt[0]++;
-    rtU.yaw_target_CH1_1=1000;
-		rtU.yaw_target_CH2_1=1000;
+
 		get_msgn();
 		assign_output();
     motor_state_update();
-    PID_MODEL_step();
+		if(CAN_RECEIVE[0]||CAN_RECEIVE[1])//confirm receive
+			PID_MODEL_step();
 		HAL_GPIO_WritePin(GPIOD,GPIO_PIN_15,(GPIO_PinState)1);
 
   }

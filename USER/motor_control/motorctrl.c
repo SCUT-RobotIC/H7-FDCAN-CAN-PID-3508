@@ -1,126 +1,97 @@
 #include "motorctrl.h"
 #include "UPPER_LOCATION.h"
-ang_dir MotorSignal[4];
+#define PI 3.1415926
+#define MAXVEL 6000
+ang_dir MotorSignal[3];
 extern motor_measure_t *motor_data_can1[8];
 extern motor_measure_t *motor_data_can2[8];
+extern uint8_t mode_6020;
 double output[16] = {0};
-int BrakeFlag = 0;
 int BrakeAng[4] = {0};
 double mult = 1;
 int dirflag=0;
-int MAXVEL=6000;
 
-void ctrlmotor(double Vx, double Vy, double omega,int dir1,int dir2,int dir3,int dir4,int flag) {
 
-	// for(int i=0;i<4;i++){
-	// 			if(fabs((double)((int)MotorSignal[i].thetas%360-90))<1)
-	// 				MotorSignal[i].thetas=90+(int)MotorSignal[i].thetas/360*360;
-	// 			if(fabs((double)((int)MotorSignal[i].thetas%360+90))<1)
-	// 				MotorSignal[i].thetas=-90+(int)MotorSignal[i].thetas/360*360;
-	// 			if(fabs((double)((int)MotorSignal[i].thetas%360-270))<1)
-	// 				MotorSignal[i].thetas=270+(int)MotorSignal[i].thetas/360*360;
-	// 			if(fabs((double)((int)MotorSignal[i].thetas%360+270))<1)
-	// 				MotorSignal[i].thetas=-270+(int)MotorSignal[i].thetas/360*360;
-	// }
-	// 	if(flag==1&&
-	// 		(fabs(motor_data_can2[0]->ecd+motor_data_can2[0]->circle*8191-rtU.yaw_target_CH2_1)<45*19*8191/360*93/35&&
-	// 		fabs(motor_data_can2[1]->ecd+motor_data_can2[1]->circle*8191-rtU.yaw_target_CH2_2)<45*19*8191/360*93/35&&
-	// 		fabs(motor_data_can2[2]->ecd+motor_data_can2[2]->circle*8191-rtU.yaw_target_CH2_3)<45*19*8191/360*93/35&&
-	// 		fabs(motor_data_can2[3]->ecd+motor_data_can2[3]->circle*8191-rtU.yaw_target_CH2_4)<45*19*8191/360*93/35)||omega!=0){
-	// 		while(  (fabs(sqrt(pow((Vy-omega*cos(atan(1))),2)+pow((Vx-omega*sin(atan(1))),2))*mult)>MAXVEL)||
-	// 					(fabs(sqrt(pow((Vy+omega*cos(atan(1))),2)+pow((Vx-omega*sin(atan(1))),2))*mult)>MAXVEL)||
-	// 					(fabs(sqrt(pow((Vy+omega*cos(atan(1))),2)+pow((Vx+omega*sin(atan(1))),2))*mult)>MAXVEL)||
-	// 					(fabs(sqrt(pow((Vy-omega*cos(atan(1))),2)+pow((Vx+omega*sin(atan(1))),2))*mult)>MAXVEL))
-	// 		{
-	// 			mult=0.98*mult;
-	// 		}
+void ctrlmotor(double Vx, double Vy, double omega,int flag) {
+  MotorSignal[0].thetan = atan2(Vy, Vx + omega) * 180 / PI;
+  MotorSignal[1].thetan = atan2(Vy - omega * cos(30.0 * PI / 180.0), Vx + omega * sin(30.0 * PI / 180.0)) * 180 / PI;
+  MotorSignal[2].thetan = atan2(Vy + omega * cos(30.0 * PI / 180.0), Vx + omega * sin(30.0 * PI / 180.0)) * 180 / PI;
+	for(int i=0;i<3;i++){
+	if(fabs(MotorSignal[i].thetan-90)<1)
+			MotorSignal[i].thetan=91;
+	if(fabs(MotorSignal[i].thetan+90)<1)
+			MotorSignal[i].thetan=-89;}
 	
-	// 		BrakeFlag=0;
-	// 		rtU.yaw_status_CH1_1=1;
-	// 		rtU.yaw_status_CH1_2=1;
-	// 		rtU.yaw_status_CH1_3=1;
-	// 		rtU.yaw_status_CH1_4=1;
+	for(int i=0;i<3;i++){
+        cala_d(i);
+		    MotorSignal[i].thetal=MotorSignal[i].thetan;
+	 			if(fabs((double)((int)MotorSignal[i].thetas%360-90))<1)
+	 				MotorSignal[i].thetas=90+(int)MotorSignal[i].thetas/360*360;
+	 			if(fabs((double)((int)MotorSignal[i].thetas%360+90))<1)
+	 				MotorSignal[i].thetas=-90+(int)MotorSignal[i].thetas/360*360;
+	 			if(fabs((double)((int)MotorSignal[i].thetas%360-270))<1)
+	 				MotorSignal[i].thetas=270+(int)MotorSignal[i].thetas/360*360;
+	 			if(fabs((double)((int)MotorSignal[i].thetas%360+270))<1)
+	 				MotorSignal[i].thetas=-270+(int)MotorSignal[i].thetas/360*360;
 				
-				
-				
-	// 		if(dir1==1)
-	// 			rtU.yaw_target_CH1_1= -sqrt(pow((Vy-omega*cos(atan(1))),2)+pow((Vx-omega*sin(atan(1))),2))*mult;
-	// 		else
-	// 			rtU.yaw_target_CH1_1= sqrt(pow((Vy-omega*cos(atan(1))),2)+pow((Vx-omega*sin(atan(1))),2))*mult;
+	 }
+
+	 
+	 	if(flag==0)
+    {
+			rtU.yaw_target_CH2_5 = MotorSignal[0].thetas*8191/(360);
+			rtU.yaw_target_CH2_6 = MotorSignal[1].thetas*8191/(360);
+			rtU.yaw_target_CH2_7 = MotorSignal[2].thetas*8191/(360);
+	 		while( (fabs(sqrt(pow(Vx-omega,2)+pow(Vy,2))*mult)>MAXVEL)||
+	 					(fabs(sqrt(pow((Vx+omega*sin(30.0*PI/180.0)),2)+pow((Vy-omega*cos(30.0*PI/180.0)),2))*mult)>MAXVEL)||
+	 					(fabs(sqrt(pow((Vx+omega*sin(30.0*PI/180.0)),2)+pow((Vy+omega*cos(30.0*PI/180.0)),2))*mult)>MAXVEL))
+	 		{
+	 			mult=0.98*mult;
+	 		}
+	 		rtU.yaw_status_CH1_1=1;
+	 		rtU.yaw_status_CH1_2=1;
+	 		rtU.yaw_status_CH1_3=1;
+	 		if(fabs(motor_data_can2[4]->ecd+motor_data_can2[4]->circle*8191-rtU.yaw_target_CH2_5)<45*8191/360&&
+		 fabs(motor_data_can2[5]->ecd+motor_data_can2[5]->circle*8191-rtU.yaw_target_CH2_6)<45*8191/360&&
+		 fabs(motor_data_can2[6]->ecd+motor_data_can2[6]->circle*8191-rtU.yaw_target_CH2_7)<45*8191/360
+		 ||omega!=0){
+				if(MotorSignal[0].dir==1)
+					rtU.yaw_target_CH1_1= -sqrt(pow(Vx-omega,2)+pow(Vy,2))*mult;
+				else
+					rtU.yaw_target_CH1_1= sqrt(pow(Vx-omega,2)+pow(Vy,2))*mult;
+		
+				if(MotorSignal[1].dir==1)	
+					rtU.yaw_target_CH1_2 =-sqrt(pow((Vx+omega*sin(30.0*PI/180.0)),2)+pow((Vy-omega*cos(30.0*PI/180.0)),2))*mult;
+				else
+					rtU.yaw_target_CH1_2 =sqrt(pow((Vx+omega*sin(30.0*PI/180.0)),2)+pow((Vy-omega*cos(30.0*PI/180.0)),2))*mult;
+		
+				if(MotorSignal[2].dir==1)
+					rtU.yaw_target_CH1_3= -sqrt(pow((Vx+omega*sin(30.0*PI/180.0)),2)+pow((Vy+omega*cos(30.0*PI/180.0)),2))*mult;	
+				else
+					rtU.yaw_target_CH1_3= sqrt(pow((Vx+omega*sin(30.0*PI/180.0)),2)+pow((Vy+omega*cos(30.0*PI/180.0)),2))*mult;	
+			}
 	
-	// 		if(dir2==1)	
-	// 			rtU.yaw_target_CH1_2 =-sqrt(pow((Vy-omega*cos(atan(1))),2)+pow((Vx+omega*sin(atan(1))),2))*mult;
-	// 		else
-	// 			rtU.yaw_target_CH1_2 =sqrt(pow((Vy-omega*cos(atan(1))),2)+pow((Vx+omega*sin(atan(1))),2))*mult;
+	 	}
+	 		else
+	 		{
+        rtU.yaw_target_CH1_1=0;
+				rtU.yaw_target_CH1_2=0;
+				rtU.yaw_target_CH1_3=0;//驻停必要操作
+				rtU.yaw_target_CH2_5 =(((int)MotorSignal[0].thetas)/360)*360*8191/(360);
+				rtU.yaw_target_CH2_6 =((((int)MotorSignal[0].thetas)/360)*360+120)*8191/(360);
+	 		  rtU.yaw_target_CH2_7 =((((int)MotorSignal[0].thetas)/360)*360+60)*8191/(360);
+	 		}
 	
-	// 		if(dir3==1)
-	// 			rtU.yaw_target_CH1_3= -sqrt(pow((Vy+omega*cos(atan(1))),2)+pow((Vx+omega*sin(atan(1))),2))*mult;	
-	// 		else
-	// 			rtU.yaw_target_CH1_3= sqrt(pow((Vy+omega*cos(atan(1))),2)+pow((Vx+omega*sin(atan(1))),2))*mult;	
-	
-	// 		if(dir4==1)
-	// 			rtU.yaw_target_CH1_4 =-sqrt(pow((Vy+omega*cos(atan(1))),2)+pow((Vx-omega*sin(atan(1))),2))*mult;
-	// 		else
-	// 			rtU.yaw_target_CH1_4 =sqrt(pow((Vy+omega*cos(atan(1))),2)+pow((Vx-omega*sin(atan(1))),2))*mult;
-	// 		// if(RC.y>6700)
-	// 		// {
-	// 		// 	if(RC.theta<0&&RC.theta>-180&&RC.action!=6)
-	// 		// 	{
-	// 		// 		rtU.yaw_target_CH2_5=-15000;
-	// 		// 		rtU.yaw_target_CH2_6=-15000;
-	// 		// 	}
-	// 		// 	else if(RC.theta<180&&RC.theta>0&&RC.action!=6)
-	// 		// 	{
-	// 		// 		rtU.yaw_target_CH2_5=15000;
-	// 		// 		rtU.yaw_target_CH2_6=15000;
-	// 		// 	}	
-	// 		// 	else if(RC.action==6){
-	// 		// 		rtU.yaw_target_CH2_5=0;
-	// 		// 		rtU.yaw_target_CH2_6=0;
-	// 		// 	}
-	// 		// }				
-	// 	}
-	// 		else
-	// 				{
-	
-	
-	// 				if(BrakeFlag==0&&motor_data_can1[0]->ecd<8191&&motor_data_can1[1]->ecd<8191
-	// 		&&motor_data_can1[2]->ecd<8191&&motor_data_can1[3]->ecd<8191)
-	// 				{
-							
-	// 						rtDW.Integrator_DSTATE_lm=0;
-	// 						rtDW.Integrator_DSTATE_mwe=0;
-	// 						rtDW.Integrator_DSTATE_cf=0;
-	// 						rtDW.Integrator_DSTATE_mw=0;
-	// 						rtU.yaw_status_CH1_1=2;
-	// 						rtU.yaw_status_CH1_2=2;
-	// 						rtU.yaw_status_CH1_3=2;
-	// 						rtU.yaw_status_CH1_4=2;
-	// 						BrakeAng[0]=motor_data_can1[0]->ecd+motor_data_can1[0]->circle*8191;
-	// 						BrakeAng[1]=motor_data_can1[1]->ecd+motor_data_can1[1]->circle*8191;
-	// 						BrakeAng[2]=motor_data_can1[2]->ecd+motor_data_can1[2]->circle*8191;
-	// 						BrakeAng[3]=motor_data_can1[3]->ecd+motor_data_can1[3]->circle*8191;
-	// 						BrakeFlag=1;
-	// 				}
-	// 				rtU.yaw_target_CH1_1=BrakeAng[0];
-	// 				rtU.yaw_target_CH1_2=BrakeAng[1];
-	// 				rtU.yaw_target_CH1_3=BrakeAng[2];
-	// 				rtU.yaw_target_CH1_4=BrakeAng[3];
-					
-	// 			 rtU.yaw_target_CH2_5=0;
-	// 		   rtU.yaw_target_CH2_6=0;
-	// 				}
-	
-	// mult=1;
+	 mult=1;
 }
 
 void cala_d(int i){
 	
-		if((MotorSignal[i].thetan<=180&&MotorSignal[i].thetan>90)||(MotorSignal[i].thetan<-90&&MotorSignal[i].thetan>-180))
+		if((MotorSignal[i].thetan>90)||(MotorSignal[i].thetan<-90))
 				MotorSignal[i].dir=1;
 			else
 				MotorSignal[i].dir=0;
- if(MotorSignal[i].thetan<-90&&MotorSignal[i].thetan>-180)
+		if(MotorSignal[i].thetan<-90&&MotorSignal[i].thetan>-180)
 		 {
 			 MotorSignal[i].thetan=MotorSignal[i].thetan+180;
 
@@ -132,6 +103,35 @@ void cala_d(int i){
 		 }
 
 		 MotorSignal[i].err=MotorSignal[i].thetan-MotorSignal[i].thetal;
+		 
+//		 if(i==0){
+//		 if(MotorSignal[0].err>0&&fabs(motor_data_can2[4]->ecd+motor_data_can2[4]->circle*8191-rtU.yaw_target_CH2_5)>50)
+//		 {
+//				MotorSignal[0].err=MotorSignal[0].err+2.5;
+//		 }else if(MotorSignal[0].err<0&&fabs(motor_data_can2[4]->ecd+motor_data_can2[4]->circle*8191-rtU.yaw_target_CH2_5)>50)
+//		 {
+//				MotorSignal[0].err=MotorSignal[0].err-2.5;
+//		 }
+//		}
+//		 	if(i==1){
+//		 if(MotorSignal[1].err>0&&fabs(motor_data_can2[5]->ecd+motor_data_can2[5]->circle*8191-rtU.yaw_target_CH2_6)>50)
+//		 {
+//				MotorSignal[1].err=MotorSignal[1].err+2.5;
+//		 }else if(MotorSignal[1].err<0&&fabs(motor_data_can2[5]->ecd+motor_data_can2[5]->circle*8191-rtU.yaw_target_CH2_6)>50)
+//		 {
+//				MotorSignal[1].err=MotorSignal[1].err-2.5;
+//		 }
+//		}
+//			if(i==2){
+//		 if(MotorSignal[2].err>0&&fabs(motor_data_can2[6]->ecd+motor_data_can2[6]->circle*8191-rtU.yaw_target_CH2_7)>50)
+//		 {
+//				MotorSignal[2].err=MotorSignal[2].err+2.5;
+//		 }else if(MotorSignal[2].err<0&&fabs(motor_data_can2[6]->ecd+motor_data_can2[6]->circle*8191-rtU.yaw_target_CH2_7)>50)
+//		 {
+//				MotorSignal[2].err=MotorSignal[2].err-2.5;
+//		 }
+//		}
+//			
       if(MotorSignal[i].thetan-MotorSignal[i].thetal<0)
 			{
 				MotorSignal[i].err1=MotorSignal[i].err+180;
@@ -152,19 +152,12 @@ void cala_d(int i){
         MotorSignal[i].dir=1-MotorSignal[i].dir;
 			}
 			MotorSignal[i].thetas+=MotorSignal[i].err;
-			
 
-//			if((dirflag==0)&&(((int)MotorSignal[i].thetas%360<=270&&(int)MotorSignal[i].thetas%360>=90)||((int)MotorSignal[i].thetas%360<=-90&&(int)MotorSignal[i].thetas%360>=-270))){
-//					MotorSignal[i].dir=1-MotorSignal[i].dir;
-//					dirflag=1;
-//				}
-//			
-			if((((int)MotorSignal[i].thetas%360<=270&&(int)MotorSignal[i].thetas%360>=90)||((int)MotorSignal[i].thetas%360<=-90&&(int)MotorSignal[i].thetas%360>=-270))){
+			if((((int)MotorSignal[i].thetas%360<=270&&(int)MotorSignal[i].thetas%360>=90)
+      ||((int)MotorSignal[i].thetas%360<=-90&&(int)MotorSignal[i].thetas%360>=-270))){
 					MotorSignal[i].dir=1-MotorSignal[i].dir;
 				}
-//			else if(!((int)MotorSignal[i].thetas%360<=270&&(int)MotorSignal[i].thetas%360>=90)||((int)MotorSignal[i].thetas%360<=-90&&(int)MotorSignal[i].thetas%360>=-270)){
-//			dirflag=0;
-//			}
+
 
 }
 
@@ -313,9 +306,24 @@ void assign_output(void)
     output[CH2_7] = rtY.yaw_SPD_OUT_CH2_7;
   else
     output[CH2_7] = rtY.yaw_ANG_OUT_CH2_7;
-
-  CAN1_cmd_motor(output[CH1_1], output[CH1_2], output[CH1_3], output[CH1_4], output[CH1_5], output[CH1_6], output[CH1_7], 0);
-  CAN2_cmd_motor(output[CH2_1], output[CH2_2], output[CH2_3], output[CH2_4], output[CH2_5], output[CH2_6], output[CH2_7], 0);
+	
+	if((mode_6020 & 0b100)==0){
+		CAN1_cmd_motor(output[CH1_1], output[CH1_2], output[CH1_3], output[CH1_4]);
+		CAN1_cmd_motor_last(output[CH1_5], output[CH1_6], output[CH1_7], 0);
+	}
+		else{
+//		CAN1_cmd_motor(output[CH1_1], output[CH1_2], output[CH1_3], output[CH1_4]);
+		CAN1_cmd_motor6020(output[CH1_1], output[CH1_2], output[CH1_3], output[CH1_4], output[CH1_5], output[CH1_6], output[CH1_7]);
+	}
+	if((mode_6020 & 0b010)==0)
+	{
+		CAN2_cmd_motor(output[CH2_1], output[CH2_2], output[CH2_3], output[CH2_4]);
+		CAN2_cmd_motor_last(output[CH2_5], output[CH2_6], output[CH2_7], 0);
+	}
+		else{
+//		CAN2_cmd_motor(output[CH2_1], output[CH2_2], output[CH2_3], output[CH2_4]);
+		CAN2_cmd_motor6020(output[CH2_1], output[CH2_2], output[CH2_3], output[CH2_4], output[CH2_5], output[CH2_6], output[CH2_7]);
+		}
 }
 void set_mode(int mode_CH1_1, int mode_CH1_2, int mode_CH1_3, int mode_CH1_4, int mode_CH1_5, int mode_CH1_6, int mode_CH1_7,
               int mode_CH2_1, int mode_CH2_2, int mode_CH2_3, int mode_CH2_4, int mode_CH2_5, int mode_CH2_6, int mode_CH2_7)

@@ -5,24 +5,28 @@
 typedef enum
 {
     CAN_motor_ALL_ID = 0x200,
-    CAN_3508_M1_ID = 0x201,
-    CAN_3508_M2_ID = 0x202,
-    CAN_3508_M3_ID = 0x203,
-    CAN_3508_M4_ID = 0x204,
-    CAN_3508_M5_ID = 0x205,
-    CAN_3508_M6_ID = 0x206,
-    CAN_3508_M7_ID = 0x207,
-    CAN_3508_M8_ID = 0x208,
+	  CAN_GIMBAL_ALL_ID = 0x1FF,
+    CAN_M1_ID = 0x201,
+    CAN_M2_ID = 0x202,
+    CAN_M3_ID = 0x203,
+    CAN_M4_ID = 0x204,
+    CAN_M5_ID = 0x205,
+    CAN_M6_ID = 0x206,
+    CAN_M7_ID = 0x207,
+    CAN_M8_ID = 0x208,
 
-    CAN_2006_M1_ID = 0x201,
-    CAN_2006_M2_ID = 0x202,
-    CAN_2006_M3_ID = 0x203,
-    CAN_2006_M4_ID = 0x204,
-    CAN_2006_M5_ID = 0x205,
-    CAN_2006_M6_ID = 0x206,
-    CAN_2006_M7_ID = 0x207,
-    CAN_2006_M8_ID = 0x208,
-    CAN_GIMBAL_ALL_ID = 0x1FF,
+	  CAN_motor_6020_ALL_ID  = 0x1FF,
+		CAN_GIMBAL_6020_ALL_ID = 0x2FF,
+		
+    CAN_6020_M1_ID = 0x205,
+    CAN_6020_M2_ID = 0x206,
+    CAN_6020_M3_ID = 0x207,
+    CAN_6020_M4_ID = 0x208,
+    CAN_6020_M5_ID = 0x209,
+    CAN_6020_M6_ID = 0x20A,
+    CAN_6020_M7_ID = 0x21B,
+		
+		
 
 } can_msg_id_e;
 
@@ -38,9 +42,13 @@ typedef struct
     int16_t last_ecd;
     int circle;
 } motor_measure_t;
-
-void CAN1_cmd_motor(int16_t motor1, int16_t motor2, int16_t motor3, int16_t motor4, int16_t motor5, int16_t motor6, int16_t motor7, int16_t motor8);
-void CAN2_cmd_motor(int16_t motor1, int16_t motor2, int16_t motor3, int16_t motor4, int16_t motor5, int16_t motor6, int16_t motor7, int16_t motor8);
+void Set_6020_Mode(uint8_t mode);
+void CAN1_cmd_motor(int16_t motor1, int16_t motor2, int16_t motor3, int16_t motor4);
+void CAN1_cmd_motor_last(int16_t motor5, int16_t motor6, int16_t motor7, int16_t motor8);
+void CAN2_cmd_motor(int16_t motor5, int16_t motor6, int16_t motor7, int16_t motor8);
+void CAN2_cmd_motor_last(int16_t motor5, int16_t motor6, int16_t motor7, int16_t motor8);
+void CAN1_cmd_motor6020(int16_t motor1, int16_t motor2, int16_t motor3, int16_t motor4, int16_t motor5, int16_t motor6, int16_t motor7);
+void CAN2_cmd_motor6020(int16_t motor1, int16_t motor2, int16_t motor3, int16_t motor4, int16_t motor5, int16_t motor6, int16_t motor7);
 
 void FDCAN1_RX_Filter_Init(void);
 void can_filter_init(void);

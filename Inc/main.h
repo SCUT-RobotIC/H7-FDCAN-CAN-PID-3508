@@ -48,6 +48,14 @@ extern motor_measure_t *motor_data_can2[8];
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
+#define ACTIVATE_6020_CAN1 0b100  // 100
+#define ACTIVATE_6020_CAN2 0b010  // 010
+#define ACTIVATE_6020_CAN3 0b001  // 001
+#define ACTIVATE_6020_CAN_1_2 0b110  // 110
+#define ACTIVATE_6020_CAN_1_3 0b101  // 101
+#define ACTIVATE_6020_CAN_2_3 0b011  // 011
+#define ACTIVATE_6020_CAN_1_2_3 0b111  // 111
+#define CLOSE_6020 0b000
 
 /* USER CODE END EC */
 

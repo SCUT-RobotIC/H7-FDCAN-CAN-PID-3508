@@ -525,21 +525,21 @@ P rtP = {
    *   '<S1666>/Switch1'
    *   '<S1666>/Switch2'
    */
-  500.0F,
+  25.0F,
 
   /* Variable: DEADBAND_CH2_6
    * Referenced by:
    *   '<S1816>/Switch1'
    *   '<S1816>/Switch2'
    */
-  500.0F,
+  25.0F,
 
   /* Variable: DEADBAND_CH2_7
    * Referenced by:
    *   '<S1966>/Switch1'
    *   '<S1966>/Switch2'
    */
-  500.0F,
+  25.0F,
 
   /* Variable: SPD_D_CH1_1
    * Referenced by: '<S43>/Derivative Gain'
