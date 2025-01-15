@@ -331,7 +331,7 @@
 /* Private struct -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
-/** @addtogroup CRYP_Private_Functions_Prototypes
+/** @addtogroup CRYP_Private_Functions_prototypes
   * @{
   */
 
@@ -782,7 +782,7 @@ HAL_StatusTypeDef HAL_CRYP_RegisterCallback(CRYP_HandleTypeDef *hcryp, HAL_CRYP_
 
 /**
   * @brief  Unregister an CRYP Callback
-  *         CRYP callback is redirected to the weak predefined callback
+  *         CRYP callabck is redirected to the weak predefined callback
   * @param hcryp cryp handle
   * @param CallbackID ID of the callback to be unregistered
   *        This parameter can be one of the following values:
@@ -1807,9 +1807,6 @@ __weak void HAL_CRYP_ErrorCallback(CRYP_HandleTypeDef *hcryp)
 /**
   * @}
   */
-/**
-  * @}
-  */
 
 /* Private functions ---------------------------------------------------------*/
 /** @addtogroup CRYP_Private_Functions
@@ -2287,8 +2284,7 @@ static HAL_StatusTypeDef CRYP_AES_Decrypt_IT(CRYP_HandleTypeDef *hcryp)
           __HAL_UNLOCK(hcryp);
           return HAL_ERROR;
         }
-      }
-      while (HAL_IS_BIT_SET(hcryp->Instance->SR, CRYP_FLAG_BUSY));
+      } while (HAL_IS_BIT_SET(hcryp->Instance->SR, CRYP_FLAG_BUSY));
 
       /* Turn back to ALGOMODE of the configuration */
       MODIFY_REG(hcryp->Instance->CR, CRYP_CR_ALGOMODE, hcryp->Init.Algorithm);
@@ -2391,8 +2387,7 @@ static HAL_StatusTypeDef CRYP_AES_Decrypt_DMA(CRYP_HandleTypeDef *hcryp)
           __HAL_UNLOCK(hcryp);
           return HAL_ERROR;
         }
-      }
-      while (HAL_IS_BIT_SET(hcryp->Instance->SR, CRYP_FLAG_BUSY));
+      } while (HAL_IS_BIT_SET(hcryp->Instance->SR, CRYP_FLAG_BUSY));
 
       /* Turn back to ALGOMODE of the configuration */
       MODIFY_REG(hcryp->Instance->CR, CRYP_CR_ALGOMODE, hcryp->Init.Algorithm);
@@ -2552,8 +2547,7 @@ static void CRYP_DMAOutCplt(DMA_HandleTypeDef *hdma)
         HAL_CRYP_ErrorCallback(hcryp);
 #endif /* USE_HAL_CRYP_REGISTER_CALLBACKS */
       }
-    }
-    while (HAL_IS_BIT_CLR(hcryp->Instance->SR, CRYP_FLAG_OFNE));
+    } while (HAL_IS_BIT_CLR(hcryp->Instance->SR, CRYP_FLAG_OFNE));
 
     /*Read the output block from the output FIFO */
     for (count = 0U; count < 4U; count++)
@@ -2909,8 +2903,6 @@ static HAL_StatusTypeDef CRYP_AESGCM_Process(CRYP_HandleTypeDef *hcryp, uint32_t
   uint32_t temp[4];  /* Temporary CrypOutBuff */
   uint32_t index ;
   uint32_t lastwordsize ;
-  uint32_t nolastpaddingbytes;
-  uint8_t *pval;
   uint16_t outcount;  /* Temporary CrypOutCount Value */
   uint32_t DoKeyIVConfig = 1U; /* By default, carry out peripheral Key and IV configuration */
 
@@ -3128,48 +3120,9 @@ static HAL_StatusTypeDef CRYP_AESGCM_Process(CRYP_HandleTypeDef *hcryp, uint32_t
           then get CrypOutBuff from temporary buffer */
           temp[index] = hcryp->Instance->DOUT;
         }
-
-        for (index = 0U; index < lastwordsize; index++)
+        for (index = 0; index < lastwordsize; index++)
         {
-          pval = (uint8_t *)(hcryp->pCrypOutBuffPtr + (hcryp->CrypOutCount));
-
-          if (index == (lastwordsize - 1U))
-          {
-            nolastpaddingbytes = npblb % 4U;
-
-            switch (nolastpaddingbytes)
-            {
-              case 1:
-                *(pval) = (uint8_t)(temp[index]);
-                pval++;
-                *(pval) = (uint8_t)(temp[index] >> 8U);
-                pval++;
-                *(pval) = (uint8_t)(temp[index] >> 16U);
-                break;
-              case 2:
-                *(pval) = (uint8_t)(temp[index]);
-                pval++;
-                *(pval) = (uint8_t)(temp[index] >> 8U);
-                break;
-              case 3:
-                *(pval) = (uint8_t)(temp[index]);
-                break;
-              default:
-                *(pval) = (uint8_t)(temp[index]);
-                pval++;
-                *(pval) = (uint8_t)(temp[index] >> 8U);
-                pval++;
-                *(pval) = (uint8_t)(temp[index] >> 16U);
-                pval++;
-                *(pval) = (uint8_t)(temp[index] >> 24U);
-                break;
-            }
-          }
-          else
-          {
-            *(uint32_t *)(hcryp->pCrypOutBuffPtr + (hcryp->CrypOutCount)) = temp[index];
-          }
-
+          *(uint32_t *)(hcryp->pCrypOutBuffPtr + (hcryp->CrypOutCount)) = temp[index];
           hcryp->CrypOutCount++;
         }
       }
@@ -3262,8 +3215,7 @@ static HAL_StatusTypeDef CRYP_AESGCM_Process_IT(CRYP_HandleTypeDef *hcryp)
         __HAL_UNLOCK(hcryp);
         return HAL_ERROR;
       }
-    }
-    while ((hcryp->Instance->CR & CRYP_CR_CRYPEN) == CRYP_CR_CRYPEN);
+    } while ((hcryp->Instance->CR & CRYP_CR_CRYPEN) == CRYP_CR_CRYPEN);
 
     /***************************** Header phase *********************************/
 
@@ -3359,8 +3311,7 @@ static HAL_StatusTypeDef CRYP_AESGCM_Process_DMA(CRYP_HandleTypeDef *hcryp)
         __HAL_UNLOCK(hcryp);
         return HAL_ERROR;
       }
-    }
-    while ((hcryp->Instance->CR & CRYP_CR_CRYPEN) == CRYP_CR_CRYPEN);
+    } while ((hcryp->Instance->CR & CRYP_CR_CRYPEN) == CRYP_CR_CRYPEN);
 
     /************************ Header phase *************************************/
 
@@ -3478,8 +3429,7 @@ static HAL_StatusTypeDef CRYP_AESGCM_Process_DMA(CRYP_HandleTypeDef *hcryp)
         HAL_CRYP_ErrorCallback(hcryp);
 #endif /* USE_HAL_CRYP_REGISTER_CALLBACKS */
       }
-    }
-    while (HAL_IS_BIT_CLR(hcryp->Instance->SR, CRYP_FLAG_OFNE));
+    } while (HAL_IS_BIT_CLR(hcryp->Instance->SR, CRYP_FLAG_OFNE));
 
     /*Read the output block from the output FIFO */
     for (index = 0U; index < 4U; index++)
@@ -3927,8 +3877,7 @@ static HAL_StatusTypeDef CRYP_AESCCM_Process_IT(CRYP_HandleTypeDef *hcryp)
         __HAL_UNLOCK(hcryp);
         return HAL_ERROR;
       }
-    }
-    while ((hcryp->Instance->CR & CRYP_CR_CRYPEN) == CRYP_CR_CRYPEN);
+    } while ((hcryp->Instance->CR & CRYP_CR_CRYPEN) == CRYP_CR_CRYPEN);
 
     /* Select header phase */
     CRYP_SET_PHASE(hcryp, CRYP_PHASE_HEADER);
@@ -4064,8 +4013,7 @@ static HAL_StatusTypeDef CRYP_AESCCM_Process_DMA(CRYP_HandleTypeDef *hcryp)
         __HAL_UNLOCK(hcryp);
         return HAL_ERROR;
       }
-    }
-    while ((hcryp->Instance->CR & CRYP_CR_CRYPEN) == CRYP_CR_CRYPEN);
+    } while ((hcryp->Instance->CR & CRYP_CR_CRYPEN) == CRYP_CR_CRYPEN);
 
     /********************* Header phase *****************************************/
 
@@ -4179,8 +4127,7 @@ static HAL_StatusTypeDef CRYP_AESCCM_Process_DMA(CRYP_HandleTypeDef *hcryp)
         HAL_CRYP_ErrorCallback(hcryp);
 #endif /* USE_HAL_CRYP_REGISTER_CALLBACKS */
       }
-    }
-    while (HAL_IS_BIT_CLR(hcryp->Instance->SR, CRYP_FLAG_OFNE));
+    } while (HAL_IS_BIT_CLR(hcryp->Instance->SR, CRYP_FLAG_OFNE));
 
     /*Read the output block from the output FIFO */
     for (index = 0U; index < 4U; index++)
@@ -4633,8 +4580,7 @@ static HAL_StatusTypeDef CRYP_GCMCCM_SetHeaderPhase_DMA(CRYP_HandleTypeDef *hcry
             __HAL_UNLOCK(hcryp);
             return HAL_ERROR;
           }
-        }
-        while (HAL_IS_BIT_CLR(hcryp->Instance->SR, CRYP_FLAG_IFEM));
+        } while (HAL_IS_BIT_CLR(hcryp->Instance->SR, CRYP_FLAG_IFEM));
       }
     }
     else
@@ -4670,8 +4616,7 @@ static HAL_StatusTypeDef CRYP_GCMCCM_SetHeaderPhase_DMA(CRYP_HandleTypeDef *hcry
             __HAL_UNLOCK(hcryp);
             return HAL_ERROR;
           }
-        }
-        while (HAL_IS_BIT_CLR(hcryp->Instance->SR, CRYP_FLAG_IFEM));
+        } while (HAL_IS_BIT_CLR(hcryp->Instance->SR, CRYP_FLAG_IFEM));
       }
       /*  Last block optionally pad the data with zeros*/
       for (loopcounter = 0U; (loopcounter < (hcryp->Init.HeaderSize % 4U)); loopcounter++)
@@ -4701,8 +4646,7 @@ static HAL_StatusTypeDef CRYP_GCMCCM_SetHeaderPhase_DMA(CRYP_HandleTypeDef *hcry
           __HAL_UNLOCK(hcryp);
           return HAL_ERROR;
         }
-      }
-      while (HAL_IS_BIT_CLR(hcryp->Instance->SR, CRYP_FLAG_IFEM));
+      } while (HAL_IS_BIT_CLR(hcryp->Instance->SR, CRYP_FLAG_IFEM));
     }
     /* Wait until the complete message has been processed */
     count = CRYP_TIMEOUT_GCMCCMHEADERPHASE;
@@ -4720,8 +4664,7 @@ static HAL_StatusTypeDef CRYP_GCMCCM_SetHeaderPhase_DMA(CRYP_HandleTypeDef *hcry
         __HAL_UNLOCK(hcryp);
         return HAL_ERROR;
       }
-    }
-    while (HAL_IS_BIT_SET(hcryp->Instance->SR, CRYP_FLAG_BUSY));
+    } while (HAL_IS_BIT_SET(hcryp->Instance->SR, CRYP_FLAG_BUSY));
   }
 
   /* Return function status */
@@ -5239,6 +5182,10 @@ static HAL_StatusTypeDef CRYP_WaitOnOFNEFlag(const CRYP_HandleTypeDef  *hcryp, u
   */
 
 
+
+/**
+  * @}
+  */
 
 /**
   * @}

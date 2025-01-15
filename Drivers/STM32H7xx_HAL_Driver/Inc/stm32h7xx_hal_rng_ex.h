@@ -196,14 +196,14 @@ typedef struct
   */
 
 /* Exported functions --------------------------------------------------------*/
-/** @addtogroup RNG_Ex_Exported_Functions
+/** @defgroup RNG_Ex_Exported_Functions RNG_Ex Exported Functions
   * @{
   */
 
 /** @addtogroup RNG_Ex_Exported_Functions_Group1
   * @{
   */
-HAL_StatusTypeDef HAL_RNGEx_SetConfig(RNG_HandleTypeDef *hrng, const RNG_ConfigTypeDef *pConf);
+HAL_StatusTypeDef HAL_RNGEx_SetConfig(RNG_HandleTypeDef *hrng, RNG_ConfigTypeDef *pConf);
 HAL_StatusTypeDef HAL_RNGEx_GetConfig(RNG_HandleTypeDef *hrng, RNG_ConfigTypeDef *pConf);
 HAL_StatusTypeDef HAL_RNGEx_LockConfig(RNG_HandleTypeDef *hrng);
 
