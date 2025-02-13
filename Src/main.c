@@ -19,20 +19,29 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "fdcan.h"
-#include "memorymap.h"
 #include "tim.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "PID_MODEL.h"
+#include "rtwtypes.h"
+#include <math.h>
+#include "bsp_fdcan.h"
+#include "motorctrl.h"
+#include "stdio.h"
+#include "math.h"
+#include "dm_motor_drv.h"
+#include "dm_motor_ctrl.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
+extern motor_t motor[num];
 extern FDCAN_HandleTypeDef hfdcan1;
 extern FDCAN_HandleTypeDef hfdcan2;
-
+extern uint8_t CAN_RECEIVE[3];
 #define VEL      1
 #define ANG      2
 
@@ -45,7 +54,11 @@ extern FDCAN_HandleTypeDef hfdcan2;
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-FDCAN_RxHeaderTypeDef rx_headertemp;
+vehicle_state vehicle_test={
+0,0,0,0
+};
+
+
 uint8_t rx_datatemp[8];
 
 /* USER CODE END PM */
@@ -104,26 +117,47 @@ int main(void)
   MX_FDCAN1_Init();
   MX_TIM6_Init();
   MX_FDCAN2_Init();
+  MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 	HAL_TIM_Base_Start_IT(&htim6);
   can_filter_init();
+	bsp_can_init();
 	PID_MODEL_initialize();
 	PID_Speed_Para_Init(1, 1, 10 , 3 , 0.01);
 	PID_Speed_Para_Init(1, 2, 10 , 3 , 0.01);
 	PID_Speed_Para_Init(1, 3, 10 , 3 , 0.01);
 	PID_Speed_Para_Init(1, 4, 10 , 3 , 0.01);
+	PID_Speed_Para_Init(1, 5, 10 , 3 , 0.01);
+	
 	PID_Speed_Para_Init(2, 1, 10 , 3 , 0.01);
 	PID_Speed_Para_Init(2, 2, 10 , 3 , 0.01);
 	PID_Speed_Para_Init(2, 3, 10 , 3 , 0.01);
 	PID_Speed_Para_Init(2, 4, 10 , 3 , 0.01);
+	PID_Speed_Para_Init(2, 5, 10 , 3 , 0.01);
+	
+	PID_Angle_S_Para_Init(2, 1 , 5 , 3 , 0.01);
+  PID_Angle_A_Para_Init(2, 1 , 1.5 , 1 , 0.1);
+	
+	PID_Angle_S_Para_Init(2, 5 , 50 , 5 , 0.1);
+  PID_Angle_A_Para_Init(2, 5 , 0.5 , 0.5 , 0);
+	PID_Angle_S_Para_Init(2, 6 , 50 , 5 , 0.1);
+  PID_Angle_A_Para_Init(2, 6 , 0.5 , 0.5 , 0);
+	PID_Angle_S_Para_Init(2, 7 , 50 , 5 , 0.1);
+  PID_Angle_A_Para_Init(2, 7 , 0.5 , 0.5 , 0);
+	
+	Set_6020_Mode( 0 );
 	set_mode(VEL, VEL, VEL, VEL, VEL, VEL, VEL,
-             VEL, VEL, VEL, VEL, VEL, VEL, VEL); 
+             VEL, VEL, VEL, VEL, ANG, ANG, ANG); 
+	dm_motor_init();
+	dm_motor_enable(&hfdcan1,&motor[Motor1]);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
+		ctrlmotor(vehicle_test.Vx,vehicle_test.Vy,vehicle_test.omega,vehicle_test.Park);
 
     /* USER CODE END WHILE */
 
@@ -158,12 +192,12 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 2;
-  RCC_OscInitStruct.PLL.PLLN = 40;
+  RCC_OscInitStruct.PLL.PLLM = 5;
+  RCC_OscInitStruct.PLL.PLLN = 96;
   RCC_OscInitStruct.PLL.PLLP = 1;
   RCC_OscInitStruct.PLL.PLLQ = 4;
   RCC_OscInitStruct.PLL.PLLR = 2;
-  RCC_OscInitStruct.PLL.PLLRGE = RCC_PLL1VCIRANGE_3;
+  RCC_OscInitStruct.PLL.PLLRGE = RCC_PLL1VCIRANGE_2;
   RCC_OscInitStruct.PLL.PLLVCOSEL = RCC_PLL1VCOWIDE;
   RCC_OscInitStruct.PLL.PLLFRACN = 0;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
@@ -195,15 +229,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   if (htim->Instance == TIM6)
   {
-		if(motor_data_can2[0]->temperate==0)
-			rtDW.Integrator_DSTATE_ee=0;//can2_1收不到温度值就一直重置i的累计
     cnt[0]++;
-    rtU.yaw_target_CH1_1=1000;
-		rtU.yaw_target_CH2_1=1000;
+		dm_motor_ctrl_send(&hfdcan1,&motor[Motor1]);
 		get_msgn();
 		assign_output();
     motor_state_update();
-    PID_MODEL_step();
+		PID_MODEL_step();
 		HAL_GPIO_WritePin(GPIOD,GPIO_PIN_15,(GPIO_PinState)1);
 
   }
