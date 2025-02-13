@@ -57,8 +57,11 @@ extern uint8_t CAN_RECEIVE[3];
 vehicle_state vehicle_test={
 0,0,0,0
 };
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
 uint8_t rx_datatemp[8];
 
 /* USER CODE END PM */
@@ -148,8 +151,12 @@ int main(void)
 	Set_6020_Mode( 0 );
 	set_mode(VEL, VEL, VEL, VEL, VEL, VEL, VEL,
              VEL, VEL, VEL, VEL, ANG, ANG, ANG); 
+<<<<<<< HEAD
 	dm_motor_init();
 	dm_motor_enable(&hfdcan1,&motor[Motor1]);
+=======
+
+>>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -230,11 +237,19 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   if (htim->Instance == TIM6)
   {
     cnt[0]++;
+<<<<<<< HEAD
 		dm_motor_ctrl_send(&hfdcan1,&motor[Motor1]);
 		get_msgn();
 		assign_output();
     motor_state_update();
 		PID_MODEL_step();
+=======
+
+		get_msgn();
+		assign_output();
+    motor_state_update();
+			PID_MODEL_step();
+>>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
 		HAL_GPIO_WritePin(GPIOD,GPIO_PIN_15,(GPIO_PinState)1);
 
   }

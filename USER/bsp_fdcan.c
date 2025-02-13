@@ -1,7 +1,10 @@
 #include "bsp_fdcan.h"
 #include "main.h"
 FDCAN_TxHeaderTypeDef can_message;
+<<<<<<< HEAD
 FDCAN_TxHeaderTypeDef pTxHeader;
+=======
+>>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
 uint8_t mode_6020 = CLOSE_6020;
 
 extern FDCAN_HandleTypeDef hfdcan1; // CAN????1
@@ -81,14 +84,22 @@ void can_filter_init(void)
 **/
 uint8_t fdcanx_send_data(hcan_t *hfdcan, uint16_t id, uint8_t *data, uint32_t len)
 {	
+<<<<<<< HEAD
 
+=======
+    FDCAN_TxHeaderTypeDef pTxHeader;
+>>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
     pTxHeader.Identifier=id;
     pTxHeader.IdType=FDCAN_STANDARD_ID;
     pTxHeader.TxFrameType=FDCAN_DATA_FRAME;
 	
 	/* HAL API*/
 	if(len<=8)
+<<<<<<< HEAD
 		pTxHeader.DataLength = FDCAN_DLC_BYTES_8;
+=======
+		pTxHeader.DataLength = len;
+>>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
 	if(len==12)
 		pTxHeader.DataLength = FDCAN_DLC_BYTES_12;
 	if(len==16)

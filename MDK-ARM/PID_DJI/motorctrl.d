@@ -41,6 +41,10 @@ pid_dji\motorctrl.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h
 pid_dji\motorctrl.o: ..\USER\PID_MODEL.h
 pid_dji\motorctrl.o: ..\USER\rtwtypes.h
 pid_dji\motorctrl.o: ..\USER\bsp_fdcan.h
+<<<<<<< HEAD
+=======
+pid_dji\motorctrl.o: ../Inc/main.h
+>>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
 pid_dji\motorctrl.o: ../Inc/fdcan.h
 pid_dji\motorctrl.o: ..\USER\motorctrl.h
 pid_dji\motorctrl.o: D:\keil\ARM\ARMCC\Bin\..\include\stdio.h

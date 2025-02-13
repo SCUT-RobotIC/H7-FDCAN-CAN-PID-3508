@@ -31,7 +31,17 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+<<<<<<< HEAD
 
+=======
+#include "PID_MODEL.h"
+#include "rtwtypes.h"
+#include <math.h>
+#include "bsp_fdcan.h"
+#include "motorctrl.h"
+#include "stdio.h"
+#include "math.h"
+>>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

@@ -1,8 +1,13 @@
 Dependencies for Project 'PID_DJI', Target 'PID_DJI': (DO NOT MODIFY !)
 CompilerVersion: 5060960::V5.06 update 7 (build 960)::.\ARMCC
 F (startup_stm32h723xx.s)(0x678288CC)(--cpu Cortex-M7.fp.dp -g --apcs=interwork --pd "__MICROLIB SETA 1"-I.\RTE\_PID_DJI-ID:\keil\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\keil\Keil\STM32H7xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include--pd "__UVISION_VERSION SETA 534" --pd "_RTE_ SETA 1" --pd "STM32H723xx SETA 1" --pd "_RTE_ SETA 1"--list startup_stm32h723xx.lst --xref -o pid_dji\startup_stm32h723xx.o --depend pid_dji\startup_stm32h723xx.d)
+<<<<<<< HEAD
 F (../Src/main.c)(0x67ADA6E3)(--c99 --gnu -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ..\USER-I.\RTE\_PID_DJI-ID:\keil\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\keil\Keil\STM32H7xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32H723xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32H723xx-o pid_dji\main.o --omf_browse pid_dji\main.crf --depend pid_dji\main.d)
 I (../Inc/main.h)(0x67AD934F)
+=======
+F (../Src/main.c)(0x6787C004)(--c99 --gnu -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ..\USER-I.\RTE\_PID_DJI-ID:\keil\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\keil\Keil\STM32H7xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32H723xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32H723xx-o pid_dji\main.o --omf_browse pid_dji\main.crf --depend pid_dji\main.d)
+I (../Inc/main.h)(0x67878FE1)
+>>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x678288AA)
 I (../Inc/stm32h7xx_hal_conf.h)(0x677E7042)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x678288AA)
@@ -39,15 +44,112 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x678288AA)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x678288AA)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h)(0x678288AA)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h)(0x678288AA)
+<<<<<<< HEAD
 I (../Inc/fdcan.h)(0x673C82AF)
 I (../Inc/tim.h)(0x66D33413)
 I (../Inc/usart.h)(0x677E7041)
 I (../Inc/gpio.h)(0x66D31FEB)
+=======
+I (..\USER\PID_MODEL.h)(0x6661BCC1)
+I (..\USER\rtwtypes.h)(0x6661BCC1)
+I (..\USER\bsp_fdcan.h)(0x6787BA38)
+I (../Inc/fdcan.h)(0x673C82AF)
+I (..\USER\motorctrl.h)(0x6787BA22)
+I (D:\keil\ARM\ARMCC\include\stdio.h)(0x5E8E3CC2)
+I (../Inc/tim.h)(0x66D33413)
+I (../Inc/usart.h)(0x677E7041)
+I (../Inc/gpio.h)(0x66D31FEB)
+F (../Src/gpio.c)(0x6752D80C)(--c99 --gnu -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ..\USER-I.\RTE\_PID_DJI-ID:\keil\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\keil\Keil\STM32H7xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32H723xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32H723xx-o pid_dji\gpio.o --omf_browse pid_dji\gpio.crf --depend pid_dji\gpio.d)
+I (../Inc/gpio.h)(0x66D31FEB)
+I (../Inc/main.h)(0x67878FE1)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x678288AA)
+I (../Inc/stm32h7xx_hal_conf.h)(0x677E7042)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x678288AA)
+I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x678288A7)
+I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h)(0x678288A7)
+I (../Drivers/CMSIS/Include/core_cm7.h)(0x678288AA)
+I (D:\keil\ARM\ARMCC\include\stdint.h)(0x5E8E3CC2)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x678288AA)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x678288AA)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x678288AA)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x678288AA)
+I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/system_stm32h7xx.h)(0x678288A7)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x678288AA)
+I (D:\keil\ARM\ARMCC\include\stddef.h)(0x5E8E3CC2)
+I (D:\keil\ARM\ARMCC\include\math.h)(0x5E8E3CC2)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc_ex.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_gpio.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_gpio_ex.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_dma.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_dma_ex.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_mdma.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_exti.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_cortex.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_fdcan.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_flash.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_flash_ex.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_hsem.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_i2c.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_i2c_ex.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pwr.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pwr_ex.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h)(0x678288AA)
+I (..\USER\PID_MODEL.h)(0x6661BCC1)
+I (..\USER\rtwtypes.h)(0x6661BCC1)
+I (..\USER\bsp_fdcan.h)(0x6787BA38)
+I (../Inc/fdcan.h)(0x673C82AF)
+I (..\USER\motorctrl.h)(0x6787BA22)
+I (D:\keil\ARM\ARMCC\include\stdio.h)(0x5E8E3CC2)
+F (../Src/fdcan.c)(0x6752D80D)(--c99 --gnu -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ..\USER-I.\RTE\_PID_DJI-ID:\keil\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\keil\Keil\STM32H7xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32H723xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32H723xx-o pid_dji\fdcan.o --omf_browse pid_dji\fdcan.crf --depend pid_dji\fdcan.d)
+I (../Inc/fdcan.h)(0x673C82AF)
+I (../Inc/main.h)(0x67878FE1)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x678288AA)
+I (../Inc/stm32h7xx_hal_conf.h)(0x677E7042)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x678288AA)
+I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x678288A7)
+I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h)(0x678288A7)
+I (../Drivers/CMSIS/Include/core_cm7.h)(0x678288AA)
+I (D:\keil\ARM\ARMCC\include\stdint.h)(0x5E8E3CC2)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x678288AA)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x678288AA)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x678288AA)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x678288AA)
+I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/system_stm32h7xx.h)(0x678288A7)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x678288AA)
+I (D:\keil\ARM\ARMCC\include\stddef.h)(0x5E8E3CC2)
+I (D:\keil\ARM\ARMCC\include\math.h)(0x5E8E3CC2)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc_ex.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_gpio.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_gpio_ex.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_dma.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_dma_ex.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_mdma.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_exti.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_cortex.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_fdcan.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_flash.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_flash_ex.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_hsem.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_i2c.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_i2c_ex.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pwr.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pwr_ex.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h)(0x678288AA)
+>>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
 I (..\USER\PID_MODEL.h)(0x6661BCC1)
 I (..\USER\rtwtypes.h)(0x6661BCC1)
 I (..\USER\bsp_fdcan.h)(0x6787BA38)
 I (..\USER\motorctrl.h)(0x6787BA22)
 I (D:\keil\ARM\ARMCC\include\stdio.h)(0x5E8E3CC2)
+<<<<<<< HEAD
 I (..\USER\dm_motor_drv.h)(0x67AD923B)
 I (..\USER\dm_motor_ctrl.h)(0x6782876A)
 F (../Src/gpio.c)(0x6752D80C)(--c99 --gnu -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ..\USER-I.\RTE\_PID_DJI-ID:\keil\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\keil\Keil\STM32H7xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32H723xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32H723xx-o pid_dji\gpio.o --omf_browse pid_dji\gpio.crf --depend pid_dji\gpio.d)
@@ -131,6 +233,11 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h)(0x678288AA)
 F (../Src/tim.c)(0x66D43D8A)(--c99 --gnu -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ..\USER-I.\RTE\_PID_DJI-ID:\keil\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\keil\Keil\STM32H7xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32H723xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32H723xx-o pid_dji\tim.o --omf_browse pid_dji\tim.crf --depend pid_dji\tim.d)
 I (../Inc/tim.h)(0x66D33413)
 I (../Inc/main.h)(0x67AD934F)
+=======
+F (../Src/tim.c)(0x66D43D8A)(--c99 --gnu -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ..\USER-I.\RTE\_PID_DJI-ID:\keil\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\keil\Keil\STM32H7xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32H723xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32H723xx-o pid_dji\tim.o --omf_browse pid_dji\tim.crf --depend pid_dji\tim.d)
+I (../Inc/tim.h)(0x66D33413)
+I (../Inc/main.h)(0x67878FE1)
+>>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x678288AA)
 I (../Inc/stm32h7xx_hal_conf.h)(0x677E7042)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x678288AA)
@@ -167,9 +274,21 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x678288AA)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x678288AA)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h)(0x678288AA)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h)(0x678288AA)
+<<<<<<< HEAD
 F (../Src/usart.c)(0x677E7041)(--c99 --gnu -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ..\USER-I.\RTE\_PID_DJI-ID:\keil\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\keil\Keil\STM32H7xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32H723xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32H723xx-o pid_dji\usart.o --omf_browse pid_dji\usart.crf --depend pid_dji\usart.d)
 I (../Inc/usart.h)(0x677E7041)
 I (../Inc/main.h)(0x67AD934F)
+=======
+I (..\USER\PID_MODEL.h)(0x6661BCC1)
+I (..\USER\rtwtypes.h)(0x6661BCC1)
+I (..\USER\bsp_fdcan.h)(0x6787BA38)
+I (../Inc/fdcan.h)(0x673C82AF)
+I (..\USER\motorctrl.h)(0x6787BA22)
+I (D:\keil\ARM\ARMCC\include\stdio.h)(0x5E8E3CC2)
+F (../Src/usart.c)(0x677E7041)(--c99 --gnu -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ..\USER-I.\RTE\_PID_DJI-ID:\keil\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\keil\Keil\STM32H7xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32H723xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32H723xx-o pid_dji\usart.o --omf_browse pid_dji\usart.crf --depend pid_dji\usart.d)
+I (../Inc/usart.h)(0x677E7041)
+I (../Inc/main.h)(0x67878FE1)
+>>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x678288AA)
 I (../Inc/stm32h7xx_hal_conf.h)(0x677E7042)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x678288AA)
@@ -206,8 +325,19 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x678288AA)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x678288AA)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h)(0x678288AA)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h)(0x678288AA)
+<<<<<<< HEAD
 F (../Src/stm32h7xx_it.c)(0x6752D80D)(--c99 --gnu -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ..\USER-I.\RTE\_PID_DJI-ID:\keil\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\keil\Keil\STM32H7xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32H723xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32H723xx-o pid_dji\stm32h7xx_it.o --omf_browse pid_dji\stm32h7xx_it.crf --depend pid_dji\stm32h7xx_it.d)
 I (../Inc/main.h)(0x67AD934F)
+=======
+I (..\USER\PID_MODEL.h)(0x6661BCC1)
+I (..\USER\rtwtypes.h)(0x6661BCC1)
+I (..\USER\bsp_fdcan.h)(0x6787BA38)
+I (../Inc/fdcan.h)(0x673C82AF)
+I (..\USER\motorctrl.h)(0x6787BA22)
+I (D:\keil\ARM\ARMCC\include\stdio.h)(0x5E8E3CC2)
+F (../Src/stm32h7xx_it.c)(0x6752D80D)(--c99 --gnu -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ..\USER-I.\RTE\_PID_DJI-ID:\keil\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\keil\Keil\STM32H7xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32H723xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32H723xx-o pid_dji\stm32h7xx_it.o --omf_browse pid_dji\stm32h7xx_it.crf --depend pid_dji\stm32h7xx_it.d)
+I (../Inc/main.h)(0x67878FE1)
+>>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x678288AA)
 I (../Inc/stm32h7xx_hal_conf.h)(0x677E7042)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x678288AA)
@@ -244,9 +374,21 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x678288AA)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x678288AA)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h)(0x678288AA)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h)(0x678288AA)
+<<<<<<< HEAD
 I (../Inc/stm32h7xx_it.h)(0x6752D80D)
 F (../Src/stm32h7xx_hal_msp.c)(0x6752D80D)(--c99 --gnu -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ..\USER-I.\RTE\_PID_DJI-ID:\keil\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\keil\Keil\STM32H7xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32H723xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32H723xx-o pid_dji\stm32h7xx_hal_msp.o --omf_browse pid_dji\stm32h7xx_hal_msp.crf --depend pid_dji\stm32h7xx_hal_msp.d)
 I (../Inc/main.h)(0x67AD934F)
+=======
+I (..\USER\PID_MODEL.h)(0x6661BCC1)
+I (..\USER\rtwtypes.h)(0x6661BCC1)
+I (..\USER\bsp_fdcan.h)(0x6787BA38)
+I (../Inc/fdcan.h)(0x673C82AF)
+I (..\USER\motorctrl.h)(0x6787BA22)
+I (D:\keil\ARM\ARMCC\include\stdio.h)(0x5E8E3CC2)
+I (../Inc/stm32h7xx_it.h)(0x6752D80D)
+F (../Src/stm32h7xx_hal_msp.c)(0x6752D80D)(--c99 --gnu -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ..\USER-I.\RTE\_PID_DJI-ID:\keil\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\keil\Keil\STM32H7xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32H723xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32H723xx-o pid_dji\stm32h7xx_hal_msp.o --omf_browse pid_dji\stm32h7xx_hal_msp.crf --depend pid_dji\stm32h7xx_hal_msp.d)
+I (../Inc/main.h)(0x67878FE1)
+>>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x678288AA)
 I (../Inc/stm32h7xx_hal_conf.h)(0x677E7042)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x678288AA)
@@ -283,6 +425,15 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x678288AA)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x678288AA)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h)(0x678288AA)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h)(0x678288AA)
+<<<<<<< HEAD
+=======
+I (..\USER\PID_MODEL.h)(0x6661BCC1)
+I (..\USER\rtwtypes.h)(0x6661BCC1)
+I (..\USER\bsp_fdcan.h)(0x6787BA38)
+I (../Inc/fdcan.h)(0x673C82AF)
+I (..\USER\motorctrl.h)(0x6787BA22)
+I (D:\keil\ARM\ARMCC\include\stdio.h)(0x5E8E3CC2)
+>>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
 F (../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c)(0x678288AA)(--c99 --gnu -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ..\USER-I.\RTE\_PID_DJI-ID:\keil\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\keil\Keil\STM32H7xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32H723xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32H723xx-o pid_dji\stm32h7xx_hal_cortex.o --omf_browse pid_dji\stm32h7xx_hal_cortex.crf --depend pid_dji\stm32h7xx_hal_cortex.d)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x678288AA)
 I (../Inc/stm32h7xx_hal_conf.h)(0x677E7042)
@@ -1097,9 +1248,15 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x678288AA)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x678288AA)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h)(0x678288AA)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h)(0x678288AA)
+<<<<<<< HEAD
 F (..\USER\bsp_fdcan.c)(0x67ADA10C)(--c99 --gnu -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ..\USER-I.\RTE\_PID_DJI-ID:\keil\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\keil\Keil\STM32H7xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32H723xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32H723xx-o pid_dji\bsp_fdcan.o --omf_browse pid_dji\bsp_fdcan.crf --depend pid_dji\bsp_fdcan.d)
 I (..\USER\bsp_fdcan.h)(0x6787BA38)
 I (../Inc/main.h)(0x67AD934F)
+=======
+F (..\USER\bsp_fdcan.c)(0x67879022)(--c99 --gnu -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ..\USER-I.\RTE\_PID_DJI-ID:\keil\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\keil\Keil\STM32H7xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32H723xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32H723xx-o pid_dji\bsp_fdcan.o --omf_browse pid_dji\bsp_fdcan.crf --depend pid_dji\bsp_fdcan.d)
+I (..\USER\bsp_fdcan.h)(0x6787BA38)
+I (../Inc/main.h)(0x67878FE1)
+>>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x678288AA)
 I (../Inc/stm32h7xx_hal_conf.h)(0x677E7042)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x678288AA)
@@ -1136,6 +1293,7 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x678288AA)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x678288AA)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h)(0x678288AA)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h)(0x678288AA)
+<<<<<<< HEAD
 I (../Inc/fdcan.h)(0x673C82AF)
 F (..\USER\delay.c)(0x6782876A)(--c99 --gnu -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ..\USER-I.\RTE\_PID_DJI-ID:\keil\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\keil\Keil\STM32H7xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32H723xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32H723xx-o pid_dji\delay.o --omf_browse pid_dji\delay.crf --depend pid_dji\delay.d)
 I (..\USER\delay.h)(0x6782876A)
@@ -1180,6 +1338,16 @@ F (..\USER\dm_motor_ctrl.c)(0x67AD9177)(--c99 --gnu -c --cpu Cortex-M7.fp.dp -D_
 I (..\USER\dm_motor_drv.h)(0x67AD923B)
 I (../Inc/fdcan.h)(0x673C82AF)
 I (../Inc/main.h)(0x67AD934F)
+=======
+I (..\USER\PID_MODEL.h)(0x6661BCC1)
+I (..\USER\rtwtypes.h)(0x6661BCC1)
+I (..\USER\motorctrl.h)(0x6787BA22)
+I (D:\keil\ARM\ARMCC\include\stdio.h)(0x5E8E3CC2)
+I (../Inc/fdcan.h)(0x673C82AF)
+F (..\USER\delay.c)(0x6782876A)(--c99 --gnu -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ..\USER-I.\RTE\_PID_DJI-ID:\keil\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\keil\Keil\STM32H7xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32H723xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32H723xx-o pid_dji\delay.o --omf_browse pid_dji\delay.crf --depend pid_dji\delay.d)
+I (..\USER\delay.h)(0x6782876A)
+I (../Inc/main.h)(0x67878FE1)
+>>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x678288AA)
 I (../Inc/stm32h7xx_hal_conf.h)(0x677E7042)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x678288AA)
@@ -1216,14 +1384,73 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x678288AA)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x678288AA)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h)(0x678288AA)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h)(0x678288AA)
+<<<<<<< HEAD
 I (..\USER\bsp_fdcan.h)(0x6787BA38)
+=======
+I (..\USER\PID_MODEL.h)(0x6661BCC1)
+I (..\USER\rtwtypes.h)(0x6661BCC1)
+I (..\USER\bsp_fdcan.h)(0x6787BA38)
+I (../Inc/fdcan.h)(0x673C82AF)
+I (..\USER\motorctrl.h)(0x6787BA22)
+I (D:\keil\ARM\ARMCC\include\stdio.h)(0x5E8E3CC2)
+F (..\USER\dm_motor_ctrl.c)(0x6787B7A2)(--c99 --gnu -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ..\USER-I.\RTE\_PID_DJI-ID:\keil\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\keil\Keil\STM32H7xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32H723xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32H723xx-o pid_dji\dm_motor_ctrl.o --omf_browse pid_dji\dm_motor_ctrl.crf --depend pid_dji\dm_motor_ctrl.d)
+I (..\USER\dm_motor_drv.h)(0x6782876A)
+I (../Inc/main.h)(0x67878FE1)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x678288AA)
+I (../Inc/stm32h7xx_hal_conf.h)(0x677E7042)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x678288AA)
+I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x678288A7)
+I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h)(0x678288A7)
+I (../Drivers/CMSIS/Include/core_cm7.h)(0x678288AA)
+I (D:\keil\ARM\ARMCC\include\stdint.h)(0x5E8E3CC2)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x678288AA)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x678288AA)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x678288AA)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x678288AA)
+I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/system_stm32h7xx.h)(0x678288A7)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x678288AA)
+I (D:\keil\ARM\ARMCC\include\stddef.h)(0x5E8E3CC2)
+I (D:\keil\ARM\ARMCC\include\math.h)(0x5E8E3CC2)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc_ex.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_gpio.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_gpio_ex.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_dma.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_dma_ex.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_mdma.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_exti.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_cortex.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_fdcan.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_flash.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_flash_ex.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_hsem.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_i2c.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_i2c_ex.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pwr.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pwr_ex.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h)(0x678288AA)
+I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h)(0x678288AA)
+I (..\USER\PID_MODEL.h)(0x6661BCC1)
+I (..\USER\rtwtypes.h)(0x6661BCC1)
+I (..\USER\bsp_fdcan.h)(0x6787BA38)
+I (../Inc/fdcan.h)(0x673C82AF)
+I (..\USER\motorctrl.h)(0x6787BA22)
+I (D:\keil\ARM\ARMCC\include\stdio.h)(0x5E8E3CC2)
+>>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
 I (..\USER\dm_motor_ctrl.h)(0x6782876A)
 I (D:\keil\ARM\ARMCC\include\string.h)(0x5E8E3CC2)
 I (D:\keil\ARM\ARMCC\include\stdbool.h)(0x5E8E3CC2)
 F (..\USER\dm_motor_drv.c)(0x6782876A)(--c99 --gnu -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ..\USER-I.\RTE\_PID_DJI-ID:\keil\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\keil\Keil\STM32H7xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32H723xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32H723xx-o pid_dji\dm_motor_drv.o --omf_browse pid_dji\dm_motor_drv.crf --depend pid_dji\dm_motor_drv.d)
+<<<<<<< HEAD
 I (..\USER\dm_motor_drv.h)(0x67AD923B)
 I (../Inc/fdcan.h)(0x673C82AF)
 I (../Inc/main.h)(0x67AD934F)
+=======
+I (..\USER\dm_motor_drv.h)(0x6782876A)
+I (../Inc/main.h)(0x67878FE1)
+>>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x678288AA)
 I (../Inc/stm32h7xx_hal_conf.h)(0x677E7042)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x678288AA)
@@ -1260,10 +1487,22 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x678288AA)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x678288AA)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h)(0x678288AA)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h)(0x678288AA)
+<<<<<<< HEAD
 I (..\USER\bsp_fdcan.h)(0x6787BA38)
 F (..\USER\motorctrl.c)(0x6787BB4E)(--c99 --gnu -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ..\USER-I.\RTE\_PID_DJI-ID:\keil\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\keil\Keil\STM32H7xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32H723xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32H723xx-o pid_dji\motorctrl.o --omf_browse pid_dji\motorctrl.crf --depend pid_dji\motorctrl.d)
 I (..\USER\motorctrl.h)(0x6787BA22)
 I (../Inc/main.h)(0x67AD934F)
+=======
+I (..\USER\PID_MODEL.h)(0x6661BCC1)
+I (..\USER\rtwtypes.h)(0x6661BCC1)
+I (..\USER\bsp_fdcan.h)(0x6787BA38)
+I (../Inc/fdcan.h)(0x673C82AF)
+I (..\USER\motorctrl.h)(0x6787BA22)
+I (D:\keil\ARM\ARMCC\include\stdio.h)(0x5E8E3CC2)
+F (..\USER\motorctrl.c)(0x6787BB4E)(--c99 --gnu -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ..\USER-I.\RTE\_PID_DJI-ID:\keil\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\keil\Keil\STM32H7xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32H723xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32H723xx-o pid_dji\motorctrl.o --omf_browse pid_dji\motorctrl.crf --depend pid_dji\motorctrl.d)
+I (..\USER\motorctrl.h)(0x6787BA22)
+I (../Inc/main.h)(0x67878FE1)
+>>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x678288AA)
 I (../Inc/stm32h7xx_hal_conf.h)(0x677E7042)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x678288AA)
