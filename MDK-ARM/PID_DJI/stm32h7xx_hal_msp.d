@@ -37,14 +37,3 @@ pid_dji\stm32h7xx_hal_msp.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_t
 pid_dji\stm32h7xx_hal_msp.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h
 pid_dji\stm32h7xx_hal_msp.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h
 pid_dji\stm32h7xx_hal_msp.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h
-<<<<<<< HEAD
-=======
-pid_dji\stm32h7xx_hal_msp.o: ..\USER\PID_MODEL.h
-pid_dji\stm32h7xx_hal_msp.o: ..\USER\rtwtypes.h
-pid_dji\stm32h7xx_hal_msp.o: ..\USER\bsp_fdcan.h
-pid_dji\stm32h7xx_hal_msp.o: ../Inc/main.h
-pid_dji\stm32h7xx_hal_msp.o: ../Inc/fdcan.h
-pid_dji\stm32h7xx_hal_msp.o: ..\USER\motorctrl.h
-pid_dji\stm32h7xx_hal_msp.o: ..\USER\motorctrl.h
-pid_dji\stm32h7xx_hal_msp.o: D:\keil\ARM\ARMCC\Bin\..\include\stdio.h
->>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb

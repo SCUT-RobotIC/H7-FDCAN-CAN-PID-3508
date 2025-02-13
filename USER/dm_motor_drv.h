@@ -1,9 +1,5 @@
 #ifndef __DM_MOTOR_DRV_H__
 #define __DM_MOTOR_DRV_H__
-<<<<<<< HEAD
-=======
-#include "main.h"
->>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
 #include "fdcan.h"
 #include "bsp_fdcan.h"
 

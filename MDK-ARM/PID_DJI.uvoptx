@@ -152,41 +152,25 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-<<<<<<< HEAD
           <LineNumber>320</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>134251990</Address>
-=======
-          <LineNumber>249</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134242080</Address>
->>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-<<<<<<< HEAD
           <Filename>..\USER\motorctrl.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\PID_DJI\../USER/motorctrl.c\320</Expression>
-=======
-          <Filename>..\USER\dm_motor_ctrl.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\PID_DJI\../USER/dm_motor_ctrl.c\249</Expression>
->>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
           <LineNumber>324</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-<<<<<<< HEAD
           <Address>134252012</Address>
-=======
-          <Address>134244704</Address>
->>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -200,36 +184,22 @@
         <Bp>
           <Number>2</Number>
           <Type>0</Type>
-<<<<<<< HEAD
           <LineNumber>161</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
-=======
-          <LineNumber>320</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134244682</Address>
->>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-<<<<<<< HEAD
           <BreakIfRCount>0</BreakIfRCount>
           <Filename>startup_stm32h723xx.s</Filename>
           <ExecCommand></ExecCommand>
           <Expression></Expression>
-=======
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\USER\motorctrl.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\PID_DJI\../USER/motorctrl.c\320</Expression>
->>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
         </Bp>
         <Bp>
           <Number>3</Number>
           <Type>0</Type>
-<<<<<<< HEAD
           <LineNumber>250</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
@@ -247,9 +217,6 @@
           <Number>4</Number>
           <Type>0</Type>
           <LineNumber>162</LineNumber>
-=======
-          <LineNumber>161</LineNumber>
->>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -293,14 +260,11 @@
           <count>5</count>
           <WinNumber>1</WinNumber>
           <ItemText>output</ItemText>
-<<<<<<< HEAD
         </Ww>
         <Ww>
           <count>6</count>
           <WinNumber>1</WinNumber>
           <ItemText>motor,0x0A</ItemText>
-=======
->>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
         </Ww>
       </WatchWindow1>
       <Tracepoint>

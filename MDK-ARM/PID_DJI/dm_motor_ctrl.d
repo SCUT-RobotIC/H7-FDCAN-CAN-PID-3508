@@ -1,9 +1,6 @@
 pid_dji\dm_motor_ctrl.o: ..\USER\dm_motor_ctrl.c
 pid_dji\dm_motor_ctrl.o: ..\USER\dm_motor_drv.h
-<<<<<<< HEAD
 pid_dji\dm_motor_ctrl.o: ../Inc/fdcan.h
-=======
->>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
 pid_dji\dm_motor_ctrl.o: ../Inc/main.h
 pid_dji\dm_motor_ctrl.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h
 pid_dji\dm_motor_ctrl.o: ../Inc/stm32h7xx_hal_conf.h
@@ -42,18 +39,7 @@ pid_dji\dm_motor_ctrl.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h
 pid_dji\dm_motor_ctrl.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h
 pid_dji\dm_motor_ctrl.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h
 pid_dji\dm_motor_ctrl.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h
-<<<<<<< HEAD
 pid_dji\dm_motor_ctrl.o: ..\USER\bsp_fdcan.h
-=======
-pid_dji\dm_motor_ctrl.o: ..\USER\PID_MODEL.h
-pid_dji\dm_motor_ctrl.o: ..\USER\rtwtypes.h
-pid_dji\dm_motor_ctrl.o: ..\USER\bsp_fdcan.h
-pid_dji\dm_motor_ctrl.o: ../Inc/main.h
-pid_dji\dm_motor_ctrl.o: ../Inc/fdcan.h
-pid_dji\dm_motor_ctrl.o: ..\USER\motorctrl.h
-pid_dji\dm_motor_ctrl.o: ..\USER\motorctrl.h
-pid_dji\dm_motor_ctrl.o: D:\keil\ARM\ARMCC\Bin\..\include\stdio.h
->>>>>>> a4184346c32f38bc54193fcfc7b65fe0c7e02beb
 pid_dji\dm_motor_ctrl.o: ..\USER\dm_motor_ctrl.h
 pid_dji\dm_motor_ctrl.o: D:\keil\ARM\ARMCC\Bin\..\include\string.h
 pid_dji\dm_motor_ctrl.o: D:\keil\ARM\ARMCC\Bin\..\include\stdbool.h
