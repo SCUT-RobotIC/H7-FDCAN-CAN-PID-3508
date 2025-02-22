@@ -118,6 +118,7 @@ int main(void)
   MX_TIM6_Init();
   MX_FDCAN2_Init();
   MX_USART2_UART_Init();
+  MX_FDCAN3_Init();
   /* USER CODE BEGIN 2 */
 	HAL_TIM_Base_Start_IT(&htim6);
   can_filter_init();
@@ -135,8 +136,21 @@ int main(void)
 	PID_Speed_Para_Init(2, 4, 10 , 3 , 0.01);
 	PID_Speed_Para_Init(2, 5, 10 , 3 , 0.01);
 	
-	PID_Angle_S_Para_Init(2, 1 , 5 , 3 , 0.01);
-  PID_Angle_A_Para_Init(2, 1 , 1.5 , 1 , 0.1);
+	PID_Speed_Para_Init(3, 1, 10 , 3 , 0.01);
+	PID_Speed_Para_Init(3, 2, 10 , 3 , 0.01);
+	PID_Speed_Para_Init(3, 3, 10 , 3 , 0.01);
+	PID_Speed_Para_Init(3, 4, 10 , 3 , 0.01);
+	PID_Speed_Para_Init(3, 5, 10 , 3 , 0.01);
+	
+	PID_Angle_S_Para_Init(1, 1 , 10 , 3 , 0.01);
+  PID_Angle_A_Para_Init(1, 1 , 0.3 , 0 , 0);
+	rtP.TRANS_CH1_1=0.5;
+	
+	PID_Angle_S_Para_Init(2, 1 , 1 , 1 , 0.01);
+  PID_Angle_A_Para_Init(2, 1 , 1 , 1 , 0.1);
+	
+	PID_Angle_S_Para_Init(2, 3 , 5 , 3 , 0.01);
+  PID_Angle_A_Para_Init(2, 3 , 1.5 , 1 , 0.1);
 	
 	PID_Angle_S_Para_Init(2, 5 , 50 , 5 , 0.1);
   PID_Angle_A_Para_Init(2, 5 , 0.5 , 0.5 , 0);
@@ -145,9 +159,13 @@ int main(void)
 	PID_Angle_S_Para_Init(2, 7 , 50 , 5 , 0.1);
   PID_Angle_A_Para_Init(2, 7 , 0.5 , 0.5 , 0);
 	
+	PID_Angle_S_Para_Init(3, 1 , 10 , 3 , 0.01);
+  PID_Angle_A_Para_Init(3, 1 , 0.3 , 0 , 0);
+	
 	Set_6020_Mode( 0 );
-	set_mode(VEL, VEL, VEL, VEL, VEL, VEL, VEL,
-             VEL, VEL, VEL, VEL, ANG, ANG, ANG); 
+	set_mode( ANG, VEL, VEL, VEL, VEL, VEL, VEL,
+            VEL, VEL, VEL, VEL, ANG, ANG, ANG,
+					  ANG, VEL, VEL, VEL, ANG, ANG, ANG ); 
 	dm_motor_init();
 	dm_motor_enable(&hfdcan1,&motor[Motor1]);
   /* USER CODE END 2 */
@@ -156,8 +174,10 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
-		ctrlmotor(vehicle_test.Vx,vehicle_test.Vy,vehicle_test.omega,vehicle_test.Park);
+		set_target(1,1,8191*100);
+		set_target(2,1,8191*100);
+		set_target(3,1,8191*100);
+		//ctrlmotor(vehicle_test.Vx,vehicle_test.Vy,vehicle_test.omega,vehicle_test.Park);
 
     /* USER CODE END WHILE */
 
@@ -234,6 +254,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		get_msgn();
 		assign_output();
     motor_state_update();
+		set_reset_status();
 		PID_MODEL_step();
 		HAL_GPIO_WritePin(GPIOD,GPIO_PIN_15,(GPIO_PinState)1);
 

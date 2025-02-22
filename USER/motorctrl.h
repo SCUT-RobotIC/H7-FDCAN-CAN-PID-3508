@@ -12,24 +12,34 @@
 #include "stdio.h"
 #include "math.h"
 
-
-#define CH1_1 0
-#define CH1_2 1
-#define CH1_3 2
-#define CH1_4 3
-#define CH1_5 4
-#define CH1_6 5
-#define CH1_7 6
-
-#define CH2_1 7
-#define CH2_2 8
-#define CH2_3 9
-#define CH2_4 10
-#define CH2_5 11
-#define CH2_6 12
-#define CH2_7 13
-
-extern double output[16];
+typedef enum
+{
+	CH1_1,
+	CH1_2,
+	CH1_3,
+	CH1_4,
+	CH1_5,
+	CH1_6,
+	CH1_7,
+			
+	CH2_1,
+	CH2_2,
+	CH2_3,
+	CH2_4,
+	CH2_5,
+	CH2_6,
+	CH2_7,
+	
+	CH3_1,
+	CH3_2,
+	CH3_3,
+	CH3_4,
+	CH3_5,
+	CH3_6,
+	CH3_7
+	
+}chennel;
+extern double tor_output[3*8];
 typedef struct
 {
 	int dir;
@@ -53,9 +63,10 @@ typedef struct
 
 void get_msgn(void);
 void assign_output(void);
-void set_mode(int mode_CH1_1, int mode_CH1_2, int mode_CH1_3, int mode_CH1_4, int mode_CH1_5, int mode_CH1_6, int mode_CH1_7, 
-              int mode_CH2_1, int mode_CH2_2, int mode_CH2_3, int mode_CH2_4, int mode_CH2_5, int mode_CH2_6, int mode_CH2_7);
-
+void set_mode(int mode_CH1_1, int mode_CH1_2, int mode_CH1_3, int mode_CH1_4, int mode_CH1_5, int mode_CH1_6, int mode_CH1_7,
+              int mode_CH2_1, int mode_CH2_2, int mode_CH2_3, int mode_CH2_4, int mode_CH2_5, int mode_CH2_6, int mode_CH2_7,
+							int mode_CH3_1, int mode_CH3_2, int mode_CH3_3, int mode_CH3_4, int mode_CH3_5, int mode_CH3_6, int mode_CH3_7);
+void set_reset_status(void);
 void cala_d(int i);
 void ctrlmotor(double Vx, double Vy, double omega,int brake) ;
 void set_target(uint8_t channel,uint8_t id,int target);

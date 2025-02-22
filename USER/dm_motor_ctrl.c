@@ -4,6 +4,7 @@
 #include "stdbool.h"
 extern motor_measure_t can1_motor[8];
 extern motor_measure_t can2_motor[8];
+extern motor_measure_t can3_motor[8];
 
 motor_t motor[num];
 
@@ -305,3 +306,35 @@ void fdcan2_rx_callback(void)
 	}
 }
 
+void fdcan3_rx_callback(void)
+{
+	uint16_t rec_id;
+	uint8_t rx_data[8] = {0};
+	fdcanx_receive(&hfdcan3, &rec_id, rx_data);
+	switch (rec_id)
+	{
+ 		case 0x11: dm_motor_fbdata(&motor[Motor1], rx_data); receive_motor_data(&motor[Motor1], rx_data); break;
+		case CAN_M1_ID:
+		case CAN_M2_ID:
+		case CAN_M3_ID:
+		case CAN_M4_ID:
+		case CAN_M5_ID:
+		case CAN_M6_ID:
+		case CAN_M7_ID:
+		case CAN_M8_ID:
+		{
+		
+			static uint8_t i = 0;
+			// get motor id
+			i = rec_id - CAN_M1_ID;
+			get_motor_measure(&can3_motor[i], rx_data);
+			circle_cc(&can3_motor[i]);
+			break;
+		}
+		default:
+		{
+			break;
+		}
+		
+	}
+}

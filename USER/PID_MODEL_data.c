@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'PID_MODEL'.
  *
- * Model version                  : 2.18
- * Simulink Coder version         : 23.2 (R2023b) 01-Aug-2023
- * C/C++ source code generated on : Mon Apr 22 19:38:11 2024
+ * Model version                  : 4.4
+ * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
+ * C/C++ source code generated on : Sat Feb 22 20:33:40 2025
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex-M
@@ -24,800 +24,1214 @@
 /* Block parameters (default storage) */
 P rtP = {
   /* Variable: ANG_A_D_CH1_1
-   * Referenced by: '<S142>/Derivative Gain'
+   * Referenced by: '<S155>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_D_CH1_2
-   * Referenced by: '<S292>/Derivative Gain'
+   * Referenced by: '<S311>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_D_CH1_3
-   * Referenced by: '<S442>/Derivative Gain'
+   * Referenced by: '<S467>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_D_CH1_4
-   * Referenced by: '<S592>/Derivative Gain'
+   * Referenced by: '<S623>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_D_CH1_5
-   * Referenced by: '<S742>/Derivative Gain'
+   * Referenced by: '<S779>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_D_CH1_6
-   * Referenced by: '<S892>/Derivative Gain'
+   * Referenced by: '<S935>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_D_CH1_7
-   * Referenced by: '<S1042>/Derivative Gain'
+   * Referenced by: '<S1091>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_D_CH2_1
-   * Referenced by: '<S1192>/Derivative Gain'
+   * Referenced by: '<S1247>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_D_CH2_2
-   * Referenced by: '<S1342>/Derivative Gain'
+   * Referenced by: '<S1403>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_D_CH2_3
-   * Referenced by: '<S1492>/Derivative Gain'
+   * Referenced by: '<S1559>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_D_CH2_4
-   * Referenced by: '<S1642>/Derivative Gain'
+   * Referenced by: '<S1715>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_D_CH2_5
-   * Referenced by: '<S1792>/Derivative Gain'
+   * Referenced by: '<S1871>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_D_CH2_6
-   * Referenced by: '<S1942>/Derivative Gain'
+   * Referenced by: '<S2027>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_D_CH2_7
-   * Referenced by: '<S2092>/Derivative Gain'
+   * Referenced by: '<S2183>/Derivative Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_A_D_CH3_1
+   * Referenced by: '<S2339>/Derivative Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_A_D_CH3_2
+   * Referenced by: '<S2495>/Derivative Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_A_D_CH3_3
+   * Referenced by: '<S2651>/Derivative Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_A_D_CH3_4
+   * Referenced by: '<S2807>/Derivative Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_A_D_CH3_5
+   * Referenced by: '<S2963>/Derivative Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_A_D_CH3_6
+   * Referenced by: '<S3119>/Derivative Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_A_D_CH3_7
+   * Referenced by: '<S3275>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_I_CH1_1
-   * Referenced by: '<S145>/Integral Gain'
+   * Referenced by: '<S159>/Integral Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_I_CH1_2
-   * Referenced by: '<S295>/Integral Gain'
+   * Referenced by: '<S315>/Integral Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_I_CH1_3
-   * Referenced by: '<S445>/Integral Gain'
+   * Referenced by: '<S471>/Integral Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_I_CH1_4
-   * Referenced by: '<S595>/Integral Gain'
+   * Referenced by: '<S627>/Integral Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_I_CH1_5
-   * Referenced by: '<S745>/Integral Gain'
+   * Referenced by: '<S783>/Integral Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_I_CH1_6
-   * Referenced by: '<S895>/Integral Gain'
+   * Referenced by: '<S939>/Integral Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_I_CH1_7
-   * Referenced by: '<S1045>/Integral Gain'
+   * Referenced by: '<S1095>/Integral Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_I_CH2_1
-   * Referenced by: '<S1195>/Integral Gain'
+   * Referenced by: '<S1251>/Integral Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_I_CH2_2
-   * Referenced by: '<S1345>/Integral Gain'
+   * Referenced by: '<S1407>/Integral Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_I_CH2_3
-   * Referenced by: '<S1495>/Integral Gain'
+   * Referenced by: '<S1563>/Integral Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_I_CH2_4
-   * Referenced by: '<S1645>/Integral Gain'
+   * Referenced by: '<S1719>/Integral Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_I_CH2_5
-   * Referenced by: '<S1795>/Integral Gain'
+   * Referenced by: '<S1875>/Integral Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_I_CH2_6
-   * Referenced by: '<S1945>/Integral Gain'
+   * Referenced by: '<S2031>/Integral Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_I_CH2_7
-   * Referenced by: '<S2095>/Integral Gain'
+   * Referenced by: '<S2187>/Integral Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_A_I_CH3_1
+   * Referenced by: '<S2343>/Integral Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_A_I_CH3_2
+   * Referenced by: '<S2499>/Integral Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_A_I_CH3_3
+   * Referenced by: '<S2655>/Integral Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_A_I_CH3_4
+   * Referenced by: '<S2811>/Integral Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_A_I_CH3_5
+   * Referenced by: '<S2967>/Integral Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_A_I_CH3_6
+   * Referenced by: '<S3123>/Integral Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_A_I_CH3_7
+   * Referenced by: '<S3279>/Integral Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_P_CH1_1
-   * Referenced by: '<S153>/Proportional Gain'
+   * Referenced by: '<S167>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_P_CH1_2
-   * Referenced by: '<S303>/Proportional Gain'
+   * Referenced by: '<S323>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_P_CH1_3
-   * Referenced by: '<S453>/Proportional Gain'
+   * Referenced by: '<S479>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_P_CH1_4
-   * Referenced by: '<S603>/Proportional Gain'
+   * Referenced by: '<S635>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_P_CH1_5
-   * Referenced by: '<S753>/Proportional Gain'
+   * Referenced by: '<S791>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_P_CH1_6
-   * Referenced by: '<S903>/Proportional Gain'
+   * Referenced by: '<S947>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_P_CH1_7
-   * Referenced by: '<S1053>/Proportional Gain'
+   * Referenced by: '<S1103>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_P_CH2_1
-   * Referenced by: '<S1203>/Proportional Gain'
+   * Referenced by: '<S1259>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_P_CH2_2
-   * Referenced by: '<S1353>/Proportional Gain'
+   * Referenced by: '<S1415>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_P_CH2_3
-   * Referenced by: '<S1503>/Proportional Gain'
+   * Referenced by: '<S1571>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_P_CH2_4
-   * Referenced by: '<S1653>/Proportional Gain'
+   * Referenced by: '<S1727>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_P_CH2_5
-   * Referenced by: '<S1803>/Proportional Gain'
+   * Referenced by: '<S1883>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_P_CH2_6
-   * Referenced by: '<S1953>/Proportional Gain'
+   * Referenced by: '<S2039>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: ANG_A_P_CH2_7
-   * Referenced by: '<S2103>/Proportional Gain'
+   * Referenced by: '<S2195>/Proportional Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_A_P_CH3_1
+   * Referenced by: '<S2351>/Proportional Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_A_P_CH3_2
+   * Referenced by: '<S2507>/Proportional Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_A_P_CH3_3
+   * Referenced by: '<S2663>/Proportional Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_A_P_CH3_4
+   * Referenced by: '<S2819>/Proportional Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_A_P_CH3_5
+   * Referenced by: '<S2975>/Proportional Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_A_P_CH3_6
+   * Referenced by: '<S3131>/Proportional Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_A_P_CH3_7
+   * Referenced by: '<S3287>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_D_CH1_1
-   * Referenced by: '<S94>/Derivative Gain'
+   * Referenced by: '<S105>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_D_CH1_2
-   * Referenced by: '<S244>/Derivative Gain'
+   * Referenced by: '<S261>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_D_CH1_3
-   * Referenced by: '<S394>/Derivative Gain'
+   * Referenced by: '<S417>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_D_CH1_4
-   * Referenced by: '<S544>/Derivative Gain'
+   * Referenced by: '<S573>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_D_CH1_5
-   * Referenced by: '<S694>/Derivative Gain'
+   * Referenced by: '<S729>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_D_CH1_6
-   * Referenced by: '<S844>/Derivative Gain'
+   * Referenced by: '<S885>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_D_CH1_7
-   * Referenced by: '<S994>/Derivative Gain'
+   * Referenced by: '<S1041>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_D_CH2_1
-   * Referenced by: '<S1144>/Derivative Gain'
+   * Referenced by: '<S1197>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_D_CH2_2
-   * Referenced by: '<S1294>/Derivative Gain'
+   * Referenced by: '<S1353>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_D_CH2_3
-   * Referenced by: '<S1444>/Derivative Gain'
+   * Referenced by: '<S1509>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_D_CH2_4
-   * Referenced by: '<S1594>/Derivative Gain'
+   * Referenced by: '<S1665>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_D_CH2_5
-   * Referenced by: '<S1744>/Derivative Gain'
+   * Referenced by: '<S1821>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_D_CH2_6
-   * Referenced by: '<S1894>/Derivative Gain'
+   * Referenced by: '<S1977>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_D_CH2_7
-   * Referenced by: '<S2044>/Derivative Gain'
+   * Referenced by: '<S2133>/Derivative Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_S_D_CH3_1
+   * Referenced by: '<S2289>/Derivative Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_S_D_CH3_2
+   * Referenced by: '<S2445>/Derivative Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_S_D_CH3_3
+   * Referenced by: '<S2601>/Derivative Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_S_D_CH3_4
+   * Referenced by: '<S2757>/Derivative Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_S_D_CH3_5
+   * Referenced by: '<S2913>/Derivative Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_S_D_CH3_6
+   * Referenced by: '<S3069>/Derivative Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_S_D_CH3_7
+   * Referenced by: '<S3225>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_I_CH1_1
-   * Referenced by: '<S97>/Integral Gain'
+   * Referenced by: '<S109>/Integral Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_I_CH1_2
-   * Referenced by: '<S247>/Integral Gain'
+   * Referenced by: '<S265>/Integral Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_I_CH1_3
-   * Referenced by: '<S397>/Integral Gain'
+   * Referenced by: '<S421>/Integral Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_I_CH1_4
-   * Referenced by: '<S547>/Integral Gain'
+   * Referenced by: '<S577>/Integral Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_I_CH1_5
-   * Referenced by: '<S697>/Integral Gain'
+   * Referenced by: '<S733>/Integral Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_I_CH1_6
-   * Referenced by: '<S847>/Integral Gain'
+   * Referenced by: '<S889>/Integral Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_I_CH1_7
-   * Referenced by: '<S997>/Integral Gain'
+   * Referenced by: '<S1045>/Integral Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_I_CH2_1
-   * Referenced by: '<S1147>/Integral Gain'
+   * Referenced by: '<S1201>/Integral Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_I_CH2_2
-   * Referenced by: '<S1297>/Integral Gain'
+   * Referenced by: '<S1357>/Integral Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_I_CH2_3
-   * Referenced by: '<S1447>/Integral Gain'
+   * Referenced by: '<S1513>/Integral Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_I_CH2_4
-   * Referenced by: '<S1597>/Integral Gain'
+   * Referenced by: '<S1669>/Integral Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_I_CH2_5
-   * Referenced by: '<S1747>/Integral Gain'
+   * Referenced by: '<S1825>/Integral Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_I_CH2_6
-   * Referenced by: '<S1897>/Integral Gain'
+   * Referenced by: '<S1981>/Integral Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_I_CH2_7
-   * Referenced by: '<S2047>/Integral Gain'
+   * Referenced by: '<S2137>/Integral Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_S_I_CH3_1
+   * Referenced by: '<S2293>/Integral Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_S_I_CH3_2
+   * Referenced by: '<S2449>/Integral Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_S_I_CH3_3
+   * Referenced by: '<S2605>/Integral Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_S_I_CH3_4
+   * Referenced by: '<S2761>/Integral Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_S_I_CH3_5
+   * Referenced by: '<S2917>/Integral Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_S_I_CH3_6
+   * Referenced by: '<S3073>/Integral Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_S_I_CH3_7
+   * Referenced by: '<S3229>/Integral Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_P_CH1_1
-   * Referenced by: '<S105>/Proportional Gain'
+   * Referenced by: '<S117>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_P_CH1_2
-   * Referenced by: '<S255>/Proportional Gain'
+   * Referenced by: '<S273>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_P_CH1_3
-   * Referenced by: '<S405>/Proportional Gain'
+   * Referenced by: '<S429>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_P_CH1_4
-   * Referenced by: '<S555>/Proportional Gain'
+   * Referenced by: '<S585>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_P_CH1_5
-   * Referenced by: '<S705>/Proportional Gain'
+   * Referenced by: '<S741>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_P_CH1_6
-   * Referenced by: '<S855>/Proportional Gain'
+   * Referenced by: '<S897>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_P_CH1_7
-   * Referenced by: '<S1005>/Proportional Gain'
+   * Referenced by: '<S1053>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_P_CH2_1
-   * Referenced by: '<S1155>/Proportional Gain'
+   * Referenced by: '<S1209>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_P_CH2_2
-   * Referenced by: '<S1305>/Proportional Gain'
+   * Referenced by: '<S1365>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_P_CH2_3
-   * Referenced by: '<S1455>/Proportional Gain'
+   * Referenced by: '<S1521>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_P_CH2_4
-   * Referenced by: '<S1605>/Proportional Gain'
+   * Referenced by: '<S1677>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_P_CH2_5
-   * Referenced by: '<S1755>/Proportional Gain'
+   * Referenced by: '<S1833>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_P_CH2_6
-   * Referenced by: '<S1905>/Proportional Gain'
+   * Referenced by: '<S1989>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: ANG_S_P_CH2_7
-   * Referenced by: '<S2055>/Proportional Gain'
+   * Referenced by: '<S2145>/Proportional Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_S_P_CH3_1
+   * Referenced by: '<S2301>/Proportional Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_S_P_CH3_2
+   * Referenced by: '<S2457>/Proportional Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_S_P_CH3_3
+   * Referenced by: '<S2613>/Proportional Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_S_P_CH3_4
+   * Referenced by: '<S2769>/Proportional Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_S_P_CH3_5
+   * Referenced by: '<S2925>/Proportional Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_S_P_CH3_6
+   * Referenced by: '<S3081>/Proportional Gain'
+   */
+  0.0F,
+
+  /* Variable: ANG_S_P_CH3_7
+   * Referenced by: '<S3237>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: DEADBAND_CH1_1
    * Referenced by:
-   *   '<S16>/Switch1'
-   *   '<S16>/Switch2'
+   *   '<S24>/Switch1'
+   *   '<S24>/Switch2'
    */
   500.0F,
 
   /* Variable: DEADBAND_CH1_2
    * Referenced by:
-   *   '<S166>/Switch1'
-   *   '<S166>/Switch2'
+   *   '<S180>/Switch1'
+   *   '<S180>/Switch2'
    */
   500.0F,
 
   /* Variable: DEADBAND_CH1_3
    * Referenced by:
-   *   '<S316>/Switch1'
-   *   '<S316>/Switch2'
+   *   '<S336>/Switch1'
+   *   '<S336>/Switch2'
    */
   500.0F,
 
   /* Variable: DEADBAND_CH1_4
    * Referenced by:
-   *   '<S466>/Switch1'
-   *   '<S466>/Switch2'
+   *   '<S492>/Switch1'
+   *   '<S492>/Switch2'
    */
   500.0F,
 
   /* Variable: DEADBAND_CH1_5
    * Referenced by:
-   *   '<S616>/Switch1'
-   *   '<S616>/Switch2'
+   *   '<S648>/Switch1'
+   *   '<S648>/Switch2'
    */
   500.0F,
 
   /* Variable: DEADBAND_CH1_6
    * Referenced by:
-   *   '<S766>/Switch1'
-   *   '<S766>/Switch2'
+   *   '<S804>/Switch1'
+   *   '<S804>/Switch2'
    */
   500.0F,
 
   /* Variable: DEADBAND_CH1_7
    * Referenced by:
-   *   '<S916>/Switch1'
-   *   '<S916>/Switch2'
+   *   '<S960>/Switch1'
+   *   '<S960>/Switch2'
    */
   500.0F,
 
   /* Variable: DEADBAND_CH2_1
    * Referenced by:
-   *   '<S1066>/Switch1'
-   *   '<S1066>/Switch2'
+   *   '<S1116>/Switch1'
+   *   '<S1116>/Switch2'
    */
   500.0F,
 
   /* Variable: DEADBAND_CH2_2
    * Referenced by:
-   *   '<S1216>/Switch1'
-   *   '<S1216>/Switch2'
+   *   '<S1272>/Switch1'
+   *   '<S1272>/Switch2'
    */
   500.0F,
 
   /* Variable: DEADBAND_CH2_3
    * Referenced by:
-   *   '<S1366>/Switch1'
-   *   '<S1366>/Switch2'
+   *   '<S1428>/Switch1'
+   *   '<S1428>/Switch2'
    */
   500.0F,
 
   /* Variable: DEADBAND_CH2_4
    * Referenced by:
-   *   '<S1516>/Switch1'
-   *   '<S1516>/Switch2'
+   *   '<S1584>/Switch1'
+   *   '<S1584>/Switch2'
    */
   500.0F,
 
   /* Variable: DEADBAND_CH2_5
    * Referenced by:
-   *   '<S1666>/Switch1'
-   *   '<S1666>/Switch2'
+   *   '<S1740>/Switch1'
+   *   '<S1740>/Switch2'
    */
-  25.0F,
+  500.0F,
 
   /* Variable: DEADBAND_CH2_6
    * Referenced by:
-   *   '<S1816>/Switch1'
-   *   '<S1816>/Switch2'
+   *   '<S1896>/Switch1'
+   *   '<S1896>/Switch2'
    */
-  25.0F,
+  500.0F,
 
   /* Variable: DEADBAND_CH2_7
    * Referenced by:
-   *   '<S1966>/Switch1'
-   *   '<S1966>/Switch2'
+   *   '<S2052>/Switch1'
+   *   '<S2052>/Switch2'
    */
-  25.0F,
+  500.0F,
+
+  /* Variable: DEADBAND_CH3_1
+   * Referenced by:
+   *   '<S2208>/Switch1'
+   *   '<S2208>/Switch2'
+   */
+  500.0F,
+
+  /* Variable: DEADBAND_CH3_2
+   * Referenced by:
+   *   '<S2364>/Switch1'
+   *   '<S2364>/Switch2'
+   */
+  500.0F,
+
+  /* Variable: DEADBAND_CH3_3
+   * Referenced by:
+   *   '<S2520>/Switch1'
+   *   '<S2520>/Switch2'
+   */
+  500.0F,
+
+  /* Variable: DEADBAND_CH3_4
+   * Referenced by:
+   *   '<S2676>/Switch1'
+   *   '<S2676>/Switch2'
+   */
+  500.0F,
+
+  /* Variable: DEADBAND_CH3_5
+   * Referenced by:
+   *   '<S2832>/Switch1'
+   *   '<S2832>/Switch2'
+   */
+  500.0F,
+
+  /* Variable: DEADBAND_CH3_6
+   * Referenced by:
+   *   '<S2988>/Switch1'
+   *   '<S2988>/Switch2'
+   */
+  500.0F,
+
+  /* Variable: DEADBAND_CH3_7
+   * Referenced by:
+   *   '<S3144>/Switch1'
+   *   '<S3144>/Switch2'
+   */
+  500.0F,
+
+  /* Variable: POS_D
+   * Referenced by: '<S3325>/Derivative Gain'
+   */
+  0.0F,
+
+  /* Variable: POS_I
+   * Referenced by: '<S3329>/Integral Gain'
+   */
+  0.0F,
+
+  /* Variable: POS_P
+   * Referenced by: '<S3337>/Proportional Gain'
+   */
+  0.0F,
 
   /* Variable: SPD_D_CH1_1
-   * Referenced by: '<S43>/Derivative Gain'
+   * Referenced by: '<S52>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: SPD_D_CH1_2
-   * Referenced by: '<S193>/Derivative Gain'
+   * Referenced by: '<S208>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: SPD_D_CH1_3
-   * Referenced by: '<S343>/Derivative Gain'
+   * Referenced by: '<S364>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: SPD_D_CH1_4
-   * Referenced by: '<S493>/Derivative Gain'
+   * Referenced by: '<S520>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: SPD_D_CH1_5
-   * Referenced by: '<S643>/Derivative Gain'
+   * Referenced by: '<S676>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: SPD_D_CH1_6
-   * Referenced by: '<S793>/Derivative Gain'
+   * Referenced by: '<S832>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: SPD_D_CH1_7
-   * Referenced by: '<S943>/Derivative Gain'
+   * Referenced by: '<S988>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: SPD_D_CH2_1
-   * Referenced by: '<S1093>/Derivative Gain'
+   * Referenced by: '<S1144>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: SPD_D_CH2_2
-   * Referenced by: '<S1243>/Derivative Gain'
+   * Referenced by: '<S1300>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: SPD_D_CH2_3
-   * Referenced by: '<S1393>/Derivative Gain'
+   * Referenced by: '<S1456>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: SPD_D_CH2_4
-   * Referenced by: '<S1543>/Derivative Gain'
+   * Referenced by: '<S1612>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: SPD_D_CH2_5
-   * Referenced by: '<S1693>/Derivative Gain'
+   * Referenced by: '<S1768>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: SPD_D_CH2_6
-   * Referenced by: '<S1843>/Derivative Gain'
+   * Referenced by: '<S1924>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: SPD_D_CH2_7
-   * Referenced by: '<S1993>/Derivative Gain'
+   * Referenced by: '<S2080>/Derivative Gain'
+   */
+  0.0F,
+
+  /* Variable: SPD_D_CH3_1
+   * Referenced by: '<S2236>/Derivative Gain'
+   */
+  0.0F,
+
+  /* Variable: SPD_D_CH3_2
+   * Referenced by: '<S2392>/Derivative Gain'
+   */
+  0.0F,
+
+  /* Variable: SPD_D_CH3_3
+   * Referenced by: '<S2548>/Derivative Gain'
+   */
+  0.0F,
+
+  /* Variable: SPD_D_CH3_4
+   * Referenced by: '<S2704>/Derivative Gain'
+   */
+  0.0F,
+
+  /* Variable: SPD_D_CH3_5
+   * Referenced by: '<S2860>/Derivative Gain'
+   */
+  0.0F,
+
+  /* Variable: SPD_D_CH3_6
+   * Referenced by: '<S3016>/Derivative Gain'
+   */
+  0.0F,
+
+  /* Variable: SPD_D_CH3_7
+   * Referenced by: '<S3172>/Derivative Gain'
    */
   0.0F,
 
   /* Variable: SPD_I_CH1_1
-   * Referenced by: '<S46>/Integral Gain'
+   * Referenced by: '<S56>/Integral Gain'
    */
   0.0F,
 
   /* Variable: SPD_I_CH1_2
-   * Referenced by: '<S196>/Integral Gain'
+   * Referenced by: '<S212>/Integral Gain'
    */
   0.0F,
 
   /* Variable: SPD_I_CH1_3
-   * Referenced by: '<S346>/Integral Gain'
+   * Referenced by: '<S368>/Integral Gain'
    */
   0.0F,
 
   /* Variable: SPD_I_CH1_4
-   * Referenced by: '<S496>/Integral Gain'
+   * Referenced by: '<S524>/Integral Gain'
    */
   0.0F,
 
   /* Variable: SPD_I_CH1_5
-   * Referenced by: '<S646>/Integral Gain'
+   * Referenced by: '<S680>/Integral Gain'
    */
   0.0F,
 
   /* Variable: SPD_I_CH1_6
-   * Referenced by: '<S796>/Integral Gain'
+   * Referenced by: '<S836>/Integral Gain'
    */
   0.0F,
 
   /* Variable: SPD_I_CH1_7
-   * Referenced by: '<S946>/Integral Gain'
+   * Referenced by: '<S992>/Integral Gain'
    */
   0.0F,
 
   /* Variable: SPD_I_CH2_1
-   * Referenced by: '<S1096>/Integral Gain'
+   * Referenced by: '<S1148>/Integral Gain'
    */
   0.0F,
 
   /* Variable: SPD_I_CH2_2
-   * Referenced by: '<S1246>/Integral Gain'
+   * Referenced by: '<S1304>/Integral Gain'
    */
   0.0F,
 
   /* Variable: SPD_I_CH2_3
-   * Referenced by: '<S1396>/Integral Gain'
+   * Referenced by: '<S1460>/Integral Gain'
    */
   0.0F,
 
   /* Variable: SPD_I_CH2_4
-   * Referenced by: '<S1546>/Integral Gain'
+   * Referenced by: '<S1616>/Integral Gain'
    */
   0.0F,
 
   /* Variable: SPD_I_CH2_5
-   * Referenced by: '<S1696>/Integral Gain'
+   * Referenced by: '<S1772>/Integral Gain'
    */
   0.0F,
 
   /* Variable: SPD_I_CH2_6
-   * Referenced by: '<S1846>/Integral Gain'
+   * Referenced by: '<S1928>/Integral Gain'
    */
   0.0F,
 
   /* Variable: SPD_I_CH2_7
-   * Referenced by: '<S1996>/Integral Gain'
+   * Referenced by: '<S2084>/Integral Gain'
+   */
+  0.0F,
+
+  /* Variable: SPD_I_CH3_1
+   * Referenced by: '<S2240>/Integral Gain'
+   */
+  0.0F,
+
+  /* Variable: SPD_I_CH3_2
+   * Referenced by: '<S2396>/Integral Gain'
+   */
+  0.0F,
+
+  /* Variable: SPD_I_CH3_3
+   * Referenced by: '<S2552>/Integral Gain'
+   */
+  0.0F,
+
+  /* Variable: SPD_I_CH3_4
+   * Referenced by: '<S2708>/Integral Gain'
+   */
+  0.0F,
+
+  /* Variable: SPD_I_CH3_5
+   * Referenced by: '<S2864>/Integral Gain'
+   */
+  0.0F,
+
+  /* Variable: SPD_I_CH3_6
+   * Referenced by: '<S3020>/Integral Gain'
+   */
+  0.0F,
+
+  /* Variable: SPD_I_CH3_7
+   * Referenced by: '<S3176>/Integral Gain'
    */
   0.0F,
 
   /* Variable: SPD_P_CH1_1
-   * Referenced by: '<S54>/Proportional Gain'
+   * Referenced by: '<S64>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: SPD_P_CH1_2
-   * Referenced by: '<S204>/Proportional Gain'
+   * Referenced by: '<S220>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: SPD_P_CH1_3
-   * Referenced by: '<S354>/Proportional Gain'
+   * Referenced by: '<S376>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: SPD_P_CH1_4
-   * Referenced by: '<S504>/Proportional Gain'
+   * Referenced by: '<S532>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: SPD_P_CH1_5
-   * Referenced by: '<S654>/Proportional Gain'
+   * Referenced by: '<S688>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: SPD_P_CH1_6
-   * Referenced by: '<S804>/Proportional Gain'
+   * Referenced by: '<S844>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: SPD_P_CH1_7
-   * Referenced by: '<S954>/Proportional Gain'
+   * Referenced by: '<S1000>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: SPD_P_CH2_1
-   * Referenced by: '<S1104>/Proportional Gain'
+   * Referenced by: '<S1156>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: SPD_P_CH2_2
-   * Referenced by: '<S1254>/Proportional Gain'
+   * Referenced by: '<S1312>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: SPD_P_CH2_3
-   * Referenced by: '<S1404>/Proportional Gain'
+   * Referenced by: '<S1468>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: SPD_P_CH2_4
-   * Referenced by: '<S1554>/Proportional Gain'
+   * Referenced by: '<S1624>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: SPD_P_CH2_5
-   * Referenced by: '<S1704>/Proportional Gain'
+   * Referenced by: '<S1780>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: SPD_P_CH2_6
-   * Referenced by: '<S1854>/Proportional Gain'
+   * Referenced by: '<S1936>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: SPD_P_CH2_7
-   * Referenced by: '<S2004>/Proportional Gain'
+   * Referenced by: '<S2092>/Proportional Gain'
+   */
+  0.0F,
+
+  /* Variable: SPD_P_CH3_1
+   * Referenced by: '<S2248>/Proportional Gain'
+   */
+  0.0F,
+
+  /* Variable: SPD_P_CH3_2
+   * Referenced by: '<S2404>/Proportional Gain'
+   */
+  0.0F,
+
+  /* Variable: SPD_P_CH3_3
+   * Referenced by: '<S2560>/Proportional Gain'
+   */
+  0.0F,
+
+  /* Variable: SPD_P_CH3_4
+   * Referenced by: '<S2716>/Proportional Gain'
+   */
+  0.0F,
+
+  /* Variable: SPD_P_CH3_5
+   * Referenced by: '<S2872>/Proportional Gain'
+   */
+  0.0F,
+
+  /* Variable: SPD_P_CH3_6
+   * Referenced by: '<S3028>/Proportional Gain'
+   */
+  0.0F,
+
+  /* Variable: SPD_P_CH3_7
+   * Referenced by: '<S3184>/Proportional Gain'
    */
   0.0F,
 
   /* Variable: TRANS_CH1_1
-   * Referenced by: '<S16>/Multiply'
+   * Referenced by: '<S24>/Multiply'
    */
   0.5F,
 
   /* Variable: TRANS_CH1_2
-   * Referenced by: '<S166>/Multiply'
+   * Referenced by: '<S180>/Multiply'
    */
   0.5F,
 
   /* Variable: TRANS_CH1_3
-   * Referenced by: '<S316>/Multiply'
+   * Referenced by: '<S336>/Multiply'
    */
   0.5F,
 
   /* Variable: TRANS_CH1_4
-   * Referenced by: '<S466>/Multiply'
+   * Referenced by: '<S492>/Multiply'
    */
   0.5F,
 
   /* Variable: TRANS_CH1_5
-   * Referenced by: '<S616>/Multiply'
+   * Referenced by: '<S648>/Multiply'
    */
   0.5F,
 
   /* Variable: TRANS_CH1_6
-   * Referenced by: '<S766>/Multiply'
+   * Referenced by: '<S804>/Multiply'
    */
   0.5F,
 
   /* Variable: TRANS_CH1_7
-   * Referenced by: '<S916>/Multiply'
+   * Referenced by: '<S960>/Multiply'
    */
   0.5F,
 
   /* Variable: TRANS_CH2_1
-   * Referenced by: '<S1066>/Multiply'
+   * Referenced by: '<S1116>/Multiply'
    */
   0.5F,
 
   /* Variable: TRANS_CH2_2
-   * Referenced by: '<S1216>/Multiply'
+   * Referenced by: '<S1272>/Multiply'
    */
   0.5F,
 
   /* Variable: TRANS_CH2_3
-   * Referenced by: '<S1366>/Multiply'
+   * Referenced by: '<S1428>/Multiply'
    */
   0.5F,
 
   /* Variable: TRANS_CH2_4
-   * Referenced by: '<S1516>/Multiply'
+   * Referenced by: '<S1584>/Multiply'
    */
   0.5F,
 
   /* Variable: TRANS_CH2_5
-   * Referenced by: '<S1666>/Multiply'
+   * Referenced by: '<S1740>/Multiply'
    */
   0.5F,
 
   /* Variable: TRANS_CH2_6
-   * Referenced by: '<S1816>/Multiply'
+   * Referenced by: '<S1896>/Multiply'
    */
   0.5F,
 
   /* Variable: TRANS_CH2_7
-   * Referenced by: '<S1966>/Multiply'
+   * Referenced by: '<S2052>/Multiply'
+   */
+  0.5F,
+
+  /* Variable: TRANS_CH3_1
+   * Referenced by: '<S2208>/Multiply'
+   */
+  0.5F,
+
+  /* Variable: TRANS_CH3_2
+   * Referenced by: '<S2364>/Multiply'
+   */
+  0.5F,
+
+  /* Variable: TRANS_CH3_3
+   * Referenced by: '<S2520>/Multiply'
+   */
+  0.5F,
+
+  /* Variable: TRANS_CH3_4
+   * Referenced by: '<S2676>/Multiply'
+   */
+  0.5F,
+
+  /* Variable: TRANS_CH3_5
+   * Referenced by: '<S2832>/Multiply'
+   */
+  0.5F,
+
+  /* Variable: TRANS_CH3_6
+   * Referenced by: '<S2988>/Multiply'
+   */
+  0.5F,
+
+  /* Variable: TRANS_CH3_7
+   * Referenced by: '<S3144>/Multiply'
    */
   0.5F
 };

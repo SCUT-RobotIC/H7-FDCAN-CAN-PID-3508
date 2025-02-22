@@ -9,8 +9,10 @@ extern FDCAN_HandleTypeDef hfdcan1; // CAN����1
 extern FDCAN_HandleTypeDef hfdcan2;
 extern motor_measure_t *motor_data_can1[8];
 extern motor_measure_t *motor_data_can2[8];
+extern motor_measure_t *motor_data_can3[8];
+
 extern uint8_t mode_6020;
-double output[16] = {0};
+double tor_output[3*8] = {0};
 int BrakeAng[4] = {0};
 double mult = 1;
 int dirflag=0;
@@ -42,12 +44,12 @@ void ctrlmotor(double Vx, double Vy, double omega,int brake) {
 	 		{
 	 			mult=0.98*mult;
 	 		}
-	 		rtU.yaw_status_CH1_1=1;
-	 		rtU.yaw_status_CH1_2=1;
-	 		rtU.yaw_status_CH1_3=1;
-	 		if((fabs(motor_data_can2[4]->ecd+motor_data_can2[4]->circle*8191-rtU.yaw_target_CH2_5)<45*8191/360&&
-		 fabs(motor_data_can2[5]->ecd+motor_data_can2[5]->circle*8191-rtU.yaw_target_CH2_6)<45*8191/360&&
-		 fabs(motor_data_can2[6]->ecd+motor_data_can2[6]->circle*8191-rtU.yaw_target_CH2_7)<45*8191/360)
+	 		rtU.status_CH1_1=1;
+	 		rtU.status_CH1_2=1;
+	 		rtU.status_CH1_3=1;
+	 		if((fabs(motor_data_can2[4]->ecd+motor_data_can2[4]->circle*8191-rtU.target_CH2_5)<45*8191/360&&
+		 fabs(motor_data_can2[5]->ecd+motor_data_can2[5]->circle*8191-rtU.target_CH2_6)<45*8191/360&&
+		 fabs(motor_data_can2[6]->ecd+motor_data_can2[6]->circle*8191-rtU.target_CH2_7)<45*8191/360)
 		 ||omega!=0){
 				if(MotorSignal[0].dir==1)
 					set_target(1,1,-sqrt(pow(Vx-omega,2)+pow(Vy,2))*mult);
@@ -68,9 +70,9 @@ void ctrlmotor(double Vx, double Vy, double omega,int brake) {
 	 	}
 	 		else
 	 		{
-        rtU.yaw_target_CH1_1=0;
-				rtU.yaw_target_CH1_2=0;
-				rtU.yaw_target_CH1_3=0;//驻停必要操作
+        rtU.target_CH1_1=0;
+				rtU.target_CH1_2=0;
+				rtU.target_CH1_3=0;//驻停必要操作
 				set_target(2,5,(((int)MotorSignal[0].thetas)/360+90)*360*8191/(360));
 				set_target(2,6,((((int)MotorSignal[0].thetas)/360)*360+120-90)*8191/(360));
 	 		  set_target(2,7,((((int)MotorSignal[0].thetas)/360)*360+60-90)*8191/(360));
@@ -127,176 +129,348 @@ void cala_d(int i){
 
 void get_msgn(void)
 {
-  rtU.yaw_speed_rpm_CH1_1 = motor_data_can1[0]->speed_rpm;
-  rtU.yaw_ecd_CH1_1 = motor_data_can1[0]->ecd;
-  rtU.yaw_last_ecd_CH1_1 = motor_data_can1[0]->last_ecd;
-  rtU.yaw_circle_CH1_1 = motor_data_can1[0]->circle;
+  rtU.speed_rpm_CH1_1 = motor_data_can1[0]->speed_rpm;
+  rtU.ecd_CH1_1 = motor_data_can1[0]->ecd;
+  rtU.last_ecd_CH1_1 = motor_data_can1[0]->last_ecd;
+  rtU.circle_CH1_1 = motor_data_can1[0]->circle;
 
-  rtU.yaw_speed_rpm_CH1_2 = motor_data_can1[1]->speed_rpm;
-  rtU.yaw_ecd_CH1_2 = motor_data_can1[1]->ecd;
-  rtU.yaw_last_ecd_CH1_2 = motor_data_can1[1]->last_ecd;
-  rtU.yaw_circle_CH1_2 = motor_data_can1[1]->circle;
+  rtU.speed_rpm_CH1_2 = motor_data_can1[1]->speed_rpm;
+  rtU.ecd_CH1_2 = motor_data_can1[1]->ecd;
+  rtU.last_ecd_CH1_2 = motor_data_can1[1]->last_ecd;
+  rtU.circle_CH1_2 = motor_data_can1[1]->circle;
 
-  rtU.yaw_speed_rpm_CH1_3 = motor_data_can1[2]->speed_rpm;
-  rtU.yaw_ecd_CH1_3 = motor_data_can1[2]->ecd;
-  rtU.yaw_last_ecd_CH1_3 = motor_data_can1[2]->last_ecd;
-  rtU.yaw_circle_CH1_3 = motor_data_can1[2]->circle;
+  rtU.speed_rpm_CH1_3 = motor_data_can1[2]->speed_rpm;
+  rtU.ecd_CH1_3 = motor_data_can1[2]->ecd;
+  rtU.last_ecd_CH1_3 = motor_data_can1[2]->last_ecd;
+  rtU.circle_CH1_3 = motor_data_can1[2]->circle;
 
-  rtU.yaw_speed_rpm_CH1_4 = motor_data_can1[3]->speed_rpm;
-  rtU.yaw_ecd_CH1_4 = motor_data_can1[3]->ecd;
-  rtU.yaw_last_ecd_CH1_4 = motor_data_can1[3]->last_ecd;
-  rtU.yaw_circle_CH1_4 = motor_data_can1[3]->circle;
+  rtU.speed_rpm_CH1_4 = motor_data_can1[3]->speed_rpm;
+  rtU.ecd_CH1_4 = motor_data_can1[3]->ecd;
+  rtU.last_ecd_CH1_4 = motor_data_can1[3]->last_ecd;
+  rtU.circle_CH1_4 = motor_data_can1[3]->circle;
 
-  rtU.yaw_speed_rpm_CH1_5 = motor_data_can1[4]->speed_rpm;
-  rtU.yaw_ecd_CH1_5 = motor_data_can1[4]->ecd;
-  rtU.yaw_last_ecd_CH1_5 = motor_data_can1[4]->last_ecd;
-  rtU.yaw_circle_CH1_5 = motor_data_can1[4]->circle;
+  rtU.speed_rpm_CH1_5 = motor_data_can1[4]->speed_rpm;
+  rtU.ecd_CH1_5 = motor_data_can1[4]->ecd;
+  rtU.last_ecd_CH1_5 = motor_data_can1[4]->last_ecd;
+  rtU.circle_CH1_5 = motor_data_can1[4]->circle;
 
-  rtU.yaw_speed_rpm_CH1_6 = motor_data_can1[5]->speed_rpm;
-  rtU.yaw_ecd_CH1_6 = motor_data_can1[5]->ecd;
-  rtU.yaw_last_ecd_CH1_6 = motor_data_can1[5]->last_ecd;
-  rtU.yaw_circle_CH1_6 = motor_data_can1[5]->circle;
+  rtU.speed_rpm_CH1_6 = motor_data_can1[5]->speed_rpm;
+  rtU.ecd_CH1_6 = motor_data_can1[5]->ecd;
+  rtU.last_ecd_CH1_6 = motor_data_can1[5]->last_ecd;
+  rtU.circle_CH1_6 = motor_data_can1[5]->circle;
 
-  rtU.yaw_speed_rpm_CH1_7 = motor_data_can1[6]->speed_rpm;
-  rtU.yaw_ecd_CH1_7 = motor_data_can1[6]->ecd;
-  rtU.yaw_last_ecd_CH1_7 = motor_data_can1[6]->last_ecd;
-  rtU.yaw_circle_CH1_7 = motor_data_can1[6]->circle;
+  rtU.speed_rpm_CH1_7 = motor_data_can1[6]->speed_rpm;
+  rtU.ecd_CH1_7 = motor_data_can1[6]->ecd;
+  rtU.last_ecd_CH1_7 = motor_data_can1[6]->last_ecd;
+  rtU.circle_CH1_7 = motor_data_can1[6]->circle;
 
-  rtU.yaw_speed_rpm_CH2_1 = motor_data_can2[0]->speed_rpm;
-  rtU.yaw_ecd_CH2_1 = motor_data_can2[0]->ecd;
-  rtU.yaw_last_ecd_CH2_1 = motor_data_can2[0]->last_ecd;
-  rtU.yaw_circle_CH2_1 = motor_data_can2[0]->circle;
+  rtU.speed_rpm_CH2_1 = motor_data_can2[0]->speed_rpm;
+  rtU.ecd_CH2_1 = motor_data_can2[0]->ecd;
+  rtU.last_ecd_CH2_1 = motor_data_can2[0]->last_ecd;
+  rtU.circle_CH2_1 = motor_data_can2[0]->circle;
 
-  rtU.yaw_speed_rpm_CH2_2 = motor_data_can2[1]->speed_rpm;
-  rtU.yaw_ecd_CH2_2 = motor_data_can2[1]->ecd;
-  rtU.yaw_last_ecd_CH2_2 = motor_data_can2[1]->last_ecd;
-  rtU.yaw_circle_CH2_2 = motor_data_can2[1]->circle;
+  rtU.speed_rpm_CH2_2 = motor_data_can2[1]->speed_rpm;
+  rtU.ecd_CH2_2 = motor_data_can2[1]->ecd;
+  rtU.last_ecd_CH2_2 = motor_data_can2[1]->last_ecd;
+  rtU.circle_CH2_2 = motor_data_can2[1]->circle;
 
-  rtU.yaw_speed_rpm_CH2_3 = motor_data_can2[2]->speed_rpm;
-  rtU.yaw_ecd_CH2_3 = motor_data_can2[2]->ecd;
-  rtU.yaw_last_ecd_CH2_3 = motor_data_can2[2]->last_ecd;
-  rtU.yaw_circle_CH2_3 = motor_data_can2[2]->circle;
+  rtU.speed_rpm_CH2_3 = motor_data_can2[2]->speed_rpm;
+  rtU.ecd_CH2_3 = motor_data_can2[2]->ecd;
+  rtU.last_ecd_CH2_3 = motor_data_can2[2]->last_ecd;
+  rtU.circle_CH2_3 = motor_data_can2[2]->circle;
 
-  rtU.yaw_speed_rpm_CH2_4 = motor_data_can2[3]->speed_rpm;
-  rtU.yaw_ecd_CH2_4 = motor_data_can2[3]->ecd;
-  rtU.yaw_last_ecd_CH2_4 = motor_data_can2[3]->last_ecd;
-  rtU.yaw_circle_CH2_4 = motor_data_can2[3]->circle;
+  rtU.speed_rpm_CH2_4 = motor_data_can2[3]->speed_rpm;
+  rtU.ecd_CH2_4 = motor_data_can2[3]->ecd;
+  rtU.last_ecd_CH2_4 = motor_data_can2[3]->last_ecd;
+  rtU.circle_CH2_4 = motor_data_can2[3]->circle;
 
-  rtU.yaw_speed_rpm_CH2_5 = motor_data_can2[4]->speed_rpm;
-  rtU.yaw_ecd_CH2_5 = motor_data_can2[4]->ecd;
-  rtU.yaw_last_ecd_CH2_5 = motor_data_can2[4]->last_ecd;
-  rtU.yaw_circle_CH2_5 = motor_data_can2[4]->circle;
+  rtU.speed_rpm_CH2_5 = motor_data_can2[4]->speed_rpm;
+  rtU.ecd_CH2_5 = motor_data_can2[4]->ecd;
+  rtU.last_ecd_CH2_5 = motor_data_can2[4]->last_ecd;
+  rtU.circle_CH2_5 = motor_data_can2[4]->circle;
 
-  rtU.yaw_speed_rpm_CH2_6 = motor_data_can2[5]->speed_rpm;
-  rtU.yaw_ecd_CH2_6 = motor_data_can2[5]->ecd;
-  rtU.yaw_last_ecd_CH2_6 = motor_data_can2[5]->last_ecd;
-  rtU.yaw_circle_CH2_6 = motor_data_can2[5]->circle;
+  rtU.speed_rpm_CH2_6 = motor_data_can2[5]->speed_rpm;
+  rtU.ecd_CH2_6 = motor_data_can2[5]->ecd;
+  rtU.last_ecd_CH2_6 = motor_data_can2[5]->last_ecd;
+  rtU.circle_CH2_6 = motor_data_can2[5]->circle;
 
-  rtU.yaw_speed_rpm_CH2_7 = motor_data_can2[6]->speed_rpm;
-  rtU.yaw_ecd_CH2_7 = motor_data_can2[6]->ecd;
-  rtU.yaw_last_ecd_CH2_7 = motor_data_can2[6]->last_ecd;
-  rtU.yaw_circle_CH2_7 = motor_data_can2[6]->circle;
+  rtU.speed_rpm_CH2_7 = motor_data_can2[6]->speed_rpm;
+  rtU.ecd_CH2_7 = motor_data_can2[6]->ecd;
+  rtU.last_ecd_CH2_7 = motor_data_can2[6]->last_ecd;
+  rtU.circle_CH2_7 = motor_data_can2[6]->circle;
+	
+	  rtU.speed_rpm_CH3_1 = motor_data_can3[0]->speed_rpm;
+  rtU.ecd_CH3_1 = motor_data_can3[0]->ecd;
+  rtU.last_ecd_CH3_1 = motor_data_can3[0]->last_ecd;
+  rtU.circle_CH3_1 = motor_data_can3[0]->circle;
+
+  rtU.speed_rpm_CH3_2 = motor_data_can3[1]->speed_rpm;
+  rtU.ecd_CH3_2 = motor_data_can3[1]->ecd;
+  rtU.last_ecd_CH3_2 = motor_data_can3[1]->last_ecd;
+  rtU.circle_CH3_2 = motor_data_can3[1]->circle;
+
+  rtU.speed_rpm_CH3_3 = motor_data_can3[2]->speed_rpm;
+  rtU.ecd_CH3_3 = motor_data_can3[2]->ecd;
+  rtU.last_ecd_CH3_3 = motor_data_can3[2]->last_ecd;
+  rtU.circle_CH3_3 = motor_data_can3[2]->circle;
+
+  rtU.speed_rpm_CH3_4 = motor_data_can3[3]->speed_rpm;
+  rtU.ecd_CH3_4 = motor_data_can3[3]->ecd;
+  rtU.last_ecd_CH3_4 = motor_data_can3[3]->last_ecd;
+  rtU.circle_CH3_4 = motor_data_can3[3]->circle;
+
+  rtU.speed_rpm_CH3_5 = motor_data_can3[4]->speed_rpm;
+  rtU.ecd_CH3_5 = motor_data_can3[4]->ecd;
+  rtU.last_ecd_CH3_5 = motor_data_can3[4]->last_ecd;
+  rtU.circle_CH3_5 = motor_data_can3[4]->circle;
+
+  rtU.speed_rpm_CH3_6 = motor_data_can3[5]->speed_rpm;
+  rtU.ecd_CH3_6 = motor_data_can3[5]->ecd;
+  rtU.last_ecd_CH3_6 = motor_data_can3[5]->last_ecd;
+  rtU.circle_CH3_6 = motor_data_can3[5]->circle;
+
+  rtU.speed_rpm_CH3_7 = motor_data_can3[6]->speed_rpm;
+  rtU.ecd_CH3_7 = motor_data_can3[6]->ecd;
+  rtU.last_ecd_CH3_7 = motor_data_can3[6]->last_ecd;
+  rtU.circle_CH3_7 = motor_data_can3[6]->circle;
 }
 
 void assign_output(void)
 {
-  if (rtU.yaw_status_CH1_1 == 1)
-    output[CH1_1] = rtY.yaw_SPD_OUT_CH1_1;
+  if (rtU.status_CH1_1 == 1)
+    tor_output[CH1_1] = rtY.SPD_OUT_CH1_1;
   else
-    output[CH1_1] = rtY.yaw_ANG_OUT_CH1_1;
+    tor_output[CH1_1] = rtY.ANG_OUT_CH1_1;
 
-  if (rtU.yaw_status_CH1_2 == 1)
-    output[CH1_2] = rtY.yaw_SPD_OUT_CH1_2;
+  if (rtU.status_CH1_2 == 1)
+    tor_output[CH1_2] = rtY.SPD_OUT_CH1_2;
   else
-    output[CH1_2] = rtY.yaw_ANG_OUT_CH1_2;
+    tor_output[CH1_2] = rtY.ANG_OUT_CH1_2;
 
-  if (rtU.yaw_status_CH1_3 == 1)
-    output[CH1_3] = rtY.yaw_SPD_OUT_CH1_3;
+  if (rtU.status_CH1_3 == 1)
+    tor_output[CH1_3] = rtY.SPD_OUT_CH1_3;
   else
-    output[CH1_3] = rtY.yaw_ANG_OUT_CH1_3;
+    tor_output[CH1_3] = rtY.ANG_OUT_CH1_3;
 
-  if (rtU.yaw_status_CH1_4 == 1)
-    output[CH1_4] = rtY.yaw_SPD_OUT_CH1_4;
+  if (rtU.status_CH1_4 == 1)
+    tor_output[CH1_4] = rtY.SPD_OUT_CH1_4;
   else
-    output[CH1_4] = rtY.yaw_ANG_OUT_CH1_4;
+    tor_output[CH1_4] = rtY.ANG_OUT_CH1_4;
 
-  if (rtU.yaw_status_CH1_5 == 1)
-    output[CH1_5] = rtY.yaw_SPD_OUT_CH1_5;
+  if (rtU.status_CH1_5 == 1)
+    tor_output[CH1_5] = rtY.SPD_OUT_CH1_5;
   else
-    output[CH1_5] = rtY.yaw_ANG_OUT_CH1_5;
+    tor_output[CH1_5] = rtY.ANG_OUT_CH1_5;
 
-  if (rtU.yaw_status_CH1_6 == 1)
-    output[CH1_6] = rtY.yaw_SPD_OUT_CH1_6;
+  if (rtU.status_CH1_6 == 1)
+    tor_output[CH1_6] = rtY.SPD_OUT_CH1_6;
   else
-    output[CH1_6] = rtY.yaw_ANG_OUT_CH1_6;
+    tor_output[CH1_6] = rtY.ANG_OUT_CH1_6;
 
-  if (rtU.yaw_status_CH1_7 == 1)
-    output[CH1_7] = rtY.yaw_SPD_OUT_CH1_7;
+  if (rtU.status_CH1_7 == 1)
+    tor_output[CH1_7] = rtY.SPD_OUT_CH1_7;
   else
-    output[CH1_7] = rtY.yaw_ANG_OUT_CH1_7;
+    tor_output[CH1_7] = rtY.ANG_OUT_CH1_7;
 
-  if (rtU.yaw_status_CH2_1 == 1)
-    output[CH2_1] = rtY.yaw_SPD_OUT_CH2_1;
+  if (rtU.status_CH2_1 == 1)
+    tor_output[CH2_1] = rtY.SPD_OUT_CH2_1;
   else
-    output[CH2_1] = rtY.yaw_ANG_OUT_CH2_1;
+    tor_output[CH2_1] = rtY.ANG_OUT_CH2_1;
 
-  if (rtU.yaw_status_CH2_2 == 1)
-    output[CH2_2] = rtY.yaw_SPD_OUT_CH2_2;
+  if (rtU.status_CH2_2 == 1)
+    tor_output[CH2_2] = rtY.SPD_OUT_CH2_2;
   else
-    output[CH2_2] = rtY.yaw_ANG_OUT_CH2_2;
+    tor_output[CH2_2] = rtY.ANG_OUT_CH2_2;
 
-  if (rtU.yaw_status_CH2_3 == 1)
-    output[CH2_3] = rtY.yaw_SPD_OUT_CH2_3;
+  if (rtU.status_CH2_3 == 1)
+    tor_output[CH2_3] = rtY.SPD_OUT_CH2_3;
   else
-    output[CH2_3] = rtY.yaw_ANG_OUT_CH2_3;
+    tor_output[CH2_3] = rtY.ANG_OUT_CH2_3;
 
-  if (rtU.yaw_status_CH2_4 == 1)
-    output[CH2_4] = rtY.yaw_SPD_OUT_CH2_4;
+  if (rtU.status_CH2_4 == 1)
+    tor_output[CH2_4] = rtY.SPD_OUT_CH2_4;
   else
-    output[CH2_4] = rtY.yaw_ANG_OUT_CH2_4;
+    tor_output[CH2_4] = rtY.ANG_OUT_CH2_4;
 
-  if (rtU.yaw_status_CH2_5 == 1)
-    output[CH2_5] = rtY.yaw_SPD_OUT_CH2_5;
+  if (rtU.status_CH2_5 == 1)
+    tor_output[CH2_5] = rtY.SPD_OUT_CH2_5;
   else
-    output[CH2_5] = rtY.yaw_ANG_OUT_CH2_5;
+    tor_output[CH2_5] = rtY.ANG_OUT_CH2_5;
 
-  if (rtU.yaw_status_CH2_6 == 1)
-    output[CH2_6] = rtY.yaw_SPD_OUT_CH2_6;
+  if (rtU.status_CH2_6 == 1)
+    tor_output[CH2_6] = rtY.SPD_OUT_CH2_6;
   else
-    output[CH2_6] = rtY.yaw_ANG_OUT_CH2_6;
+    tor_output[CH2_6] = rtY.ANG_OUT_CH2_6;
 
-  if (rtU.yaw_status_CH2_7 == 1)
-    output[CH2_7] = rtY.yaw_SPD_OUT_CH2_7;
+  if (rtU.status_CH2_7 == 1)
+    tor_output[CH2_7] = rtY.SPD_OUT_CH2_7;
   else
-    output[CH2_7] = rtY.yaw_ANG_OUT_CH2_7;
+    tor_output[CH2_7] = rtY.ANG_OUT_CH2_7;
+	
+	  if (rtU.status_CH3_1 == 1)
+    tor_output[CH3_1] = rtY.SPD_OUT_CH3_1;
+  else
+    tor_output[CH3_1] = rtY.ANG_OUT_CH3_1;
+
+  if (rtU.status_CH3_2 == 1)
+    tor_output[CH3_2] = rtY.SPD_OUT_CH3_2;
+  else
+    tor_output[CH3_2] = rtY.ANG_OUT_CH3_2;
+
+  if (rtU.status_CH3_3 == 1)
+    tor_output[CH3_3] = rtY.SPD_OUT_CH3_3;
+  else
+    tor_output[CH3_3] = rtY.ANG_OUT_CH3_3;
+
+  if (rtU.status_CH3_4 == 1)
+    tor_output[CH3_4] = rtY.SPD_OUT_CH3_4;
+  else
+    tor_output[CH3_4] = rtY.ANG_OUT_CH3_4;
+
+  if (rtU.status_CH3_5 == 1)
+    tor_output[CH3_5] = rtY.SPD_OUT_CH3_5;
+  else
+    tor_output[CH3_5] = rtY.ANG_OUT_CH3_5;
+
+  if (rtU.status_CH3_6 == 1)
+    tor_output[CH3_6] = rtY.SPD_OUT_CH3_6;
+  else
+    tor_output[CH3_6] = rtY.ANG_OUT_CH3_6;
+
+  if (rtU.status_CH3_7 == 1)
+    tor_output[CH3_7] = rtY.SPD_OUT_CH3_7;
+  else
+    tor_output[CH3_7] = rtY.ANG_OUT_CH3_7;
 	
 
-		CAN_CMD_MOTOR_DJI(&hfdcan1,output[CH1_1], output[CH1_2], output[CH1_3], output[CH1_4],FRONT);
-		CAN_CMD_MOTOR_DJI(&hfdcan1,output[CH1_5], output[CH1_6], output[CH1_7], 0,LAST);
+		CAN_CMD_MOTOR_DJI(&hfdcan1,tor_output[CH1_1], tor_output[CH1_2], tor_output[CH1_3], tor_output[CH1_4],FRONT);
+		CAN_CMD_MOTOR_DJI(&hfdcan1,tor_output[CH1_5], tor_output[CH1_6], tor_output[CH1_7], 0,LAST);
 
-		CAN_CMD_MOTOR_DJI(&hfdcan2,output[CH2_1], output[CH2_2], output[CH2_3], output[CH2_4],FRONT);
-		CAN_CMD_MOTOR_DJI(&hfdcan2,output[CH2_5], output[CH2_6], output[CH2_7], 0,LAST);
-
+		CAN_CMD_MOTOR_DJI(&hfdcan2,tor_output[CH2_1], tor_output[CH2_2], tor_output[CH2_3], tor_output[CH2_4],FRONT);
+		CAN_CMD_MOTOR_DJI(&hfdcan2,tor_output[CH2_5], tor_output[CH2_6], tor_output[CH2_7], 0,LAST);
+	
+		CAN_CMD_MOTOR_DJI(&hfdcan3,tor_output[CH3_1], tor_output[CH3_2], tor_output[CH3_3], tor_output[CH3_4],FRONT);
+		CAN_CMD_MOTOR_DJI(&hfdcan3,tor_output[CH3_5], tor_output[CH3_6], tor_output[CH3_7], 0,LAST);
 }
 void set_mode(int mode_CH1_1, int mode_CH1_2, int mode_CH1_3, int mode_CH1_4, int mode_CH1_5, int mode_CH1_6, int mode_CH1_7,
-              int mode_CH2_1, int mode_CH2_2, int mode_CH2_3, int mode_CH2_4, int mode_CH2_5, int mode_CH2_6, int mode_CH2_7)
+              int mode_CH2_1, int mode_CH2_2, int mode_CH2_3, int mode_CH2_4, int mode_CH2_5, int mode_CH2_6, int mode_CH2_7,
+							int mode_CH3_1, int mode_CH3_2, int mode_CH3_3, int mode_CH3_4, int mode_CH3_5, int mode_CH3_6, int mode_CH3_7)
 {
-  rtU.yaw_status_CH1_1 = mode_CH1_1;
-  rtU.yaw_status_CH1_2 = mode_CH1_2;
-  rtU.yaw_status_CH1_3 = mode_CH1_3;
-  rtU.yaw_status_CH1_4 = mode_CH1_4;
-  rtU.yaw_status_CH1_5 = mode_CH1_5;
-  rtU.yaw_status_CH1_6 = mode_CH1_6;
-  rtU.yaw_status_CH1_7 = mode_CH1_7;
+  rtU.status_CH1_1 = mode_CH1_1;
+  rtU.status_CH1_2 = mode_CH1_2;
+  rtU.status_CH1_3 = mode_CH1_3;
+  rtU.status_CH1_4 = mode_CH1_4;
+  rtU.status_CH1_5 = mode_CH1_5;
+  rtU.status_CH1_6 = mode_CH1_6;
+  rtU.status_CH1_7 = mode_CH1_7;
 
-  rtU.yaw_status_CH2_1 = mode_CH2_1;
-  rtU.yaw_status_CH2_2 = mode_CH2_2;
-  rtU.yaw_status_CH2_3 = mode_CH2_3;
-  rtU.yaw_status_CH2_4 = mode_CH2_4;
-  rtU.yaw_status_CH2_5 = mode_CH2_5;
-  rtU.yaw_status_CH2_6 = mode_CH2_6;
-  rtU.yaw_status_CH2_7 = mode_CH2_7;
+  rtU.status_CH2_1 = mode_CH2_1;
+  rtU.status_CH2_2 = mode_CH2_2;
+  rtU.status_CH2_3 = mode_CH2_3;
+  rtU.status_CH2_4 = mode_CH2_4;
+  rtU.status_CH2_5 = mode_CH2_5;
+  rtU.status_CH2_6 = mode_CH2_6;
+  rtU.status_CH2_7 = mode_CH2_7;
+	
+	rtU.status_CH3_1 = mode_CH3_1;
+  rtU.status_CH3_2 = mode_CH3_2;
+  rtU.status_CH3_3 = mode_CH3_3;
+  rtU.status_CH3_4 = mode_CH3_4;
+  rtU.status_CH3_5 = mode_CH3_5;
+  rtU.status_CH3_6 = mode_CH3_6;
+  rtU.status_CH3_7 = mode_CH3_7;
 }
+
+void set_reset_status(){	
+	if((fabs(rtU.target_CH1_1-motor_data_can1[0]->speed_rpm)<200&&rtU.status_CH1_1==1)||
+		(fabs(rtU.target_CH1_1-motor_data_can1[0]->circle*8191-motor_data_can1[0]->ecd)<500&&rtU.status_CH1_1==2))
+		rtU.reset_status1_1=1-rtU.reset_status1_1;
+	
+	if((fabs(rtU.target_CH1_2-motor_data_can1[1]->speed_rpm)<200&&rtU.status_CH1_2==1)||
+		(fabs(rtU.target_CH1_2-motor_data_can1[1]->circle*8191-motor_data_can1[1]->ecd)<500&&rtU.status_CH1_2==2))
+		rtU.reset_status1_2=1-rtU.reset_status1_2;
+	
+	if((fabs(rtU.target_CH1_3-motor_data_can1[2]->speed_rpm)<200&&rtU.status_CH1_3==1)||
+		(fabs(rtU.target_CH1_3-motor_data_can1[2]->circle*8191-motor_data_can1[2]->ecd)<500&&rtU.status_CH1_3==2))
+		rtU.reset_status1_3=1-rtU.reset_status1_3;
+	
+	if((fabs(rtU.target_CH1_4-motor_data_can1[3]->speed_rpm)<200&&rtU.status_CH1_4==1)||
+		(fabs(rtU.target_CH1_4-motor_data_can1[3]->circle*8191-motor_data_can1[3]->ecd)<500&&rtU.status_CH1_4==2))
+		rtU.reset_status1_4=1-rtU.reset_status1_4;
+	
+	if((fabs(rtU.target_CH1_5-motor_data_can1[4]->speed_rpm)<200&&rtU.status_CH1_5==1)||
+		(fabs(rtU.target_CH1_5-motor_data_can1[4]->circle*8191-motor_data_can1[4]->ecd)<500&&rtU.status_CH1_5==2))
+		rtU.reset_status1_5=1-rtU.reset_status1_5;
+	
+	if((fabs(rtU.target_CH1_6-motor_data_can1[5]->speed_rpm)<200&&rtU.status_CH1_6==1)||
+		(fabs(rtU.target_CH1_6-motor_data_can1[5]->circle*8191-motor_data_can1[5]->ecd)<500&&rtU.status_CH1_6==2))
+		rtU.reset_status1_6=1-rtU.reset_status1_6;
+	
+	if((fabs(rtU.target_CH1_7-motor_data_can1[6]->speed_rpm)<200&&rtU.status_CH1_7==1)||
+		(fabs(rtU.target_CH1_7-motor_data_can1[6]->circle*8191-motor_data_can1[6]->ecd)<500&&rtU.status_CH1_7==2))
+		rtU.reset_status1_7=1-rtU.reset_status1_7;
+	
+							
+							
+	if((fabs(rtU.target_CH2_1-motor_data_can2[0]->speed_rpm)<200&&rtU.status_CH2_1==1)||
+		(fabs(rtU.target_CH2_1-motor_data_can2[0]->circle*8191-motor_data_can2[0]->ecd)<500&&rtU.status_CH2_1==2))
+		rtU.reset_status2_1=1-rtU.reset_status2_1;
+	
+	if((fabs(rtU.target_CH2_2-motor_data_can2[1]->speed_rpm)<200&&rtU.status_CH2_2==1)||
+		(fabs(rtU.target_CH2_2-motor_data_can2[1]->circle*8191-motor_data_can2[1]->ecd)<500&&rtU.status_CH2_2==2))
+		rtU.reset_status2_2=1-rtU.reset_status2_2;
+	
+	if((fabs(rtU.target_CH2_3-motor_data_can2[2]->speed_rpm)<200&&rtU.status_CH2_3==1)||
+		(fabs(rtU.target_CH2_3-motor_data_can2[2]->circle*8191-motor_data_can2[2]->ecd)<500&&rtU.status_CH2_3==2))
+		rtU.reset_status2_3=1-rtU.reset_status2_3;
+	
+	if((fabs(rtU.target_CH2_4-motor_data_can2[3]->speed_rpm)<200&&rtU.status_CH2_4==1)||
+		(fabs(rtU.target_CH2_4-motor_data_can2[3]->circle*8191-motor_data_can2[3]->ecd)<500&&rtU.status_CH2_4==2))
+		rtU.reset_status2_4=1-rtU.reset_status2_4;
+	
+	if((fabs(rtU.target_CH2_5-motor_data_can2[4]->speed_rpm)<200&&rtU.status_CH2_5==1)||
+		(fabs(rtU.target_CH2_5-motor_data_can2[4]->circle*8191-motor_data_can2[4]->ecd)<500&&rtU.status_CH2_5==2))
+		rtU.reset_status2_5=1-rtU.reset_status2_5;
+	
+	if((fabs(rtU.target_CH2_6-motor_data_can2[5]->speed_rpm)<200&&rtU.status_CH2_6==1)||
+		(fabs(rtU.target_CH2_6-motor_data_can2[5]->circle*8191-motor_data_can2[5]->ecd)<500&&rtU.status_CH2_6==2))
+		rtU.reset_status2_6=1-rtU.reset_status2_6;
+	
+	if((fabs(rtU.target_CH2_7-motor_data_can2[6]->speed_rpm)<200&&rtU.status_CH2_7==1)||
+		(fabs(rtU.target_CH2_7-motor_data_can2[6]->circle*8191-motor_data_can2[6]->ecd)<500&&rtU.status_CH2_7==2))
+		rtU.reset_status2_7=1-rtU.reset_status2_7;
+
+	
+	if((fabs(rtU.target_CH3_1-motor_data_can3[0]->speed_rpm)<200&&rtU.status_CH3_1==1)||
+		(fabs(rtU.target_CH3_1-motor_data_can3[0]->circle*8191-motor_data_can3[0]->ecd)<500&&rtU.status_CH3_1==2))
+		rtU.reset_status3_1=1-rtU.reset_status3_1;
+	
+	if((fabs(rtU.target_CH3_2-motor_data_can3[1]->speed_rpm)<200&&rtU.status_CH3_2==1)||
+		(fabs(rtU.target_CH3_2-motor_data_can3[1]->circle*8191-motor_data_can3[1]->ecd)<500&&rtU.status_CH3_2==2))
+		rtU.reset_status3_2=1-rtU.reset_status3_2;
+	
+	if((fabs(rtU.target_CH3_3-motor_data_can3[2]->speed_rpm)<200&&rtU.status_CH3_3==1)||
+		(fabs(rtU.target_CH3_3-motor_data_can3[2]->circle*8191-motor_data_can3[2]->ecd)<500&&rtU.status_CH3_3==2))
+		rtU.reset_status3_3=1-rtU.reset_status3_3;
+	
+	if((fabs(rtU.target_CH3_4-motor_data_can3[3]->speed_rpm)<200&&rtU.status_CH3_4==1)||
+		(fabs(rtU.target_CH3_4-motor_data_can3[3]->circle*8191-motor_data_can3[3]->ecd)<500&&rtU.status_CH3_4==2))
+		rtU.reset_status3_4=1-rtU.reset_status3_4;
+	
+	if((fabs(rtU.target_CH3_5-motor_data_can3[4]->speed_rpm)<200&&rtU.status_CH3_5==1)||
+		(fabs(rtU.target_CH3_5-motor_data_can3[4]->circle*8191-motor_data_can3[4]->ecd)<500&&rtU.status_CH3_5==2))
+		rtU.reset_status3_5=1-rtU.reset_status3_5;
+	
+  if((fabs(rtU.target_CH3_6-motor_data_can3[5]->speed_rpm)<200&&rtU.status_CH3_6==1)||
+		(fabs(rtU.target_CH3_6-motor_data_can3[5]->circle*8191-motor_data_can3[5]->ecd)<500&&rtU.status_CH3_6==2))
+		rtU.reset_status3_6=1-rtU.reset_status3_6;
+	
+	if((fabs(rtU.target_CH3_7-motor_data_can3[6]->speed_rpm)<200&&rtU.status_CH3_7==1)||
+		(fabs(rtU.target_CH3_7-motor_data_can3[6]->circle*8191-motor_data_can3[6]->ecd)<500&&rtU.status_CH3_7==2))
+		rtU.reset_status3_7=1-rtU.reset_status3_7;
+
+}
+
 void set_target(uint8_t channel,uint8_t id,int target)
 {
 	  switch (channel)
@@ -306,31 +480,31 @@ void set_target(uint8_t channel,uint8_t id,int target)
     {
     case 1:
 			if(motor_data_can1[0]->activate)
-				rtU.yaw_target_CH1_1=target;
+				rtU.target_CH1_1=target;
       break;
     case 2:
 			if(motor_data_can1[1]->activate)
-				rtU.yaw_target_CH1_2=target;
+				rtU.target_CH1_2=target;
       break;
     case 3:
 			if(motor_data_can1[2]->activate)
-				rtU.yaw_target_CH1_3=target;
+				rtU.target_CH1_3=target;
       break;
     case 4:
 			if(motor_data_can1[3]->activate)
-				rtU.yaw_target_CH1_4=target;
+				rtU.target_CH1_4=target;
       break;
     case 5:
 			if(motor_data_can1[4]->activate)
-				rtU.yaw_target_CH1_5=target;
+				rtU.target_CH1_5=target;
       break;
     case 6:
 			if(motor_data_can1[5]->activate)
-				rtU.yaw_target_CH1_6=target;
+				rtU.target_CH1_6=target;
       break;
     case 7:
 			if(motor_data_can1[6]->activate)
-				rtU.yaw_target_CH1_7=target;
+				rtU.target_CH1_7=target;
       break;
     }
     break;
@@ -339,31 +513,64 @@ void set_target(uint8_t channel,uint8_t id,int target)
     {
     case 1:
 			if(motor_data_can2[0]->activate)
-				rtU.yaw_target_CH2_1=target;
+				rtU.target_CH2_1=target;
       break;
     case 2:
 			if(motor_data_can2[1]->activate)
-				rtU.yaw_target_CH2_2=target;
+				rtU.target_CH2_2=target;
       break;
     case 3:
 			if(motor_data_can2[2]->activate)
-				rtU.yaw_target_CH2_3=target;
+				rtU.target_CH2_3=target;
       break;
     case 4:
 			if(motor_data_can2[3]->activate)
-				rtU.yaw_target_CH2_4=target;
+				rtU.target_CH2_4=target;
       break;
     case 5:
 			if(motor_data_can2[4]->activate)
-				rtU.yaw_target_CH2_5=target;
+				rtU.target_CH2_5=target;
       break;
     case 6:
 			if(motor_data_can2[5]->activate)
-				rtU.yaw_target_CH2_6=target;
+				rtU.target_CH2_6=target;
       break;
     case 7:
 			if(motor_data_can2[6]->activate)
-				rtU.yaw_target_CH2_7=target;
+				rtU.target_CH2_7=target;
+      break;
+    }
+    break;
+	case 3:
+		switch (id)
+    {
+    case 1:
+			if(motor_data_can3[0]->activate)
+				rtU.target_CH3_1=target;
+      break;
+    case 2:
+			if(motor_data_can3[1]->activate)
+				rtU.target_CH3_2=target;
+      break;
+    case 3:
+			if(motor_data_can3[2]->activate)
+				rtU.target_CH3_3=target;
+      break;
+    case 4:
+			if(motor_data_can3[3]->activate)
+				rtU.target_CH3_4=target;
+      break;
+    case 5:
+			if(motor_data_can3[4]->activate)
+				rtU.target_CH3_5=target;
+      break;
+    case 6:
+			if(motor_data_can3[5]->activate)
+				rtU.target_CH3_6=target;
+      break;
+    case 7:
+			if(motor_data_can3[6]->activate)
+				rtU.target_CH3_7=target;
       break;
     }
     break;
@@ -450,6 +657,46 @@ void PID_Speed_Para_Init(int channel, int motor, double kp, double ki, double kd
       rtP.SPD_D_CH2_7 = kd;
       rtP.SPD_I_CH2_7 = ki;
       rtP.SPD_P_CH2_7 = kp;
+      break;
+    }
+    break;
+		case 3:
+    switch (motor)
+    {
+    case 1:
+      rtP.SPD_D_CH3_1 = kd;
+      rtP.SPD_I_CH3_1 = ki;
+      rtP.SPD_P_CH3_1 = kp;
+      break;
+    case 2:
+      rtP.SPD_D_CH3_2 = kd;
+      rtP.SPD_I_CH3_2 = ki;
+      rtP.SPD_P_CH3_2 = kp;
+      break;
+    case 3:
+      rtP.SPD_D_CH3_3 = kd;
+      rtP.SPD_I_CH3_3 = ki;
+      rtP.SPD_P_CH3_3 = kp;
+      break;
+    case 4:
+      rtP.SPD_D_CH3_4 = kd;
+      rtP.SPD_I_CH3_4 = ki;
+      rtP.SPD_P_CH3_4 = kp;
+      break;
+    case 5:
+      rtP.SPD_D_CH3_5 = kd;
+      rtP.SPD_I_CH3_5 = ki;
+      rtP.SPD_P_CH3_5 = kp;
+      break;
+    case 6:
+      rtP.SPD_D_CH3_6 = kd;
+      rtP.SPD_I_CH3_6 = ki;
+      rtP.SPD_P_CH3_6 = kp;
+      break;
+    case 7:
+      rtP.SPD_D_CH3_7 = kd;
+      rtP.SPD_I_CH3_7 = ki;
+      rtP.SPD_P_CH3_7 = kp;
       break;
     }
     break;
@@ -540,6 +787,46 @@ void PID_Angle_S_Para_Init(int channel, int motor, double kp, double ki, double 
       break;
     }
     break;
+		case 3:
+    switch (motor)
+    {
+    case 1:
+      rtP.ANG_S_P_CH3_1 = kp;
+      rtP.ANG_S_I_CH3_1 = ki;
+      rtP.ANG_S_D_CH3_1 = kd;
+      break;
+    case 2:
+      rtP.ANG_S_P_CH3_2 = kp;
+      rtP.ANG_S_I_CH3_2 = ki;
+      rtP.ANG_S_D_CH3_2 = kd;
+      break;
+    case 3:
+      rtP.ANG_S_P_CH3_3 = kp;
+      rtP.ANG_S_I_CH3_3 = ki;
+      rtP.ANG_S_D_CH3_3 = kd;
+      break;
+    case 4:
+      rtP.ANG_S_P_CH3_4 = kp;
+      rtP.ANG_S_I_CH3_4 = ki;
+      rtP.ANG_S_D_CH3_4 = kd;
+      break;
+    case 5:
+      rtP.ANG_S_P_CH3_5 = kp;
+      rtP.ANG_S_I_CH3_5 = ki;
+      rtP.ANG_S_D_CH3_5 = kd;
+      break;
+    case 6:
+      rtP.ANG_S_P_CH3_6 = kp;
+      rtP.ANG_S_I_CH3_6 = ki;
+      rtP.ANG_S_D_CH3_6 = kd;
+      break;
+    case 7:
+      rtP.ANG_S_P_CH3_7 = kp;
+      rtP.ANG_S_I_CH3_7 = ki;
+      rtP.ANG_S_D_CH3_7 = kd;
+      break;
+    }
+    break;
   }
 }
 
@@ -624,6 +911,46 @@ void PID_Angle_A_Para_Init(int channel, int motor, double kp, double ki, double 
       rtP.ANG_A_P_CH2_7 = kp;
       rtP.ANG_A_I_CH2_7 = ki;
       rtP.ANG_A_D_CH2_7 = kd;
+      break;
+    }
+    break;
+	case 3:
+    switch (motor)
+    {
+    case 1:
+      rtP.ANG_A_P_CH3_1 = kp;
+      rtP.ANG_A_I_CH3_1 = ki;
+      rtP.ANG_A_D_CH3_1 = kd;
+      break;
+    case 2:
+      rtP.ANG_A_P_CH3_2 = kp;
+      rtP.ANG_A_I_CH3_2 = ki;
+      rtP.ANG_A_D_CH3_2 = kd;
+      break;
+    case 3:
+      rtP.ANG_A_P_CH3_3 = kp;
+      rtP.ANG_A_I_CH3_3 = ki;
+      rtP.ANG_A_D_CH3_3 = kd;
+      break;
+    case 4:
+      rtP.ANG_A_P_CH3_4 = kp;
+      rtP.ANG_A_I_CH3_4 = ki;
+      rtP.ANG_A_D_CH3_4 = kd;
+      break;
+    case 5:
+      rtP.ANG_A_P_CH3_5 = kp;
+      rtP.ANG_A_I_CH3_5 = ki;
+      rtP.ANG_A_D_CH3_5 = kd;
+      break;
+    case 6:
+      rtP.ANG_A_P_CH3_6 = kp;
+      rtP.ANG_A_I_CH3_6 = ki;
+      rtP.ANG_A_D_CH3_6 = kd;
+      break;
+    case 7:
+      rtP.ANG_A_P_CH3_7 = kp;
+      rtP.ANG_A_I_CH3_7 = ki;
+      rtP.ANG_A_D_CH3_7 = kd;
       break;
     }
     break;

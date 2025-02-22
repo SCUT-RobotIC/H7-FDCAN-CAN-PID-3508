@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'PID_MODEL'.
  *
- * Model version                  : 2.18
- * Simulink Coder version         : 23.2 (R2023b) 01-Aug-2023
- * C/C++ source code generated on : Mon Apr 22 19:38:11 2024
+ * Model version                  : 4.4
+ * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
+ * C/C++ source code generated on : Sat Feb 22 20:33:40 2025
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex-M
@@ -23,7 +23,7 @@
 #include "rtwtypes.h"
 #include <math.h>
 
-/* Named constants for Chart: '<S16>/Chart1' */
+/* Named constants for Chart: '<S24>/Chart1' */
 #define IN_ADD                         ((uint8_T)1U)
 #define IN_IDLE                        ((uint8_T)2U)
 #define IN_SUB                         ((uint8_T)3U)
@@ -45,16 +45,16 @@ static void Chart1(real32_T rtu_u1, real32_T *rty_u2, DW_Chart1 *localDW);
 
 /*
  * System initialize for atomic system:
- *    '<S16>/Chart1'
- *    '<S166>/Chart1'
- *    '<S316>/Chart1'
- *    '<S466>/Chart1'
- *    '<S616>/Chart1'
- *    '<S766>/Chart1'
- *    '<S916>/Chart1'
- *    '<S1066>/Chart1'
- *    '<S1216>/Chart1'
- *    '<S1366>/Chart1'
+ *    '<S24>/Chart1'
+ *    '<S180>/Chart1'
+ *    '<S336>/Chart1'
+ *    '<S492>/Chart1'
+ *    '<S648>/Chart1'
+ *    '<S804>/Chart1'
+ *    '<S960>/Chart1'
+ *    '<S1116>/Chart1'
+ *    '<S1272>/Chart1'
+ *    '<S1428>/Chart1'
  *    ...
  */
 static void Chart1_Init(real32_T *rty_u2)
@@ -64,21 +64,21 @@ static void Chart1_Init(real32_T *rty_u2)
 
 /*
  * Output and update for atomic system:
- *    '<S16>/Chart1'
- *    '<S166>/Chart1'
- *    '<S316>/Chart1'
- *    '<S466>/Chart1'
- *    '<S616>/Chart1'
- *    '<S766>/Chart1'
- *    '<S916>/Chart1'
- *    '<S1066>/Chart1'
- *    '<S1216>/Chart1'
- *    '<S1366>/Chart1'
+ *    '<S24>/Chart1'
+ *    '<S180>/Chart1'
+ *    '<S336>/Chart1'
+ *    '<S492>/Chart1'
+ *    '<S648>/Chart1'
+ *    '<S804>/Chart1'
+ *    '<S960>/Chart1'
+ *    '<S1116>/Chart1'
+ *    '<S1272>/Chart1'
+ *    '<S1428>/Chart1'
  *    ...
  */
 static void Chart1(real32_T rtu_u1, real32_T *rty_u2, DW_Chart1 *localDW)
 {
-  /* Chart: '<S16>/Chart1' */
+  /* Chart: '<S24>/Chart1' */
   if (localDW->is_active_c1_PID_MODEL == 0U) {
     localDW->is_active_c1_PID_MODEL = 1U;
     localDW->is_c1_PID_MODEL = IN_IDLE;
@@ -117,377 +117,311 @@ static void Chart1(real32_T rtu_u1, real32_T *rty_u2, DW_Chart1 *localDW)
     }
   }
 
-  /* End of Chart: '<S16>/Chart1' */
+  /* End of Chart: '<S24>/Chart1' */
 }
 
 /* Model step function */
 void PID_MODEL_step(void)
 {
-  real32_T rtb_FilterCoefficient_dy;
-  real32_T rtb_FilterCoefficient_e4;
-  real32_T rtb_FilterCoefficient_k;
-  real32_T rtb_Sum_pp;
+  real32_T rtb_FilterCoefficient;
+  real32_T rtb_FilterCoefficient_ch;
+  real32_T rtb_FilterCoefficient_eu;
+  real32_T rtb_FilterCoefficient_nkj;
+  real32_T rtb_Sum_cz;
   real32_T u0;
 
-  /* SwitchCase: '<S8>/Switch Case' incorporates:
-   *  Inport: '<Root>/yaw_status_CH2_1'
+  /* Gain: '<S3335>/Filter Coefficient' incorporates:
+   *  DiscreteIntegrator: '<S3327>/Filter'
+   *  Gain: '<S3325>/Derivative Gain'
+   *  Inport: '<Root>/distance'
+   *  Sum: '<S3327>/SumD'
    */
-  switch ((int32_T)rtU.yaw_status_CH2_1) {
-   case 1:
-    /* Outputs for IfAction SubSystem: '<S8>/If Action_speed Subsystem' incorporates:
-     *  ActionPort: '<S1065>/Action Port'
-     */
-    /* Sum: '<S1065>/Sum' incorporates:
-     *  Inport: '<Root>/yaw_speed_rpm_CH2_1'
-     *  Inport: '<Root>/yaw_target_CH2_1'
-     */
-    rtb_Sum_pp = rtU.yaw_target_CH2_1 - rtU.yaw_speed_rpm_CH2_1;
+  rtb_FilterCoefficient = (rtP.POS_D * rtU.distance - rtDW.Filter_DSTATE) *
+    100.0F;
 
-    /* Gain: '<S1102>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S1094>/Filter'
-     *  Gain: '<S1093>/Derivative Gain'
-     *  Sum: '<S1094>/SumD'
-     */
-    rtb_FilterCoefficient_k = (rtP.SPD_D_CH2_1 * rtb_Sum_pp -
-      rtDW.Filter_DSTATE_k4) * 100.0F;
+  /* Sum: '<S3341>/Sum' incorporates:
+   *  DiscreteIntegrator: '<S3332>/Integrator'
+   *  Gain: '<S3337>/Proportional Gain'
+   *  Inport: '<Root>/distance'
+   */
+  u0 = (rtP.POS_P * rtU.distance + rtDW.Integrator_DSTATE) +
+    rtb_FilterCoefficient;
 
-    /* Sum: '<S1108>/Sum' incorporates:
-     *  DiscreteIntegrator: '<S1099>/Integrator'
-     *  Gain: '<S1104>/Proportional Gain'
-     */
-    u0 = (rtP.SPD_P_CH2_1 * rtb_Sum_pp + rtDW.Integrator_DSTATE_ee) +
-      rtb_FilterCoefficient_k;
-
-    /* Saturate: '<S1106>/Saturation' */
-    if (u0 > 30000.0F) {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH2_1' */
-      rtY.yaw_SPD_OUT_CH2_1 = 30000.0F;
-    } else if (u0 < -30000.0F) {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH2_1' */
-      rtY.yaw_SPD_OUT_CH2_1 = -30000.0F;
-    } else {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH2_1' */
-      rtY.yaw_SPD_OUT_CH2_1 = u0;
-    }
-
-    /* End of Saturate: '<S1106>/Saturation' */
-
-    /* Update for DiscreteIntegrator: '<S1094>/Filter' */
-    rtDW.Filter_DSTATE_k4 += 0.001F * rtb_FilterCoefficient_k;
-
-    /* Update for DiscreteIntegrator: '<S1099>/Integrator' incorporates:
-     *  Gain: '<S1096>/Integral Gain'
-     */
-    rtDW.Integrator_DSTATE_ee += rtP.SPD_I_CH2_1 * rtb_Sum_pp * 0.001F;
-		
-    /* End of Outputs for SubSystem: '<S8>/If Action_speed Subsystem' */
-    break;
-
-   case 2:
-    /* Outputs for IfAction SubSystem: '<S8>/If Action_speed Subsystem1' incorporates:
-     *  ActionPort: '<S1066>/Action Port'
-     */
-    /* Sum: '<S1066>/Sum' incorporates:
-     *  Gain: '<S1066>/Gain'
-     *  Inport: '<Root>/yaw_circle_CH2_1'
-     *  Inport: '<Root>/yaw_ecd_CH2_1'
-     *  Inport: '<Root>/yaw_target_CH2_1'
-     *  Sum: '<S1066>/Sum2'
-     */
-    rtb_FilterCoefficient_k = rtU.yaw_target_CH2_1 - (8191.0F *
-      rtU.yaw_circle_CH2_1 + rtU.yaw_ecd_CH2_1);
-
-    /* Abs: '<S1066>/Abs' */
-    rtb_Sum_pp = (real32_T)fabs(rtb_FilterCoefficient_k);
-
-    /* Switch: '<S1066>/Switch2' incorporates:
-     *  Constant: '<S1066>/Constant'
-     */
-    if (!(rtb_Sum_pp > rtP.DEADBAND_CH2_1)) {
-      rtb_FilterCoefficient_k = 0.0F;
-    }
-
-    /* End of Switch: '<S1066>/Switch2' */
-
-    /* Gain: '<S1201>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S1193>/Filter'
-     *  Gain: '<S1192>/Derivative Gain'
-     *  Sum: '<S1193>/SumD'
-     */
-    rtb_FilterCoefficient_dy = (rtP.ANG_A_D_CH2_1 * rtb_FilterCoefficient_k -
-      rtDW.Filter_DSTATE_o2) * 100.0F;
-
-    /* Switch: '<S1066>/Switch1' incorporates:
-     *  Constant: '<S1066>/Constant'
-     *  Gain: '<S1066>/Multiply'
-     *  Inport: '<Root>/yaw_speed_rpm_CH2_1'
-     *  Saturate: '<S1205>/Saturation'
-     *  Sum: '<S1066>/Sum1'
-     */
-    if (rtb_Sum_pp > rtP.DEADBAND_CH2_1) {
-      /* Sum: '<S1207>/Sum' incorporates:
-       *  DiscreteIntegrator: '<S1198>/Integrator'
-       *  Gain: '<S1203>/Proportional Gain'
-       */
-      u0 = (rtP.ANG_A_P_CH2_1 * rtb_FilterCoefficient_k +
-            rtDW.Integrator_DSTATE_c) + rtb_FilterCoefficient_dy;
-
-      /* Saturate: '<S1205>/Saturation' */
-      if (u0 > 30000.0F) {
-        u0 = 30000.0F;
-      } else if (u0 < -30000.0F) {
-        u0 = -30000.0F;
-      }
-
-      rtb_Sum_pp = rtP.TRANS_CH2_1 * u0 - rtU.yaw_speed_rpm_CH2_1;
-    } else {
-      rtb_Sum_pp = 0.0F;
-    }
-
-    /* End of Switch: '<S1066>/Switch1' */
-
-    /* Gain: '<S1153>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S1145>/Filter'
-     *  Gain: '<S1144>/Derivative Gain'
-     *  Sum: '<S1145>/SumD'
-     */
-    rtb_FilterCoefficient_e4 = (rtP.ANG_S_D_CH2_1 * rtb_Sum_pp -
-      rtDW.Filter_DSTATE_nk) * 100.0F;
-
-    /* Sum: '<S1159>/Sum' incorporates:
-     *  DiscreteIntegrator: '<S1150>/Integrator'
-     *  Gain: '<S1155>/Proportional Gain'
-     */
-    u0 = (rtP.ANG_S_P_CH2_1 * rtb_Sum_pp + rtDW.Integrator_DSTATE_if) +
-      rtb_FilterCoefficient_e4;
-
-    /* Saturate: '<S1157>/Saturation' */
-    if (u0 > 30000.0F) {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH2_1' */
-      rtY.yaw_ANG_OUT_CH2_1 = 30000.0F;
-    } else if (u0 < -30000.0F) {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH2_1' */
-      rtY.yaw_ANG_OUT_CH2_1 = -30000.0F;
-    } else {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH2_1' */
-      rtY.yaw_ANG_OUT_CH2_1 = u0;
-    }
-
-    /* End of Saturate: '<S1157>/Saturation' */
-
-    /* Chart: '<S1066>/Chart1' incorporates:
-     *  Inport: '<Root>/yaw_ecd_CH2_1'
-     *  Inport: '<Root>/yaw_last_ecd_CH2_1'
-     *  Sum: '<S1066>/Sum3'
-     */
-    Chart1(rtU.yaw_ecd_CH2_1 - rtU.yaw_last_ecd_CH2_1, &rtDW.u2_o,
-           &rtDW.sf_Chart1_d);
-
-    /* Outport: '<Root>/yaw_circle_out_CH2_1' incorporates:
-     *  Inport: '<Root>/yaw_circle_CH2_1'
-     *  Sum: '<S1066>/Sum4'
-     */
-    rtY.yaw_circle_out_CH2_1 = rtDW.u2_o + rtU.yaw_circle_CH2_1;
-
-    /* Update for DiscreteIntegrator: '<S1198>/Integrator' incorporates:
-     *  Gain: '<S1195>/Integral Gain'
-     */
-    rtDW.Integrator_DSTATE_c += rtP.ANG_A_I_CH2_1 * rtb_FilterCoefficient_k *
-      0.001F;
-
-    /* Update for DiscreteIntegrator: '<S1193>/Filter' */
-    rtDW.Filter_DSTATE_o2 += 0.001F * rtb_FilterCoefficient_dy;
-
-    /* Update for DiscreteIntegrator: '<S1145>/Filter' */
-    rtDW.Filter_DSTATE_nk += 0.001F * rtb_FilterCoefficient_e4;
-
-    /* Update for DiscreteIntegrator: '<S1150>/Integrator' incorporates:
-     *  Gain: '<S1147>/Integral Gain'
-     */
-    rtDW.Integrator_DSTATE_if += rtP.ANG_S_I_CH2_1 * rtb_Sum_pp * 0.001F;
-
-    /* End of Outputs for SubSystem: '<S8>/If Action_speed Subsystem1' */
-    break;
+  /* Saturate: '<S3339>/Saturation' */
+  if (u0 > 16384.0F) {
+    /* Outport: '<Root>/vel_out' */
+    rtY.vel_out = 16384.0F;
+  } else if (u0 < -16384.0F) {
+    /* Outport: '<Root>/vel_out' */
+    rtY.vel_out = -16384.0F;
+  } else {
+    /* Outport: '<Root>/vel_out' */
+    rtY.vel_out = u0;
   }
 
-  /* End of SwitchCase: '<S8>/Switch Case' */
+  /* End of Saturate: '<S3339>/Saturation' */
 
   /* SwitchCase: '<S1>/Switch Case' incorporates:
-   *  Inport: '<Root>/yaw_status_CH1_1'
+   *  Inport: '<Root>/status_CH1_1'
    */
-  switch ((int32_T)rtU.yaw_status_CH1_1) {
+  switch ((int32_T)rtU.status_CH1_1) {
    case 1:
     /* Outputs for IfAction SubSystem: '<S1>/If Action_speed Subsystem' incorporates:
-     *  ActionPort: '<S15>/Action Port'
+     *  ActionPort: '<S23>/Action Port'
      */
-    /* Sum: '<S15>/Sum' incorporates:
-     *  Inport: '<Root>/yaw_speed_rpm_CH1_1'
-     *  Inport: '<Root>/yaw_target_CH1_1'
+    /* Sum: '<S23>/Sum' incorporates:
+     *  Inport: '<Root>/speed_rpm_CH1_1'
+     *  Inport: '<Root>/target_CH1_1'
      */
-    rtb_Sum_pp = rtU.yaw_target_CH1_1 - rtU.yaw_speed_rpm_CH1_1;
+    rtb_Sum_cz = rtU.target_CH1_1 - rtU.speed_rpm_CH1_1;
 
-    /* Gain: '<S52>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S44>/Filter'
-     *  Gain: '<S43>/Derivative Gain'
-     *  Sum: '<S44>/SumD'
+    /* DiscreteIntegrator: '<S54>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status1_1'
      */
-    rtb_FilterCoefficient_k = (rtP.SPD_D_CH1_1 * rtb_Sum_pp -
-      rtDW.Filter_DSTATE_ks) * 100.0F;
-
-    /* Sum: '<S58>/Sum' incorporates:
-     *  DiscreteIntegrator: '<S49>/Integrator'
-     *  Gain: '<S54>/Proportional Gain'
-     */
-    u0 = (rtP.SPD_P_CH1_1 * rtb_Sum_pp + rtDW.Integrator_DSTATE_lm) +
-      rtb_FilterCoefficient_k;
-
-    /* Saturate: '<S56>/Saturation' */
-    if (u0 > 16384.0F) {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH1_1' */
-      rtY.yaw_SPD_OUT_CH1_1 = 16384.0F;
-    } else if (u0 < -16384.0F) {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH1_1' */
-      rtY.yaw_SPD_OUT_CH1_1 = -16384.0F;
-    } else {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH1_1' */
-      rtY.yaw_SPD_OUT_CH1_1 = u0;
+    if (((rtU.reset_status1_1 > 0.0F) && (rtDW.Filter_PrevResetState_bi <= 0)) ||
+        ((rtU.reset_status1_1 <= 0.0F) && (rtDW.Filter_PrevResetState_bi == 1)))
+    {
+      rtDW.Filter_DSTATE_ks = 0.0F;
     }
 
-    /* End of Saturate: '<S56>/Saturation' */
-
-    /* Update for DiscreteIntegrator: '<S44>/Filter' */
-    rtDW.Filter_DSTATE_ks += 0.001F * rtb_FilterCoefficient_k;
-
-    /* Update for DiscreteIntegrator: '<S49>/Integrator' incorporates:
-     *  Gain: '<S46>/Integral Gain'
+    /* Gain: '<S62>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S54>/Filter'
+     *  Gain: '<S52>/Derivative Gain'
+     *  Sum: '<S54>/SumD'
      */
-    rtDW.Integrator_DSTATE_lm += rtP.SPD_I_CH1_1 * rtb_Sum_pp * 0.001F;
+    rtb_FilterCoefficient_eu = (rtP.SPD_D_CH1_1 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_ks) * 100.0F;
+
+    /* DiscreteIntegrator: '<S59>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status1_1'
+     */
+    if (((rtU.reset_status1_1 > 0.0F) && (rtDW.Integrator_PrevResetState_a2 <= 0))
+        || ((rtU.reset_status1_1 <= 0.0F) && (rtDW.Integrator_PrevResetState_a2 ==
+          1))) {
+      rtDW.Integrator_DSTATE_lm = 0.0F;
+    }
+
+    /* Sum: '<S68>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S59>/Integrator'
+     *  Gain: '<S64>/Proportional Gain'
+     */
+    u0 = (rtP.SPD_P_CH1_1 * rtb_Sum_cz + rtDW.Integrator_DSTATE_lm) +
+      rtb_FilterCoefficient_eu;
+
+    /* Saturate: '<S66>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH1_1' */
+      rtY.SPD_OUT_CH1_1 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH1_1' */
+      rtY.SPD_OUT_CH1_1 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/SPD_OUT_CH1_1' */
+      rtY.SPD_OUT_CH1_1 = u0;
+    }
+
+    /* End of Saturate: '<S66>/Saturation' */
+
+    /* Update for DiscreteIntegrator: '<S54>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S59>/Integrator'
+     *  Inport: '<Root>/reset_status1_1'
+     */
+    rtDW.Filter_DSTATE_ks += 0.001F * rtb_FilterCoefficient_eu;
+    if (rtU.reset_status1_1 > 0.0F) {
+      rtDW.Filter_PrevResetState_bi = 1;
+      rtDW.Integrator_PrevResetState_a2 = 1;
+    } else {
+      if (rtU.reset_status1_1 < 0.0F) {
+        rtDW.Filter_PrevResetState_bi = -1;
+      } else if (rtU.reset_status1_1 == 0.0F) {
+        rtDW.Filter_PrevResetState_bi = 0;
+      } else {
+        rtDW.Filter_PrevResetState_bi = 2;
+      }
+
+      if (rtU.reset_status1_1 < 0.0F) {
+        rtDW.Integrator_PrevResetState_a2 = -1;
+      } else if (rtU.reset_status1_1 == 0.0F) {
+        rtDW.Integrator_PrevResetState_a2 = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_a2 = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S54>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S59>/Integrator' incorporates:
+     *  Gain: '<S56>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_lm += rtP.SPD_I_CH1_1 * rtb_Sum_cz * 0.001F;
 
     /* End of Outputs for SubSystem: '<S1>/If Action_speed Subsystem' */
     break;
 
    case 2:
     /* Outputs for IfAction SubSystem: '<S1>/If Action_speed Subsystem1' incorporates:
-     *  ActionPort: '<S16>/Action Port'
+     *  ActionPort: '<S24>/Action Port'
      */
-    /* Sum: '<S16>/Sum' incorporates:
-     *  Gain: '<S16>/Gain'
-     *  Inport: '<Root>/yaw_circle_CH1_1'
-     *  Inport: '<Root>/yaw_ecd_CH1_1'
-     *  Inport: '<Root>/yaw_target_CH1_1'
-     *  Sum: '<S16>/Sum2'
+    /* Sum: '<S24>/Sum' incorporates:
+     *  Gain: '<S24>/Gain'
+     *  Inport: '<Root>/circle_CH1_1'
+     *  Inport: '<Root>/ecd_CH1_1'
+     *  Inport: '<Root>/target_CH1_1'
+     *  Sum: '<S24>/Sum2'
      */
-    rtb_FilterCoefficient_k = rtU.yaw_target_CH1_1 - (8191.0F *
-      rtU.yaw_circle_CH1_1 + rtU.yaw_ecd_CH1_1);
+    rtb_FilterCoefficient_eu = rtU.target_CH1_1 - (8191.0F * rtU.circle_CH1_1 +
+      rtU.ecd_CH1_1);
 
-    /* Abs: '<S16>/Abs' */
-    rtb_Sum_pp = (real32_T)fabs(rtb_FilterCoefficient_k);
+    /* Abs: '<S24>/Abs' */
+    rtb_Sum_cz = (real32_T)fabs(rtb_FilterCoefficient_eu);
 
-    /* Switch: '<S16>/Switch2' incorporates:
-     *  Constant: '<S16>/Constant'
+    /* Switch: '<S24>/Switch2' incorporates:
+     *  Constant: '<S24>/Constant'
      */
-    if (!(rtb_Sum_pp > rtP.DEADBAND_CH1_1)) {
-      rtb_FilterCoefficient_k = 0.0F;
+    if (!(rtb_Sum_cz > rtP.DEADBAND_CH1_1)) {
+      rtb_FilterCoefficient_eu = 0.0F;
     }
 
-    /* End of Switch: '<S16>/Switch2' */
+    /* End of Switch: '<S24>/Switch2' */
 
-    /* Gain: '<S151>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S143>/Filter'
-     *  Gain: '<S142>/Derivative Gain'
-     *  Sum: '<S143>/SumD'
+    /* Gain: '<S165>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S157>/Filter'
+     *  Gain: '<S155>/Derivative Gain'
+     *  Sum: '<S157>/SumD'
      */
-    rtb_FilterCoefficient_dy = (rtP.ANG_A_D_CH1_1 * rtb_FilterCoefficient_k -
+    rtb_FilterCoefficient_ch = (rtP.ANG_A_D_CH1_1 * rtb_FilterCoefficient_eu -
       rtDW.Filter_DSTATE_hs) * 100.0F;
 
-    /* Switch: '<S16>/Switch1' incorporates:
-     *  Constant: '<S16>/Constant'
-     *  Gain: '<S16>/Multiply'
-     *  Inport: '<Root>/yaw_speed_rpm_CH1_1'
-     *  Saturate: '<S155>/Saturation'
-     *  Sum: '<S16>/Sum1'
+    /* Switch: '<S24>/Switch1' incorporates:
+     *  Constant: '<S24>/Constant'
+     *  Gain: '<S24>/Multiply'
+     *  Inport: '<Root>/speed_rpm_CH1_1'
+     *  Saturate: '<S169>/Saturation'
+     *  Sum: '<S24>/Sum1'
      */
-    if (rtb_Sum_pp > rtP.DEADBAND_CH1_1) {
-      /* Sum: '<S157>/Sum' incorporates:
-       *  DiscreteIntegrator: '<S148>/Integrator'
-       *  Gain: '<S153>/Proportional Gain'
+    if (rtb_Sum_cz > rtP.DEADBAND_CH1_1) {
+      /* Sum: '<S171>/Sum' incorporates:
+       *  DiscreteIntegrator: '<S162>/Integrator'
+       *  Gain: '<S167>/Proportional Gain'
        */
-      u0 = (rtP.ANG_A_P_CH1_1 * rtb_FilterCoefficient_k +
-            rtDW.Integrator_DSTATE_ag) + rtb_FilterCoefficient_dy;
+      u0 = (rtP.ANG_A_P_CH1_1 * rtb_FilterCoefficient_eu +
+            rtDW.Integrator_DSTATE_ag) + rtb_FilterCoefficient_ch;
 
-      /* Saturate: '<S155>/Saturation' */
+      /* Saturate: '<S169>/Saturation' */
       if (u0 > 16384.0F) {
         u0 = 16384.0F;
       } else if (u0 < -16384.0F) {
         u0 = -16384.0F;
       }
 
-      rtb_Sum_pp = rtP.TRANS_CH1_1 * u0 - rtU.yaw_speed_rpm_CH1_1;
+      rtb_Sum_cz = rtP.TRANS_CH1_1 * u0 - rtU.speed_rpm_CH1_1;
     } else {
-      rtb_Sum_pp = 0.0F;
+      rtb_Sum_cz = 0.0F;
     }
 
-    /* End of Switch: '<S16>/Switch1' */
+    /* End of Switch: '<S24>/Switch1' */
 
-    /* Gain: '<S103>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S95>/Filter'
-     *  Gain: '<S94>/Derivative Gain'
-     *  Sum: '<S95>/SumD'
+    /* DiscreteIntegrator: '<S107>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status1_1'
      */
-    rtb_FilterCoefficient_e4 = (rtP.ANG_S_D_CH1_1 * rtb_Sum_pp -
+    if (((rtU.reset_status1_1 > 0.0F) && (rtDW.Filter_PrevResetState_hk <= 0)) ||
+        ((rtU.reset_status1_1 <= 0.0F) && (rtDW.Filter_PrevResetState_hk == 1)))
+    {
+      rtDW.Filter_DSTATE_jw = 0.0F;
+    }
+
+    /* Gain: '<S115>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S107>/Filter'
+     *  Gain: '<S105>/Derivative Gain'
+     *  Sum: '<S107>/SumD'
+     */
+    rtb_FilterCoefficient_nkj = (rtP.ANG_S_D_CH1_1 * rtb_Sum_cz -
       rtDW.Filter_DSTATE_jw) * 100.0F;
 
-    /* Sum: '<S109>/Sum' incorporates:
-     *  DiscreteIntegrator: '<S100>/Integrator'
-     *  Gain: '<S105>/Proportional Gain'
+    /* DiscreteIntegrator: '<S112>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status1_1'
      */
-    u0 = (rtP.ANG_S_P_CH1_1 * rtb_Sum_pp + rtDW.Integrator_DSTATE_l4) +
-      rtb_FilterCoefficient_e4;
-
-    /* Saturate: '<S107>/Saturation' */
-    if (u0 > 16384.0F) {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH1_1' */
-      rtY.yaw_ANG_OUT_CH1_1 = 16384.0F;
-    } else if (u0 < -16384.0F) {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH1_1' */
-      rtY.yaw_ANG_OUT_CH1_1 = -16384.0F;
-    } else {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH1_1' */
-      rtY.yaw_ANG_OUT_CH1_1 = u0;
+    if (((rtU.reset_status1_1 > 0.0F) && (rtDW.Integrator_PrevResetState_mx <= 0))
+        || ((rtU.reset_status1_1 <= 0.0F) && (rtDW.Integrator_PrevResetState_mx ==
+          1))) {
+      rtDW.Integrator_DSTATE_l4 = 0.0F;
     }
 
-    /* End of Saturate: '<S107>/Saturation' */
-
-    /* Chart: '<S16>/Chart1' incorporates:
-     *  Inport: '<Root>/yaw_ecd_CH1_1'
-     *  Inport: '<Root>/yaw_last_ecd_CH1_1'
-     *  Sum: '<S16>/Sum3'
+    /* Sum: '<S121>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S112>/Integrator'
+     *  Gain: '<S117>/Proportional Gain'
      */
-    Chart1(rtU.yaw_ecd_CH1_1 - rtU.yaw_last_ecd_CH1_1, &rtDW.u2_ae,
-           &rtDW.sf_Chart1);
+    u0 = (rtP.ANG_S_P_CH1_1 * rtb_Sum_cz + rtDW.Integrator_DSTATE_l4) +
+      rtb_FilterCoefficient_nkj;
 
-    /* Outport: '<Root>/yaw_circle_out_CH1_1' incorporates:
-     *  Inport: '<Root>/yaw_circle_CH1_1'
-     *  Sum: '<S16>/Sum4'
-     */
-    rtY.yaw_circle_out_CH1_1 = rtDW.u2_ae + rtU.yaw_circle_CH1_1;
+    /* Saturate: '<S119>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/ANG_OUT_CH1_1' */
+      rtY.ANG_OUT_CH1_1 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/ANG_OUT_CH1_1' */
+      rtY.ANG_OUT_CH1_1 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/ANG_OUT_CH1_1' */
+      rtY.ANG_OUT_CH1_1 = u0;
+    }
 
-    /* Update for DiscreteIntegrator: '<S148>/Integrator' incorporates:
-     *  Gain: '<S145>/Integral Gain'
+    /* End of Saturate: '<S119>/Saturation' */
+
+    /* Chart: '<S24>/Chart1' incorporates:
+     *  Inport: '<Root>/ecd_CH1_1'
+     *  Inport: '<Root>/last_ecd_CH1_1'
+     *  Sum: '<S24>/Sum3'
      */
-    rtDW.Integrator_DSTATE_ag += rtP.ANG_A_I_CH1_1 * rtb_FilterCoefficient_k *
+    Chart1(rtU.ecd_CH1_1 - rtU.last_ecd_CH1_1, &rtDW.u2_nnb, &rtDW.sf_Chart1);
+
+    /* Outport: '<Root>/circle_out_CH1_1' incorporates:
+     *  Inport: '<Root>/circle_CH1_1'
+     *  Sum: '<S24>/Sum4'
+     */
+    rtY.circle_out_CH1_1 = rtDW.u2_nnb + rtU.circle_CH1_1;
+
+    /* Update for DiscreteIntegrator: '<S162>/Integrator' incorporates:
+     *  Gain: '<S159>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_ag += rtP.ANG_A_I_CH1_1 * rtb_FilterCoefficient_eu *
       0.001F;
 
-    /* Update for DiscreteIntegrator: '<S143>/Filter' */
-    rtDW.Filter_DSTATE_hs += 0.001F * rtb_FilterCoefficient_dy;
+    /* Update for DiscreteIntegrator: '<S157>/Filter' */
+    rtDW.Filter_DSTATE_hs += 0.001F * rtb_FilterCoefficient_ch;
 
-    /* Update for DiscreteIntegrator: '<S95>/Filter' */
-    rtDW.Filter_DSTATE_jw += 0.001F * rtb_FilterCoefficient_e4;
-
-    /* Update for DiscreteIntegrator: '<S100>/Integrator' incorporates:
-     *  Gain: '<S97>/Integral Gain'
+    /* Update for DiscreteIntegrator: '<S107>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S112>/Integrator'
+     *  Inport: '<Root>/reset_status1_1'
      */
-    rtDW.Integrator_DSTATE_l4 += rtP.ANG_S_I_CH1_1 * rtb_Sum_pp * 0.001F;
+    rtDW.Filter_DSTATE_jw += 0.001F * rtb_FilterCoefficient_nkj;
+    if (rtU.reset_status1_1 > 0.0F) {
+      rtDW.Filter_PrevResetState_hk = 1;
+      rtDW.Integrator_PrevResetState_mx = 1;
+    } else {
+      if (rtU.reset_status1_1 < 0.0F) {
+        rtDW.Filter_PrevResetState_hk = -1;
+      } else if (rtU.reset_status1_1 == 0.0F) {
+        rtDW.Filter_PrevResetState_hk = 0;
+      } else {
+        rtDW.Filter_PrevResetState_hk = 2;
+      }
+
+      if (rtU.reset_status1_1 < 0.0F) {
+        rtDW.Integrator_PrevResetState_mx = -1;
+      } else if (rtU.reset_status1_1 == 0.0F) {
+        rtDW.Integrator_PrevResetState_mx = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_mx = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S107>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S112>/Integrator' incorporates:
+     *  Gain: '<S109>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_l4 += rtP.ANG_S_I_CH1_1 * rtb_Sum_cz * 0.001F;
 
     /* End of Outputs for SubSystem: '<S1>/If Action_speed Subsystem1' */
     break;
@@ -496,181 +430,266 @@ void PID_MODEL_step(void)
   /* End of SwitchCase: '<S1>/Switch Case' */
 
   /* SwitchCase: '<S2>/Switch Case' incorporates:
-   *  Inport: '<Root>/yaw_status_CH1_2'
+   *  Inport: '<Root>/status_CH1_2'
    */
-  switch ((int32_T)rtU.yaw_status_CH1_2) {
+  switch ((int32_T)rtU.status_CH1_2) {
    case 1:
     /* Outputs for IfAction SubSystem: '<S2>/If Action_speed Subsystem' incorporates:
-     *  ActionPort: '<S165>/Action Port'
+     *  ActionPort: '<S179>/Action Port'
      */
-    /* Sum: '<S165>/Sum' incorporates:
-     *  Inport: '<Root>/yaw_speed_rpm_CH1_2'
-     *  Inport: '<Root>/yaw_target_CH1_2'
+    /* Sum: '<S179>/Sum' incorporates:
+     *  Inport: '<Root>/speed_rpm_CH1_2'
+     *  Inport: '<Root>/target_CH1_2'
      */
-    rtb_Sum_pp = rtU.yaw_target_CH1_2 - rtU.yaw_speed_rpm_CH1_2;
+    rtb_Sum_cz = rtU.target_CH1_2 - rtU.speed_rpm_CH1_2;
 
-    /* Gain: '<S202>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S194>/Filter'
-     *  Gain: '<S193>/Derivative Gain'
-     *  Sum: '<S194>/SumD'
+    /* DiscreteIntegrator: '<S210>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status1_2'
      */
-    rtb_FilterCoefficient_k = (rtP.SPD_D_CH1_2 * rtb_Sum_pp -
-      rtDW.Filter_DSTATE_gi) * 100.0F;
-
-    /* Sum: '<S208>/Sum' incorporates:
-     *  DiscreteIntegrator: '<S199>/Integrator'
-     *  Gain: '<S204>/Proportional Gain'
-     */
-    u0 = (rtP.SPD_P_CH1_2 * rtb_Sum_pp + rtDW.Integrator_DSTATE_mwe) +
-      rtb_FilterCoefficient_k;
-
-    /* Saturate: '<S206>/Saturation' */
-    if (u0 > 16384.0F) {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH1_2' */
-      rtY.yaw_SPD_OUT_CH1_2 = 16384.0F;
-    } else if (u0 < -16384.0F) {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH1_2' */
-      rtY.yaw_SPD_OUT_CH1_2 = -16384.0F;
-    } else {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH1_2' */
-      rtY.yaw_SPD_OUT_CH1_2 = u0;
+    if (((rtU.reset_status1_2 > 0.0F) && (rtDW.Filter_PrevResetState_eo <= 0)) ||
+        ((rtU.reset_status1_2 <= 0.0F) && (rtDW.Filter_PrevResetState_eo == 1)))
+    {
+      rtDW.Filter_DSTATE_de = 0.0F;
     }
 
-    /* End of Saturate: '<S206>/Saturation' */
-
-    /* Update for DiscreteIntegrator: '<S194>/Filter' */
-    rtDW.Filter_DSTATE_gi += 0.001F * rtb_FilterCoefficient_k;
-
-    /* Update for DiscreteIntegrator: '<S199>/Integrator' incorporates:
-     *  Gain: '<S196>/Integral Gain'
+    /* Gain: '<S218>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S210>/Filter'
+     *  Gain: '<S208>/Derivative Gain'
+     *  Sum: '<S210>/SumD'
      */
-    rtDW.Integrator_DSTATE_mwe += rtP.SPD_I_CH1_2 * rtb_Sum_pp * 0.001F;
+    rtb_FilterCoefficient_eu = (rtP.SPD_D_CH1_2 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_de) * 100.0F;
+
+    /* DiscreteIntegrator: '<S215>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status1_2'
+     */
+    if (((rtU.reset_status1_2 > 0.0F) && (rtDW.Integrator_PrevResetState_np <= 0))
+        || ((rtU.reset_status1_2 <= 0.0F) && (rtDW.Integrator_PrevResetState_np ==
+          1))) {
+      rtDW.Integrator_DSTATE_bv = 0.0F;
+    }
+
+    /* Sum: '<S224>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S215>/Integrator'
+     *  Gain: '<S220>/Proportional Gain'
+     */
+    u0 = (rtP.SPD_P_CH1_2 * rtb_Sum_cz + rtDW.Integrator_DSTATE_bv) +
+      rtb_FilterCoefficient_eu;
+
+    /* Saturate: '<S222>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH1_2' */
+      rtY.SPD_OUT_CH1_2 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH1_2' */
+      rtY.SPD_OUT_CH1_2 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/SPD_OUT_CH1_2' */
+      rtY.SPD_OUT_CH1_2 = u0;
+    }
+
+    /* End of Saturate: '<S222>/Saturation' */
+
+    /* Update for DiscreteIntegrator: '<S210>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S215>/Integrator'
+     *  Inport: '<Root>/reset_status1_2'
+     */
+    rtDW.Filter_DSTATE_de += 0.001F * rtb_FilterCoefficient_eu;
+    if (rtU.reset_status1_2 > 0.0F) {
+      rtDW.Filter_PrevResetState_eo = 1;
+      rtDW.Integrator_PrevResetState_np = 1;
+    } else {
+      if (rtU.reset_status1_2 < 0.0F) {
+        rtDW.Filter_PrevResetState_eo = -1;
+      } else if (rtU.reset_status1_2 == 0.0F) {
+        rtDW.Filter_PrevResetState_eo = 0;
+      } else {
+        rtDW.Filter_PrevResetState_eo = 2;
+      }
+
+      if (rtU.reset_status1_2 < 0.0F) {
+        rtDW.Integrator_PrevResetState_np = -1;
+      } else if (rtU.reset_status1_2 == 0.0F) {
+        rtDW.Integrator_PrevResetState_np = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_np = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S210>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S215>/Integrator' incorporates:
+     *  Gain: '<S212>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_bv += rtP.SPD_I_CH1_2 * rtb_Sum_cz * 0.001F;
 
     /* End of Outputs for SubSystem: '<S2>/If Action_speed Subsystem' */
     break;
 
    case 2:
     /* Outputs for IfAction SubSystem: '<S2>/If Action_speed Subsystem1' incorporates:
-     *  ActionPort: '<S166>/Action Port'
+     *  ActionPort: '<S180>/Action Port'
      */
-    /* Sum: '<S166>/Sum' incorporates:
-     *  Gain: '<S166>/Gain'
-     *  Inport: '<Root>/yaw_circle_CH1_2'
-     *  Inport: '<Root>/yaw_ecd_CH1_2'
-     *  Inport: '<Root>/yaw_target_CH1_2'
-     *  Sum: '<S166>/Sum2'
+    /* Sum: '<S180>/Sum' incorporates:
+     *  Gain: '<S180>/Gain'
+     *  Inport: '<Root>/circle_CH1_2'
+     *  Inport: '<Root>/ecd_CH1_2'
+     *  Inport: '<Root>/target_CH1_2'
+     *  Sum: '<S180>/Sum2'
      */
-    rtb_FilterCoefficient_k = rtU.yaw_target_CH1_2 - (8191.0F *
-      rtU.yaw_circle_CH1_2 + rtU.yaw_ecd_CH1_2);
+    rtb_FilterCoefficient_eu = rtU.target_CH1_2 - (8191.0F * rtU.circle_CH1_2 +
+      rtU.ecd_CH1_2);
 
-    /* Abs: '<S166>/Abs' */
-    rtb_Sum_pp = (real32_T)fabs(rtb_FilterCoefficient_k);
+    /* Abs: '<S180>/Abs' */
+    rtb_Sum_cz = (real32_T)fabs(rtb_FilterCoefficient_eu);
 
-    /* Switch: '<S166>/Switch2' incorporates:
-     *  Constant: '<S166>/Constant'
+    /* Switch: '<S180>/Switch2' incorporates:
+     *  Constant: '<S180>/Constant'
      */
-    if (!(rtb_Sum_pp > rtP.DEADBAND_CH1_2)) {
-      rtb_FilterCoefficient_k = 0.0F;
+    if (!(rtb_Sum_cz > rtP.DEADBAND_CH1_2)) {
+      rtb_FilterCoefficient_eu = 0.0F;
     }
 
-    /* End of Switch: '<S166>/Switch2' */
+    /* End of Switch: '<S180>/Switch2' */
 
-    /* Gain: '<S301>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S293>/Filter'
-     *  Gain: '<S292>/Derivative Gain'
-     *  Sum: '<S293>/SumD'
+    /* Gain: '<S321>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S313>/Filter'
+     *  Gain: '<S311>/Derivative Gain'
+     *  Sum: '<S313>/SumD'
      */
-    rtb_FilterCoefficient_dy = (rtP.ANG_A_D_CH1_2 * rtb_FilterCoefficient_k -
-      rtDW.Filter_DSTATE_co) * 100.0F;
+    rtb_FilterCoefficient_ch = (rtP.ANG_A_D_CH1_2 * rtb_FilterCoefficient_eu -
+      rtDW.Filter_DSTATE_kn) * 100.0F;
 
-    /* Switch: '<S166>/Switch1' incorporates:
-     *  Constant: '<S166>/Constant'
-     *  Gain: '<S166>/Multiply'
-     *  Inport: '<Root>/yaw_speed_rpm_CH1_2'
-     *  Saturate: '<S305>/Saturation'
-     *  Sum: '<S166>/Sum1'
+    /* Switch: '<S180>/Switch1' incorporates:
+     *  Constant: '<S180>/Constant'
+     *  Gain: '<S180>/Multiply'
+     *  Inport: '<Root>/speed_rpm_CH1_2'
+     *  Saturate: '<S325>/Saturation'
+     *  Sum: '<S180>/Sum1'
      */
-    if (rtb_Sum_pp > rtP.DEADBAND_CH1_2) {
-      /* Sum: '<S307>/Sum' incorporates:
-       *  DiscreteIntegrator: '<S298>/Integrator'
-       *  Gain: '<S303>/Proportional Gain'
+    if (rtb_Sum_cz > rtP.DEADBAND_CH1_2) {
+      /* Sum: '<S327>/Sum' incorporates:
+       *  DiscreteIntegrator: '<S318>/Integrator'
+       *  Gain: '<S323>/Proportional Gain'
        */
-      u0 = (rtP.ANG_A_P_CH1_2 * rtb_FilterCoefficient_k +
-            rtDW.Integrator_DSTATE_hk) + rtb_FilterCoefficient_dy;
+      u0 = (rtP.ANG_A_P_CH1_2 * rtb_FilterCoefficient_eu +
+            rtDW.Integrator_DSTATE_j0) + rtb_FilterCoefficient_ch;
 
-      /* Saturate: '<S305>/Saturation' */
+      /* Saturate: '<S325>/Saturation' */
       if (u0 > 16384.0F) {
         u0 = 16384.0F;
       } else if (u0 < -16384.0F) {
         u0 = -16384.0F;
       }
 
-      rtb_Sum_pp = rtP.TRANS_CH1_2 * u0 - rtU.yaw_speed_rpm_CH1_2;
+      rtb_Sum_cz = rtP.TRANS_CH1_2 * u0 - rtU.speed_rpm_CH1_2;
     } else {
-      rtb_Sum_pp = 0.0F;
+      rtb_Sum_cz = 0.0F;
     }
 
-    /* End of Switch: '<S166>/Switch1' */
+    /* End of Switch: '<S180>/Switch1' */
 
-    /* Gain: '<S253>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S245>/Filter'
-     *  Gain: '<S244>/Derivative Gain'
-     *  Sum: '<S245>/SumD'
+    /* DiscreteIntegrator: '<S263>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status1_2'
      */
-    rtb_FilterCoefficient_e4 = (rtP.ANG_S_D_CH1_2 * rtb_Sum_pp -
-      rtDW.Filter_DSTATE_eg) * 100.0F;
+    if (((rtU.reset_status1_2 > 0.0F) && (rtDW.Filter_PrevResetState_a2 <= 0)) ||
+        ((rtU.reset_status1_2 <= 0.0F) && (rtDW.Filter_PrevResetState_a2 == 1)))
+    {
+      rtDW.Filter_DSTATE_ne = 0.0F;
+    }
 
-    /* Sum: '<S259>/Sum' incorporates:
-     *  DiscreteIntegrator: '<S250>/Integrator'
-     *  Gain: '<S255>/Proportional Gain'
+    /* Gain: '<S271>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S263>/Filter'
+     *  Gain: '<S261>/Derivative Gain'
+     *  Sum: '<S263>/SumD'
      */
-    u0 = (rtP.ANG_S_P_CH1_2 * rtb_Sum_pp + rtDW.Integrator_DSTATE_ac) +
-      rtb_FilterCoefficient_e4;
+    rtb_FilterCoefficient_nkj = (rtP.ANG_S_D_CH1_2 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_ne) * 100.0F;
 
-    /* Saturate: '<S257>/Saturation' */
+    /* DiscreteIntegrator: '<S268>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status1_2'
+     */
+    if (((rtU.reset_status1_2 > 0.0F) && (rtDW.Integrator_PrevResetState_dc <= 0))
+        || ((rtU.reset_status1_2 <= 0.0F) && (rtDW.Integrator_PrevResetState_dc ==
+          1))) {
+      rtDW.Integrator_DSTATE_k1 = 0.0F;
+    }
+
+    /* Sum: '<S277>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S268>/Integrator'
+     *  Gain: '<S273>/Proportional Gain'
+     */
+    u0 = (rtP.ANG_S_P_CH1_2 * rtb_Sum_cz + rtDW.Integrator_DSTATE_k1) +
+      rtb_FilterCoefficient_nkj;
+
+    /* Saturate: '<S275>/Saturation' */
     if (u0 > 16384.0F) {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH1_2' */
-      rtY.yaw_ANG_OUT_CH1_2 = 16384.0F;
+      /* Outport: '<Root>/ANG_OUT_CH1_2' */
+      rtY.ANG_OUT_CH1_2 = 16384.0F;
     } else if (u0 < -16384.0F) {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH1_2' */
-      rtY.yaw_ANG_OUT_CH1_2 = -16384.0F;
+      /* Outport: '<Root>/ANG_OUT_CH1_2' */
+      rtY.ANG_OUT_CH1_2 = -16384.0F;
     } else {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH1_2' */
-      rtY.yaw_ANG_OUT_CH1_2 = u0;
+      /* Outport: '<Root>/ANG_OUT_CH1_2' */
+      rtY.ANG_OUT_CH1_2 = u0;
     }
 
-    /* End of Saturate: '<S257>/Saturation' */
+    /* End of Saturate: '<S275>/Saturation' */
 
-    /* Chart: '<S166>/Chart1' incorporates:
-     *  Inport: '<Root>/yaw_ecd_CH1_2'
-     *  Inport: '<Root>/yaw_last_ecd_CH1_2'
-     *  Sum: '<S166>/Sum3'
+    /* Chart: '<S180>/Chart1' incorporates:
+     *  Inport: '<Root>/ecd_CH1_2'
+     *  Inport: '<Root>/last_ecd_CH1_2'
+     *  Sum: '<S180>/Sum3'
      */
-    Chart1(rtU.yaw_ecd_CH1_2 - rtU.yaw_last_ecd_CH1_2, &rtDW.u2_m,
-           &rtDW.sf_Chart1_l);
+    Chart1(rtU.ecd_CH1_2 - rtU.last_ecd_CH1_2, &rtDW.u2_jxj, &rtDW.sf_Chart1_m);
 
-    /* Outport: '<Root>/yaw_circle_out_CH1_2' incorporates:
-     *  Inport: '<Root>/yaw_circle_CH1_2'
-     *  Sum: '<S166>/Sum4'
+    /* Outport: '<Root>/circle_out_CH1_2' incorporates:
+     *  Inport: '<Root>/circle_CH1_2'
+     *  Sum: '<S180>/Sum4'
      */
-    rtY.yaw_circle_out_CH1_2 = rtDW.u2_m + rtU.yaw_circle_CH1_2;
+    rtY.circle_out_CH1_2 = rtDW.u2_jxj + rtU.circle_CH1_2;
 
-    /* Update for DiscreteIntegrator: '<S298>/Integrator' incorporates:
-     *  Gain: '<S295>/Integral Gain'
+    /* Update for DiscreteIntegrator: '<S318>/Integrator' incorporates:
+     *  Gain: '<S315>/Integral Gain'
      */
-    rtDW.Integrator_DSTATE_hk += rtP.ANG_A_I_CH1_2 * rtb_FilterCoefficient_k *
+    rtDW.Integrator_DSTATE_j0 += rtP.ANG_A_I_CH1_2 * rtb_FilterCoefficient_eu *
       0.001F;
 
-    /* Update for DiscreteIntegrator: '<S293>/Filter' */
-    rtDW.Filter_DSTATE_co += 0.001F * rtb_FilterCoefficient_dy;
+    /* Update for DiscreteIntegrator: '<S313>/Filter' */
+    rtDW.Filter_DSTATE_kn += 0.001F * rtb_FilterCoefficient_ch;
 
-    /* Update for DiscreteIntegrator: '<S245>/Filter' */
-    rtDW.Filter_DSTATE_eg += 0.001F * rtb_FilterCoefficient_e4;
-
-    /* Update for DiscreteIntegrator: '<S250>/Integrator' incorporates:
-     *  Gain: '<S247>/Integral Gain'
+    /* Update for DiscreteIntegrator: '<S263>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S268>/Integrator'
+     *  Inport: '<Root>/reset_status1_2'
      */
-    rtDW.Integrator_DSTATE_ac += rtP.ANG_S_I_CH1_2 * rtb_Sum_pp * 0.001F;
+    rtDW.Filter_DSTATE_ne += 0.001F * rtb_FilterCoefficient_nkj;
+    if (rtU.reset_status1_2 > 0.0F) {
+      rtDW.Filter_PrevResetState_a2 = 1;
+      rtDW.Integrator_PrevResetState_dc = 1;
+    } else {
+      if (rtU.reset_status1_2 < 0.0F) {
+        rtDW.Filter_PrevResetState_a2 = -1;
+      } else if (rtU.reset_status1_2 == 0.0F) {
+        rtDW.Filter_PrevResetState_a2 = 0;
+      } else {
+        rtDW.Filter_PrevResetState_a2 = 2;
+      }
+
+      if (rtU.reset_status1_2 < 0.0F) {
+        rtDW.Integrator_PrevResetState_dc = -1;
+      } else if (rtU.reset_status1_2 == 0.0F) {
+        rtDW.Integrator_PrevResetState_dc = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_dc = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S263>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S268>/Integrator' incorporates:
+     *  Gain: '<S265>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_k1 += rtP.ANG_S_I_CH1_2 * rtb_Sum_cz * 0.001F;
 
     /* End of Outputs for SubSystem: '<S2>/If Action_speed Subsystem1' */
     break;
@@ -679,181 +698,266 @@ void PID_MODEL_step(void)
   /* End of SwitchCase: '<S2>/Switch Case' */
 
   /* SwitchCase: '<S3>/Switch Case' incorporates:
-   *  Inport: '<Root>/yaw_status_CH1_3'
+   *  Inport: '<Root>/status_CH1_3'
    */
-  switch ((int32_T)rtU.yaw_status_CH1_3) {
+  switch ((int32_T)rtU.status_CH1_3) {
    case 1:
     /* Outputs for IfAction SubSystem: '<S3>/If Action_speed Subsystem' incorporates:
-     *  ActionPort: '<S315>/Action Port'
+     *  ActionPort: '<S335>/Action Port'
      */
-    /* Sum: '<S315>/Sum' incorporates:
-     *  Inport: '<Root>/yaw_speed_rpm_CH1_3'
-     *  Inport: '<Root>/yaw_target_CH1_3'
+    /* Sum: '<S335>/Sum' incorporates:
+     *  Inport: '<Root>/speed_rpm_CH1_3'
+     *  Inport: '<Root>/target_CH1_3'
      */
-    rtb_Sum_pp = rtU.yaw_target_CH1_3 - rtU.yaw_speed_rpm_CH1_3;
+    rtb_Sum_cz = rtU.target_CH1_3 - rtU.speed_rpm_CH1_3;
 
-    /* Gain: '<S352>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S344>/Filter'
-     *  Gain: '<S343>/Derivative Gain'
-     *  Sum: '<S344>/SumD'
+    /* DiscreteIntegrator: '<S366>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status1_3'
      */
-    rtb_FilterCoefficient_k = (rtP.SPD_D_CH1_3 * rtb_Sum_pp -
-      rtDW.Filter_DSTATE_oa) * 100.0F;
-
-    /* Sum: '<S358>/Sum' incorporates:
-     *  DiscreteIntegrator: '<S349>/Integrator'
-     *  Gain: '<S354>/Proportional Gain'
-     */
-    u0 = (rtP.SPD_P_CH1_3 * rtb_Sum_pp + rtDW.Integrator_DSTATE_cf) +
-      rtb_FilterCoefficient_k;
-
-    /* Saturate: '<S356>/Saturation' */
-    if (u0 > 16384.0F) {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH1_3' */
-      rtY.yaw_SPD_OUT_CH1_3 = 16384.0F;
-    } else if (u0 < -16384.0F) {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH1_3' */
-      rtY.yaw_SPD_OUT_CH1_3 = -16384.0F;
-    } else {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH1_3' */
-      rtY.yaw_SPD_OUT_CH1_3 = u0;
+    if (((rtU.reset_status1_3 > 0.0F) && (rtDW.Filter_PrevResetState_ev <= 0)) ||
+        ((rtU.reset_status1_3 <= 0.0F) && (rtDW.Filter_PrevResetState_ev == 1)))
+    {
+      rtDW.Filter_DSTATE_jq = 0.0F;
     }
 
-    /* End of Saturate: '<S356>/Saturation' */
-
-    /* Update for DiscreteIntegrator: '<S344>/Filter' */
-    rtDW.Filter_DSTATE_oa += 0.001F * rtb_FilterCoefficient_k;
-
-    /* Update for DiscreteIntegrator: '<S349>/Integrator' incorporates:
-     *  Gain: '<S346>/Integral Gain'
+    /* Gain: '<S374>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S366>/Filter'
+     *  Gain: '<S364>/Derivative Gain'
+     *  Sum: '<S366>/SumD'
      */
-    rtDW.Integrator_DSTATE_cf += rtP.SPD_I_CH1_3 * rtb_Sum_pp * 0.001F;
+    rtb_FilterCoefficient_eu = (rtP.SPD_D_CH1_3 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_jq) * 100.0F;
+
+    /* DiscreteIntegrator: '<S371>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status1_3'
+     */
+    if (((rtU.reset_status1_3 > 0.0F) && (rtDW.Integrator_PrevResetState_l1 <= 0))
+        || ((rtU.reset_status1_3 <= 0.0F) && (rtDW.Integrator_PrevResetState_l1 ==
+          1))) {
+      rtDW.Integrator_DSTATE_ke = 0.0F;
+    }
+
+    /* Sum: '<S380>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S371>/Integrator'
+     *  Gain: '<S376>/Proportional Gain'
+     */
+    u0 = (rtP.SPD_P_CH1_3 * rtb_Sum_cz + rtDW.Integrator_DSTATE_ke) +
+      rtb_FilterCoefficient_eu;
+
+    /* Saturate: '<S378>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH1_3' */
+      rtY.SPD_OUT_CH1_3 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH1_3' */
+      rtY.SPD_OUT_CH1_3 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/SPD_OUT_CH1_3' */
+      rtY.SPD_OUT_CH1_3 = u0;
+    }
+
+    /* End of Saturate: '<S378>/Saturation' */
+
+    /* Update for DiscreteIntegrator: '<S366>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S371>/Integrator'
+     *  Inport: '<Root>/reset_status1_3'
+     */
+    rtDW.Filter_DSTATE_jq += 0.001F * rtb_FilterCoefficient_eu;
+    if (rtU.reset_status1_3 > 0.0F) {
+      rtDW.Filter_PrevResetState_ev = 1;
+      rtDW.Integrator_PrevResetState_l1 = 1;
+    } else {
+      if (rtU.reset_status1_3 < 0.0F) {
+        rtDW.Filter_PrevResetState_ev = -1;
+      } else if (rtU.reset_status1_3 == 0.0F) {
+        rtDW.Filter_PrevResetState_ev = 0;
+      } else {
+        rtDW.Filter_PrevResetState_ev = 2;
+      }
+
+      if (rtU.reset_status1_3 < 0.0F) {
+        rtDW.Integrator_PrevResetState_l1 = -1;
+      } else if (rtU.reset_status1_3 == 0.0F) {
+        rtDW.Integrator_PrevResetState_l1 = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_l1 = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S366>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S371>/Integrator' incorporates:
+     *  Gain: '<S368>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_ke += rtP.SPD_I_CH1_3 * rtb_Sum_cz * 0.001F;
 
     /* End of Outputs for SubSystem: '<S3>/If Action_speed Subsystem' */
     break;
 
    case 2:
     /* Outputs for IfAction SubSystem: '<S3>/If Action_speed Subsystem1' incorporates:
-     *  ActionPort: '<S316>/Action Port'
+     *  ActionPort: '<S336>/Action Port'
      */
-    /* Sum: '<S316>/Sum' incorporates:
-     *  Gain: '<S316>/Gain'
-     *  Inport: '<Root>/yaw_circle_CH1_3'
-     *  Inport: '<Root>/yaw_ecd_CH1_3'
-     *  Inport: '<Root>/yaw_target_CH1_3'
-     *  Sum: '<S316>/Sum2'
+    /* Sum: '<S336>/Sum' incorporates:
+     *  Gain: '<S336>/Gain'
+     *  Inport: '<Root>/circle_CH1_3'
+     *  Inport: '<Root>/ecd_CH1_3'
+     *  Inport: '<Root>/target_CH1_3'
+     *  Sum: '<S336>/Sum2'
      */
-    rtb_FilterCoefficient_k = rtU.yaw_target_CH1_3 - (8191.0F *
-      rtU.yaw_circle_CH1_3 + rtU.yaw_ecd_CH1_3);
+    rtb_FilterCoefficient_eu = rtU.target_CH1_3 - (8191.0F * rtU.circle_CH1_3 +
+      rtU.ecd_CH1_3);
 
-    /* Abs: '<S316>/Abs' */
-    rtb_Sum_pp = (real32_T)fabs(rtb_FilterCoefficient_k);
+    /* Abs: '<S336>/Abs' */
+    rtb_Sum_cz = (real32_T)fabs(rtb_FilterCoefficient_eu);
 
-    /* Switch: '<S316>/Switch2' incorporates:
-     *  Constant: '<S316>/Constant'
+    /* Switch: '<S336>/Switch2' incorporates:
+     *  Constant: '<S336>/Constant'
      */
-    if (!(rtb_Sum_pp > rtP.DEADBAND_CH1_3)) {
-      rtb_FilterCoefficient_k = 0.0F;
+    if (!(rtb_Sum_cz > rtP.DEADBAND_CH1_3)) {
+      rtb_FilterCoefficient_eu = 0.0F;
     }
 
-    /* End of Switch: '<S316>/Switch2' */
+    /* End of Switch: '<S336>/Switch2' */
 
-    /* Gain: '<S451>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S443>/Filter'
-     *  Gain: '<S442>/Derivative Gain'
-     *  Sum: '<S443>/SumD'
+    /* Gain: '<S477>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S469>/Filter'
+     *  Gain: '<S467>/Derivative Gain'
+     *  Sum: '<S469>/SumD'
      */
-    rtb_FilterCoefficient_dy = (rtP.ANG_A_D_CH1_3 * rtb_FilterCoefficient_k -
-      rtDW.Filter_DSTATE_as) * 100.0F;
+    rtb_FilterCoefficient_ch = (rtP.ANG_A_D_CH1_3 * rtb_FilterCoefficient_eu -
+      rtDW.Filter_DSTATE_gs) * 100.0F;
 
-    /* Switch: '<S316>/Switch1' incorporates:
-     *  Constant: '<S316>/Constant'
-     *  Gain: '<S316>/Multiply'
-     *  Inport: '<Root>/yaw_speed_rpm_CH1_3'
-     *  Saturate: '<S455>/Saturation'
-     *  Sum: '<S316>/Sum1'
+    /* Switch: '<S336>/Switch1' incorporates:
+     *  Constant: '<S336>/Constant'
+     *  Gain: '<S336>/Multiply'
+     *  Inport: '<Root>/speed_rpm_CH1_3'
+     *  Saturate: '<S481>/Saturation'
+     *  Sum: '<S336>/Sum1'
      */
-    if (rtb_Sum_pp > rtP.DEADBAND_CH1_3) {
-      /* Sum: '<S457>/Sum' incorporates:
-       *  DiscreteIntegrator: '<S448>/Integrator'
-       *  Gain: '<S453>/Proportional Gain'
+    if (rtb_Sum_cz > rtP.DEADBAND_CH1_3) {
+      /* Sum: '<S483>/Sum' incorporates:
+       *  DiscreteIntegrator: '<S474>/Integrator'
+       *  Gain: '<S479>/Proportional Gain'
        */
-      u0 = (rtP.ANG_A_P_CH1_3 * rtb_FilterCoefficient_k +
-            rtDW.Integrator_DSTATE_ie) + rtb_FilterCoefficient_dy;
+      u0 = (rtP.ANG_A_P_CH1_3 * rtb_FilterCoefficient_eu +
+            rtDW.Integrator_DSTATE_ik) + rtb_FilterCoefficient_ch;
 
-      /* Saturate: '<S455>/Saturation' */
+      /* Saturate: '<S481>/Saturation' */
       if (u0 > 16384.0F) {
         u0 = 16384.0F;
       } else if (u0 < -16384.0F) {
         u0 = -16384.0F;
       }
 
-      rtb_Sum_pp = rtP.TRANS_CH1_3 * u0 - rtU.yaw_speed_rpm_CH1_3;
+      rtb_Sum_cz = rtP.TRANS_CH1_3 * u0 - rtU.speed_rpm_CH1_3;
     } else {
-      rtb_Sum_pp = 0.0F;
+      rtb_Sum_cz = 0.0F;
     }
 
-    /* End of Switch: '<S316>/Switch1' */
+    /* End of Switch: '<S336>/Switch1' */
 
-    /* Gain: '<S403>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S395>/Filter'
-     *  Gain: '<S394>/Derivative Gain'
-     *  Sum: '<S395>/SumD'
+    /* DiscreteIntegrator: '<S419>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status1_3'
      */
-    rtb_FilterCoefficient_e4 = (rtP.ANG_S_D_CH1_3 * rtb_Sum_pp -
-      rtDW.Filter_DSTATE_kc) * 100.0F;
+    if (((rtU.reset_status1_3 > 0.0F) && (rtDW.Filter_PrevResetState_na <= 0)) ||
+        ((rtU.reset_status1_3 <= 0.0F) && (rtDW.Filter_PrevResetState_na == 1)))
+    {
+      rtDW.Filter_DSTATE_f5 = 0.0F;
+    }
 
-    /* Sum: '<S409>/Sum' incorporates:
-     *  DiscreteIntegrator: '<S400>/Integrator'
-     *  Gain: '<S405>/Proportional Gain'
+    /* Gain: '<S427>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S419>/Filter'
+     *  Gain: '<S417>/Derivative Gain'
+     *  Sum: '<S419>/SumD'
      */
-    u0 = (rtP.ANG_S_P_CH1_3 * rtb_Sum_pp + rtDW.Integrator_DSTATE_cw) +
-      rtb_FilterCoefficient_e4;
+    rtb_FilterCoefficient_nkj = (rtP.ANG_S_D_CH1_3 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_f5) * 100.0F;
 
-    /* Saturate: '<S407>/Saturation' */
+    /* DiscreteIntegrator: '<S424>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status1_3'
+     */
+    if (((rtU.reset_status1_3 > 0.0F) && (rtDW.Integrator_PrevResetState_pi <= 0))
+        || ((rtU.reset_status1_3 <= 0.0F) && (rtDW.Integrator_PrevResetState_pi ==
+          1))) {
+      rtDW.Integrator_DSTATE_l3w = 0.0F;
+    }
+
+    /* Sum: '<S433>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S424>/Integrator'
+     *  Gain: '<S429>/Proportional Gain'
+     */
+    u0 = (rtP.ANG_S_P_CH1_3 * rtb_Sum_cz + rtDW.Integrator_DSTATE_l3w) +
+      rtb_FilterCoefficient_nkj;
+
+    /* Saturate: '<S431>/Saturation' */
     if (u0 > 16384.0F) {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH1_3' */
-      rtY.yaw_ANG_OUT_CH1_3 = 16384.0F;
+      /* Outport: '<Root>/ANG_OUT_CH1_3' */
+      rtY.ANG_OUT_CH1_3 = 16384.0F;
     } else if (u0 < -16384.0F) {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH1_3' */
-      rtY.yaw_ANG_OUT_CH1_3 = -16384.0F;
+      /* Outport: '<Root>/ANG_OUT_CH1_3' */
+      rtY.ANG_OUT_CH1_3 = -16384.0F;
     } else {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH1_3' */
-      rtY.yaw_ANG_OUT_CH1_3 = u0;
+      /* Outport: '<Root>/ANG_OUT_CH1_3' */
+      rtY.ANG_OUT_CH1_3 = u0;
     }
 
-    /* End of Saturate: '<S407>/Saturation' */
+    /* End of Saturate: '<S431>/Saturation' */
 
-    /* Chart: '<S316>/Chart1' incorporates:
-     *  Inport: '<Root>/yaw_ecd_CH1_3'
-     *  Inport: '<Root>/yaw_last_ecd_CH1_3'
-     *  Sum: '<S316>/Sum3'
+    /* Chart: '<S336>/Chart1' incorporates:
+     *  Inport: '<Root>/ecd_CH1_3'
+     *  Inport: '<Root>/last_ecd_CH1_3'
+     *  Sum: '<S336>/Sum3'
      */
-    Chart1(rtU.yaw_ecd_CH1_3 - rtU.yaw_last_ecd_CH1_3, &rtDW.u2_nv,
-           &rtDW.sf_Chart1_i);
+    Chart1(rtU.ecd_CH1_3 - rtU.last_ecd_CH1_3, &rtDW.u2_j2, &rtDW.sf_Chart1_h);
 
-    /* Outport: '<Root>/yaw_circle_out_CH1_3' incorporates:
-     *  Inport: '<Root>/yaw_circle_CH1_3'
-     *  Sum: '<S316>/Sum4'
+    /* Outport: '<Root>/circle_out_CH1_3' incorporates:
+     *  Inport: '<Root>/circle_CH1_3'
+     *  Sum: '<S336>/Sum4'
      */
-    rtY.yaw_circle_out_CH1_3 = rtDW.u2_nv + rtU.yaw_circle_CH1_3;
+    rtY.circle_out_CH1_3 = rtDW.u2_j2 + rtU.circle_CH1_3;
 
-    /* Update for DiscreteIntegrator: '<S448>/Integrator' incorporates:
-     *  Gain: '<S445>/Integral Gain'
+    /* Update for DiscreteIntegrator: '<S474>/Integrator' incorporates:
+     *  Gain: '<S471>/Integral Gain'
      */
-    rtDW.Integrator_DSTATE_ie += rtP.ANG_A_I_CH1_3 * rtb_FilterCoefficient_k *
+    rtDW.Integrator_DSTATE_ik += rtP.ANG_A_I_CH1_3 * rtb_FilterCoefficient_eu *
       0.001F;
 
-    /* Update for DiscreteIntegrator: '<S443>/Filter' */
-    rtDW.Filter_DSTATE_as += 0.001F * rtb_FilterCoefficient_dy;
+    /* Update for DiscreteIntegrator: '<S469>/Filter' */
+    rtDW.Filter_DSTATE_gs += 0.001F * rtb_FilterCoefficient_ch;
 
-    /* Update for DiscreteIntegrator: '<S395>/Filter' */
-    rtDW.Filter_DSTATE_kc += 0.001F * rtb_FilterCoefficient_e4;
-
-    /* Update for DiscreteIntegrator: '<S400>/Integrator' incorporates:
-     *  Gain: '<S397>/Integral Gain'
+    /* Update for DiscreteIntegrator: '<S419>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S424>/Integrator'
+     *  Inport: '<Root>/reset_status1_3'
      */
-    rtDW.Integrator_DSTATE_cw += rtP.ANG_S_I_CH1_3 * rtb_Sum_pp * 0.001F;
+    rtDW.Filter_DSTATE_f5 += 0.001F * rtb_FilterCoefficient_nkj;
+    if (rtU.reset_status1_3 > 0.0F) {
+      rtDW.Filter_PrevResetState_na = 1;
+      rtDW.Integrator_PrevResetState_pi = 1;
+    } else {
+      if (rtU.reset_status1_3 < 0.0F) {
+        rtDW.Filter_PrevResetState_na = -1;
+      } else if (rtU.reset_status1_3 == 0.0F) {
+        rtDW.Filter_PrevResetState_na = 0;
+      } else {
+        rtDW.Filter_PrevResetState_na = 2;
+      }
+
+      if (rtU.reset_status1_3 < 0.0F) {
+        rtDW.Integrator_PrevResetState_pi = -1;
+      } else if (rtU.reset_status1_3 == 0.0F) {
+        rtDW.Integrator_PrevResetState_pi = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_pi = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S419>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S424>/Integrator' incorporates:
+     *  Gain: '<S421>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_l3w += rtP.ANG_S_I_CH1_3 * rtb_Sum_cz * 0.001F;
 
     /* End of Outputs for SubSystem: '<S3>/If Action_speed Subsystem1' */
     break;
@@ -862,181 +966,266 @@ void PID_MODEL_step(void)
   /* End of SwitchCase: '<S3>/Switch Case' */
 
   /* SwitchCase: '<S4>/Switch Case' incorporates:
-   *  Inport: '<Root>/yaw_status_CH1_4'
+   *  Inport: '<Root>/status_CH1_4'
    */
-  switch ((int32_T)rtU.yaw_status_CH1_4) {
+  switch ((int32_T)rtU.status_CH1_4) {
    case 1:
     /* Outputs for IfAction SubSystem: '<S4>/If Action_speed Subsystem' incorporates:
-     *  ActionPort: '<S465>/Action Port'
+     *  ActionPort: '<S491>/Action Port'
      */
-    /* Sum: '<S465>/Sum' incorporates:
-     *  Inport: '<Root>/yaw_speed_rpm_CH1_4'
-     *  Inport: '<Root>/yaw_target_CH1_4'
+    /* Sum: '<S491>/Sum' incorporates:
+     *  Inport: '<Root>/speed_rpm_CH1_4'
+     *  Inport: '<Root>/target_CH1_4'
      */
-    rtb_Sum_pp = rtU.yaw_target_CH1_4 - rtU.yaw_speed_rpm_CH1_4;
+    rtb_Sum_cz = rtU.target_CH1_4 - rtU.speed_rpm_CH1_4;
 
-    /* Gain: '<S502>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S494>/Filter'
-     *  Gain: '<S493>/Derivative Gain'
-     *  Sum: '<S494>/SumD'
+    /* DiscreteIntegrator: '<S522>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status1_4'
      */
-    rtb_FilterCoefficient_k = (rtP.SPD_D_CH1_4 * rtb_Sum_pp -
-      rtDW.Filter_DSTATE_de) * 100.0F;
-
-    /* Sum: '<S508>/Sum' incorporates:
-     *  DiscreteIntegrator: '<S499>/Integrator'
-     *  Gain: '<S504>/Proportional Gain'
-     */
-    u0 = (rtP.SPD_P_CH1_4 * rtb_Sum_pp + rtDW.Integrator_DSTATE_mw) +
-      rtb_FilterCoefficient_k;
-
-    /* Saturate: '<S506>/Saturation' */
-    if (u0 > 16384.0F) {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH1_4' */
-      rtY.yaw_SPD_OUT_CH1_4 = 16384.0F;
-    } else if (u0 < -16384.0F) {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH1_4' */
-      rtY.yaw_SPD_OUT_CH1_4 = -16384.0F;
-    } else {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH1_4' */
-      rtY.yaw_SPD_OUT_CH1_4 = u0;
+    if (((rtU.reset_status1_4 > 0.0F) && (rtDW.Filter_PrevResetState_b0 <= 0)) ||
+        ((rtU.reset_status1_4 <= 0.0F) && (rtDW.Filter_PrevResetState_b0 == 1)))
+    {
+      rtDW.Filter_DSTATE_in = 0.0F;
     }
 
-    /* End of Saturate: '<S506>/Saturation' */
-
-    /* Update for DiscreteIntegrator: '<S494>/Filter' */
-    rtDW.Filter_DSTATE_de += 0.001F * rtb_FilterCoefficient_k;
-
-    /* Update for DiscreteIntegrator: '<S499>/Integrator' incorporates:
-     *  Gain: '<S496>/Integral Gain'
+    /* Gain: '<S530>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S522>/Filter'
+     *  Gain: '<S520>/Derivative Gain'
+     *  Sum: '<S522>/SumD'
      */
-    rtDW.Integrator_DSTATE_mw += rtP.SPD_I_CH1_4 * rtb_Sum_pp * 0.001F;
+    rtb_FilterCoefficient_eu = (rtP.SPD_D_CH1_4 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_in) * 100.0F;
+
+    /* DiscreteIntegrator: '<S527>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status1_4'
+     */
+    if (((rtU.reset_status1_4 > 0.0F) && (rtDW.Integrator_PrevResetState_fz <= 0))
+        || ((rtU.reset_status1_4 <= 0.0F) && (rtDW.Integrator_PrevResetState_fz ==
+          1))) {
+      rtDW.Integrator_DSTATE_ok = 0.0F;
+    }
+
+    /* Sum: '<S536>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S527>/Integrator'
+     *  Gain: '<S532>/Proportional Gain'
+     */
+    u0 = (rtP.SPD_P_CH1_4 * rtb_Sum_cz + rtDW.Integrator_DSTATE_ok) +
+      rtb_FilterCoefficient_eu;
+
+    /* Saturate: '<S534>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH1_4' */
+      rtY.SPD_OUT_CH1_4 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH1_4' */
+      rtY.SPD_OUT_CH1_4 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/SPD_OUT_CH1_4' */
+      rtY.SPD_OUT_CH1_4 = u0;
+    }
+
+    /* End of Saturate: '<S534>/Saturation' */
+
+    /* Update for DiscreteIntegrator: '<S522>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S527>/Integrator'
+     *  Inport: '<Root>/reset_status1_4'
+     */
+    rtDW.Filter_DSTATE_in += 0.001F * rtb_FilterCoefficient_eu;
+    if (rtU.reset_status1_4 > 0.0F) {
+      rtDW.Filter_PrevResetState_b0 = 1;
+      rtDW.Integrator_PrevResetState_fz = 1;
+    } else {
+      if (rtU.reset_status1_4 < 0.0F) {
+        rtDW.Filter_PrevResetState_b0 = -1;
+      } else if (rtU.reset_status1_4 == 0.0F) {
+        rtDW.Filter_PrevResetState_b0 = 0;
+      } else {
+        rtDW.Filter_PrevResetState_b0 = 2;
+      }
+
+      if (rtU.reset_status1_4 < 0.0F) {
+        rtDW.Integrator_PrevResetState_fz = -1;
+      } else if (rtU.reset_status1_4 == 0.0F) {
+        rtDW.Integrator_PrevResetState_fz = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_fz = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S522>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S527>/Integrator' incorporates:
+     *  Gain: '<S524>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_ok += rtP.SPD_I_CH1_4 * rtb_Sum_cz * 0.001F;
 
     /* End of Outputs for SubSystem: '<S4>/If Action_speed Subsystem' */
     break;
 
    case 2:
     /* Outputs for IfAction SubSystem: '<S4>/If Action_speed Subsystem1' incorporates:
-     *  ActionPort: '<S466>/Action Port'
+     *  ActionPort: '<S492>/Action Port'
      */
-    /* Sum: '<S466>/Sum' incorporates:
-     *  Gain: '<S466>/Gain'
-     *  Inport: '<Root>/yaw_circle_CH1_4'
-     *  Inport: '<Root>/yaw_ecd_CH1_4'
-     *  Inport: '<Root>/yaw_target_CH1_4'
-     *  Sum: '<S466>/Sum2'
+    /* Sum: '<S492>/Sum' incorporates:
+     *  Gain: '<S492>/Gain'
+     *  Inport: '<Root>/circle_CH1_4'
+     *  Inport: '<Root>/ecd_CH1_4'
+     *  Inport: '<Root>/target_CH1_4'
+     *  Sum: '<S492>/Sum2'
      */
-    rtb_FilterCoefficient_k = rtU.yaw_target_CH1_4 - (8191.0F *
-      rtU.yaw_circle_CH1_4 + rtU.yaw_ecd_CH1_4);
+    rtb_FilterCoefficient_eu = rtU.target_CH1_4 - (8191.0F * rtU.circle_CH1_4 +
+      rtU.ecd_CH1_4);
 
-    /* Abs: '<S466>/Abs' */
-    rtb_Sum_pp = (real32_T)fabs(rtb_FilterCoefficient_k);
+    /* Abs: '<S492>/Abs' */
+    rtb_Sum_cz = (real32_T)fabs(rtb_FilterCoefficient_eu);
 
-    /* Switch: '<S466>/Switch2' incorporates:
-     *  Constant: '<S466>/Constant'
+    /* Switch: '<S492>/Switch2' incorporates:
+     *  Constant: '<S492>/Constant'
      */
-    if (!(rtb_Sum_pp > rtP.DEADBAND_CH1_4)) {
-      rtb_FilterCoefficient_k = 0.0F;
+    if (!(rtb_Sum_cz > rtP.DEADBAND_CH1_4)) {
+      rtb_FilterCoefficient_eu = 0.0F;
     }
 
-    /* End of Switch: '<S466>/Switch2' */
+    /* End of Switch: '<S492>/Switch2' */
 
-    /* Gain: '<S601>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S593>/Filter'
-     *  Gain: '<S592>/Derivative Gain'
-     *  Sum: '<S593>/SumD'
+    /* Gain: '<S633>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S625>/Filter'
+     *  Gain: '<S623>/Derivative Gain'
+     *  Sum: '<S625>/SumD'
      */
-    rtb_FilterCoefficient_dy = (rtP.ANG_A_D_CH1_4 * rtb_FilterCoefficient_k -
-      rtDW.Filter_DSTATE_pb) * 100.0F;
+    rtb_FilterCoefficient_ch = (rtP.ANG_A_D_CH1_4 * rtb_FilterCoefficient_eu -
+      rtDW.Filter_DSTATE_m1) * 100.0F;
 
-    /* Switch: '<S466>/Switch1' incorporates:
-     *  Constant: '<S466>/Constant'
-     *  Gain: '<S466>/Multiply'
-     *  Inport: '<Root>/yaw_speed_rpm_CH1_4'
-     *  Saturate: '<S605>/Saturation'
-     *  Sum: '<S466>/Sum1'
+    /* Switch: '<S492>/Switch1' incorporates:
+     *  Constant: '<S492>/Constant'
+     *  Gain: '<S492>/Multiply'
+     *  Inport: '<Root>/speed_rpm_CH1_4'
+     *  Saturate: '<S637>/Saturation'
+     *  Sum: '<S492>/Sum1'
      */
-    if (rtb_Sum_pp > rtP.DEADBAND_CH1_4) {
-      /* Sum: '<S607>/Sum' incorporates:
-       *  DiscreteIntegrator: '<S598>/Integrator'
-       *  Gain: '<S603>/Proportional Gain'
+    if (rtb_Sum_cz > rtP.DEADBAND_CH1_4) {
+      /* Sum: '<S639>/Sum' incorporates:
+       *  DiscreteIntegrator: '<S630>/Integrator'
+       *  Gain: '<S635>/Proportional Gain'
        */
-      u0 = (rtP.ANG_A_P_CH1_4 * rtb_FilterCoefficient_k +
-            rtDW.Integrator_DSTATE_jj) + rtb_FilterCoefficient_dy;
+      u0 = (rtP.ANG_A_P_CH1_4 * rtb_FilterCoefficient_eu +
+            rtDW.Integrator_DSTATE_jp) + rtb_FilterCoefficient_ch;
 
-      /* Saturate: '<S605>/Saturation' */
+      /* Saturate: '<S637>/Saturation' */
       if (u0 > 16384.0F) {
         u0 = 16384.0F;
       } else if (u0 < -16384.0F) {
         u0 = -16384.0F;
       }
 
-      rtb_Sum_pp = rtP.TRANS_CH1_4 * u0 - rtU.yaw_speed_rpm_CH1_4;
+      rtb_Sum_cz = rtP.TRANS_CH1_4 * u0 - rtU.speed_rpm_CH1_4;
     } else {
-      rtb_Sum_pp = 0.0F;
+      rtb_Sum_cz = 0.0F;
     }
 
-    /* End of Switch: '<S466>/Switch1' */
+    /* End of Switch: '<S492>/Switch1' */
 
-    /* Gain: '<S553>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S545>/Filter'
-     *  Gain: '<S544>/Derivative Gain'
-     *  Sum: '<S545>/SumD'
+    /* DiscreteIntegrator: '<S575>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status1_4'
      */
-    rtb_FilterCoefficient_e4 = (rtP.ANG_S_D_CH1_4 * rtb_Sum_pp -
-      rtDW.Filter_DSTATE_mq) * 100.0F;
+    if (((rtU.reset_status1_4 > 0.0F) && (rtDW.Filter_PrevResetState_gs <= 0)) ||
+        ((rtU.reset_status1_4 <= 0.0F) && (rtDW.Filter_PrevResetState_gs == 1)))
+    {
+      rtDW.Filter_DSTATE_lm = 0.0F;
+    }
 
-    /* Sum: '<S559>/Sum' incorporates:
-     *  DiscreteIntegrator: '<S550>/Integrator'
-     *  Gain: '<S555>/Proportional Gain'
+    /* Gain: '<S583>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S575>/Filter'
+     *  Gain: '<S573>/Derivative Gain'
+     *  Sum: '<S575>/SumD'
      */
-    u0 = (rtP.ANG_S_P_CH1_4 * rtb_Sum_pp + rtDW.Integrator_DSTATE_bh) +
-      rtb_FilterCoefficient_e4;
+    rtb_FilterCoefficient_nkj = (rtP.ANG_S_D_CH1_4 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_lm) * 100.0F;
 
-    /* Saturate: '<S557>/Saturation' */
+    /* DiscreteIntegrator: '<S580>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status1_4'
+     */
+    if (((rtU.reset_status1_4 > 0.0F) && (rtDW.Integrator_PrevResetState_fb <= 0))
+        || ((rtU.reset_status1_4 <= 0.0F) && (rtDW.Integrator_PrevResetState_fb ==
+          1))) {
+      rtDW.Integrator_DSTATE_nn = 0.0F;
+    }
+
+    /* Sum: '<S589>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S580>/Integrator'
+     *  Gain: '<S585>/Proportional Gain'
+     */
+    u0 = (rtP.ANG_S_P_CH1_4 * rtb_Sum_cz + rtDW.Integrator_DSTATE_nn) +
+      rtb_FilterCoefficient_nkj;
+
+    /* Saturate: '<S587>/Saturation' */
     if (u0 > 16384.0F) {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH1_4' */
-      rtY.yaw_ANG_OUT_CH1_4 = 16384.0F;
+      /* Outport: '<Root>/ANG_OUT_CH1_4' */
+      rtY.ANG_OUT_CH1_4 = 16384.0F;
     } else if (u0 < -16384.0F) {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH1_4' */
-      rtY.yaw_ANG_OUT_CH1_4 = -16384.0F;
+      /* Outport: '<Root>/ANG_OUT_CH1_4' */
+      rtY.ANG_OUT_CH1_4 = -16384.0F;
     } else {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH1_4' */
-      rtY.yaw_ANG_OUT_CH1_4 = u0;
+      /* Outport: '<Root>/ANG_OUT_CH1_4' */
+      rtY.ANG_OUT_CH1_4 = u0;
     }
 
-    /* End of Saturate: '<S557>/Saturation' */
+    /* End of Saturate: '<S587>/Saturation' */
 
-    /* Chart: '<S466>/Chart1' incorporates:
-     *  Inport: '<Root>/yaw_ecd_CH1_4'
-     *  Inport: '<Root>/yaw_last_ecd_CH1_4'
-     *  Sum: '<S466>/Sum3'
+    /* Chart: '<S492>/Chart1' incorporates:
+     *  Inport: '<Root>/ecd_CH1_4'
+     *  Inport: '<Root>/last_ecd_CH1_4'
+     *  Sum: '<S492>/Sum3'
      */
-    Chart1(rtU.yaw_ecd_CH1_4 - rtU.yaw_last_ecd_CH1_4, &rtDW.u2_f,
-           &rtDW.sf_Chart1_j);
+    Chart1(rtU.ecd_CH1_4 - rtU.last_ecd_CH1_4, &rtDW.u2_a, &rtDW.sf_Chart1_d);
 
-    /* Outport: '<Root>/yaw_circle_out_CH1_4' incorporates:
-     *  Inport: '<Root>/yaw_circle_CH1_4'
-     *  Sum: '<S466>/Sum4'
+    /* Outport: '<Root>/circle_out_CH1_4' incorporates:
+     *  Inport: '<Root>/circle_CH1_4'
+     *  Sum: '<S492>/Sum4'
      */
-    rtY.yaw_circle_out_CH1_4 = rtDW.u2_f + rtU.yaw_circle_CH1_4;
+    rtY.circle_out_CH1_4 = rtDW.u2_a + rtU.circle_CH1_4;
 
-    /* Update for DiscreteIntegrator: '<S598>/Integrator' incorporates:
-     *  Gain: '<S595>/Integral Gain'
+    /* Update for DiscreteIntegrator: '<S630>/Integrator' incorporates:
+     *  Gain: '<S627>/Integral Gain'
      */
-    rtDW.Integrator_DSTATE_jj += rtP.ANG_A_I_CH1_4 * rtb_FilterCoefficient_k *
+    rtDW.Integrator_DSTATE_jp += rtP.ANG_A_I_CH1_4 * rtb_FilterCoefficient_eu *
       0.001F;
 
-    /* Update for DiscreteIntegrator: '<S593>/Filter' */
-    rtDW.Filter_DSTATE_pb += 0.001F * rtb_FilterCoefficient_dy;
+    /* Update for DiscreteIntegrator: '<S625>/Filter' */
+    rtDW.Filter_DSTATE_m1 += 0.001F * rtb_FilterCoefficient_ch;
 
-    /* Update for DiscreteIntegrator: '<S545>/Filter' */
-    rtDW.Filter_DSTATE_mq += 0.001F * rtb_FilterCoefficient_e4;
-
-    /* Update for DiscreteIntegrator: '<S550>/Integrator' incorporates:
-     *  Gain: '<S547>/Integral Gain'
+    /* Update for DiscreteIntegrator: '<S575>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S580>/Integrator'
+     *  Inport: '<Root>/reset_status1_4'
      */
-    rtDW.Integrator_DSTATE_bh += rtP.ANG_S_I_CH1_4 * rtb_Sum_pp * 0.001F;
+    rtDW.Filter_DSTATE_lm += 0.001F * rtb_FilterCoefficient_nkj;
+    if (rtU.reset_status1_4 > 0.0F) {
+      rtDW.Filter_PrevResetState_gs = 1;
+      rtDW.Integrator_PrevResetState_fb = 1;
+    } else {
+      if (rtU.reset_status1_4 < 0.0F) {
+        rtDW.Filter_PrevResetState_gs = -1;
+      } else if (rtU.reset_status1_4 == 0.0F) {
+        rtDW.Filter_PrevResetState_gs = 0;
+      } else {
+        rtDW.Filter_PrevResetState_gs = 2;
+      }
+
+      if (rtU.reset_status1_4 < 0.0F) {
+        rtDW.Integrator_PrevResetState_fb = -1;
+      } else if (rtU.reset_status1_4 == 0.0F) {
+        rtDW.Integrator_PrevResetState_fb = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_fb = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S575>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S580>/Integrator' incorporates:
+     *  Gain: '<S577>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_nn += rtP.ANG_S_I_CH1_4 * rtb_Sum_cz * 0.001F;
 
     /* End of Outputs for SubSystem: '<S4>/If Action_speed Subsystem1' */
     break;
@@ -1045,181 +1234,266 @@ void PID_MODEL_step(void)
   /* End of SwitchCase: '<S4>/Switch Case' */
 
   /* SwitchCase: '<S5>/Switch Case' incorporates:
-   *  Inport: '<Root>/yaw_status_CH1_5'
+   *  Inport: '<Root>/status_CH1_5'
    */
-  switch ((int32_T)rtU.yaw_status_CH1_5) {
+  switch ((int32_T)rtU.status_CH1_5) {
    case 1:
     /* Outputs for IfAction SubSystem: '<S5>/If Action_speed Subsystem' incorporates:
-     *  ActionPort: '<S615>/Action Port'
+     *  ActionPort: '<S647>/Action Port'
      */
-    /* Sum: '<S615>/Sum' incorporates:
-     *  Inport: '<Root>/yaw_speed_rpm_CH1_5'
-     *  Inport: '<Root>/yaw_target_CH1_5'
+    /* Sum: '<S647>/Sum' incorporates:
+     *  Inport: '<Root>/speed_rpm_CH1_5'
+     *  Inport: '<Root>/target_CH1_5'
      */
-    rtb_Sum_pp = rtU.yaw_target_CH1_5 - rtU.yaw_speed_rpm_CH1_5;
+    rtb_Sum_cz = rtU.target_CH1_5 - rtU.speed_rpm_CH1_5;
 
-    /* Gain: '<S652>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S644>/Filter'
-     *  Gain: '<S643>/Derivative Gain'
-     *  Sum: '<S644>/SumD'
+    /* DiscreteIntegrator: '<S678>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status1_5'
      */
-    rtb_FilterCoefficient_k = (rtP.SPD_D_CH1_5 * rtb_Sum_pp -
-      rtDW.Filter_DSTATE_ca) * 100.0F;
-
-    /* Sum: '<S658>/Sum' incorporates:
-     *  DiscreteIntegrator: '<S649>/Integrator'
-     *  Gain: '<S654>/Proportional Gain'
-     */
-    u0 = (rtP.SPD_P_CH1_5 * rtb_Sum_pp + rtDW.Integrator_DSTATE_o5) +
-      rtb_FilterCoefficient_k;
-
-    /* Saturate: '<S656>/Saturation' */
-    if (u0 > 16384.0F) {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH1_5' */
-      rtY.yaw_SPD_OUT_CH1_5 = 16384.0F;
-    } else if (u0 < -16384.0F) {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH1_5' */
-      rtY.yaw_SPD_OUT_CH1_5 = -16384.0F;
-    } else {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH1_5' */
-      rtY.yaw_SPD_OUT_CH1_5 = u0;
+    if (((rtU.reset_status1_5 > 0.0F) && (rtDW.Filter_PrevResetState_h <= 0)) ||
+        ((rtU.reset_status1_5 <= 0.0F) && (rtDW.Filter_PrevResetState_h == 1)))
+    {
+      rtDW.Filter_DSTATE_ci = 0.0F;
     }
 
-    /* End of Saturate: '<S656>/Saturation' */
-
-    /* Update for DiscreteIntegrator: '<S644>/Filter' */
-    rtDW.Filter_DSTATE_ca += 0.001F * rtb_FilterCoefficient_k;
-
-    /* Update for DiscreteIntegrator: '<S649>/Integrator' incorporates:
-     *  Gain: '<S646>/Integral Gain'
+    /* Gain: '<S686>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S678>/Filter'
+     *  Gain: '<S676>/Derivative Gain'
+     *  Sum: '<S678>/SumD'
      */
-    rtDW.Integrator_DSTATE_o5 += rtP.SPD_I_CH1_5 * rtb_Sum_pp * 0.001F;
+    rtb_FilterCoefficient_eu = (rtP.SPD_D_CH1_5 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_ci) * 100.0F;
+
+    /* DiscreteIntegrator: '<S683>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status1_5'
+     */
+    if (((rtU.reset_status1_5 > 0.0F) && (rtDW.Integrator_PrevResetState_l <= 0))
+        || ((rtU.reset_status1_5 <= 0.0F) && (rtDW.Integrator_PrevResetState_l ==
+          1))) {
+      rtDW.Integrator_DSTATE_el = 0.0F;
+    }
+
+    /* Sum: '<S692>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S683>/Integrator'
+     *  Gain: '<S688>/Proportional Gain'
+     */
+    u0 = (rtP.SPD_P_CH1_5 * rtb_Sum_cz + rtDW.Integrator_DSTATE_el) +
+      rtb_FilterCoefficient_eu;
+
+    /* Saturate: '<S690>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH1_5' */
+      rtY.SPD_OUT_CH1_5 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH1_5' */
+      rtY.SPD_OUT_CH1_5 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/SPD_OUT_CH1_5' */
+      rtY.SPD_OUT_CH1_5 = u0;
+    }
+
+    /* End of Saturate: '<S690>/Saturation' */
+
+    /* Update for DiscreteIntegrator: '<S678>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S683>/Integrator'
+     *  Inport: '<Root>/reset_status1_5'
+     */
+    rtDW.Filter_DSTATE_ci += 0.001F * rtb_FilterCoefficient_eu;
+    if (rtU.reset_status1_5 > 0.0F) {
+      rtDW.Filter_PrevResetState_h = 1;
+      rtDW.Integrator_PrevResetState_l = 1;
+    } else {
+      if (rtU.reset_status1_5 < 0.0F) {
+        rtDW.Filter_PrevResetState_h = -1;
+      } else if (rtU.reset_status1_5 == 0.0F) {
+        rtDW.Filter_PrevResetState_h = 0;
+      } else {
+        rtDW.Filter_PrevResetState_h = 2;
+      }
+
+      if (rtU.reset_status1_5 < 0.0F) {
+        rtDW.Integrator_PrevResetState_l = -1;
+      } else if (rtU.reset_status1_5 == 0.0F) {
+        rtDW.Integrator_PrevResetState_l = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_l = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S678>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S683>/Integrator' incorporates:
+     *  Gain: '<S680>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_el += rtP.SPD_I_CH1_5 * rtb_Sum_cz * 0.001F;
 
     /* End of Outputs for SubSystem: '<S5>/If Action_speed Subsystem' */
     break;
 
    case 2:
     /* Outputs for IfAction SubSystem: '<S5>/If Action_speed Subsystem1' incorporates:
-     *  ActionPort: '<S616>/Action Port'
+     *  ActionPort: '<S648>/Action Port'
      */
-    /* Sum: '<S616>/Sum' incorporates:
-     *  Gain: '<S616>/Gain'
-     *  Inport: '<Root>/yaw_circle_CH1_5'
-     *  Inport: '<Root>/yaw_ecd_CH1_5'
-     *  Inport: '<Root>/yaw_target_CH1_5'
-     *  Sum: '<S616>/Sum2'
+    /* Sum: '<S648>/Sum' incorporates:
+     *  Gain: '<S648>/Gain'
+     *  Inport: '<Root>/circle_CH1_5'
+     *  Inport: '<Root>/ecd_CH1_5'
+     *  Inport: '<Root>/target_CH1_5'
+     *  Sum: '<S648>/Sum2'
      */
-    rtb_FilterCoefficient_k = rtU.yaw_target_CH1_5 - (8191.0F *
-      rtU.yaw_circle_CH1_5 + rtU.yaw_ecd_CH1_5);
+    rtb_FilterCoefficient_eu = rtU.target_CH1_5 - (8191.0F * rtU.circle_CH1_5 +
+      rtU.ecd_CH1_5);
 
-    /* Abs: '<S616>/Abs' */
-    rtb_Sum_pp = (real32_T)fabs(rtb_FilterCoefficient_k);
+    /* Abs: '<S648>/Abs' */
+    rtb_Sum_cz = (real32_T)fabs(rtb_FilterCoefficient_eu);
 
-    /* Switch: '<S616>/Switch2' incorporates:
-     *  Constant: '<S616>/Constant'
+    /* Switch: '<S648>/Switch2' incorporates:
+     *  Constant: '<S648>/Constant'
      */
-    if (!(rtb_Sum_pp > rtP.DEADBAND_CH1_5)) {
-      rtb_FilterCoefficient_k = 0.0F;
+    if (!(rtb_Sum_cz > rtP.DEADBAND_CH1_5)) {
+      rtb_FilterCoefficient_eu = 0.0F;
     }
 
-    /* End of Switch: '<S616>/Switch2' */
+    /* End of Switch: '<S648>/Switch2' */
 
-    /* Gain: '<S751>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S743>/Filter'
-     *  Gain: '<S742>/Derivative Gain'
-     *  Sum: '<S743>/SumD'
+    /* Gain: '<S789>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S781>/Filter'
+     *  Gain: '<S779>/Derivative Gain'
+     *  Sum: '<S781>/SumD'
      */
-    rtb_FilterCoefficient_dy = (rtP.ANG_A_D_CH1_5 * rtb_FilterCoefficient_k -
-      rtDW.Filter_DSTATE_p) * 100.0F;
+    rtb_FilterCoefficient_ch = (rtP.ANG_A_D_CH1_5 * rtb_FilterCoefficient_eu -
+      rtDW.Filter_DSTATE_nq) * 100.0F;
 
-    /* Switch: '<S616>/Switch1' incorporates:
-     *  Constant: '<S616>/Constant'
-     *  Gain: '<S616>/Multiply'
-     *  Inport: '<Root>/yaw_speed_rpm_CH1_5'
-     *  Saturate: '<S755>/Saturation'
-     *  Sum: '<S616>/Sum1'
+    /* Switch: '<S648>/Switch1' incorporates:
+     *  Constant: '<S648>/Constant'
+     *  Gain: '<S648>/Multiply'
+     *  Inport: '<Root>/speed_rpm_CH1_5'
+     *  Saturate: '<S793>/Saturation'
+     *  Sum: '<S648>/Sum1'
      */
-    if (rtb_Sum_pp > rtP.DEADBAND_CH1_5) {
-      /* Sum: '<S757>/Sum' incorporates:
-       *  DiscreteIntegrator: '<S748>/Integrator'
-       *  Gain: '<S753>/Proportional Gain'
+    if (rtb_Sum_cz > rtP.DEADBAND_CH1_5) {
+      /* Sum: '<S795>/Sum' incorporates:
+       *  DiscreteIntegrator: '<S786>/Integrator'
+       *  Gain: '<S791>/Proportional Gain'
        */
-      u0 = (rtP.ANG_A_P_CH1_5 * rtb_FilterCoefficient_k +
-            rtDW.Integrator_DSTATE_p) + rtb_FilterCoefficient_dy;
+      u0 = (rtP.ANG_A_P_CH1_5 * rtb_FilterCoefficient_eu +
+            rtDW.Integrator_DSTATE_gp) + rtb_FilterCoefficient_ch;
 
-      /* Saturate: '<S755>/Saturation' */
+      /* Saturate: '<S793>/Saturation' */
       if (u0 > 16384.0F) {
         u0 = 16384.0F;
       } else if (u0 < -16384.0F) {
         u0 = -16384.0F;
       }
 
-      rtb_Sum_pp = rtP.TRANS_CH1_5 * u0 - rtU.yaw_speed_rpm_CH1_5;
+      rtb_Sum_cz = rtP.TRANS_CH1_5 * u0 - rtU.speed_rpm_CH1_5;
     } else {
-      rtb_Sum_pp = 0.0F;
+      rtb_Sum_cz = 0.0F;
     }
 
-    /* End of Switch: '<S616>/Switch1' */
+    /* End of Switch: '<S648>/Switch1' */
 
-    /* Gain: '<S703>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S695>/Filter'
-     *  Gain: '<S694>/Derivative Gain'
-     *  Sum: '<S695>/SumD'
+    /* DiscreteIntegrator: '<S731>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status1_5'
      */
-    rtb_FilterCoefficient_e4 = (rtP.ANG_S_D_CH1_5 * rtb_Sum_pp -
-      rtDW.Filter_DSTATE_bm) * 100.0F;
+    if (((rtU.reset_status1_5 > 0.0F) && (rtDW.Filter_PrevResetState_kt <= 0)) ||
+        ((rtU.reset_status1_5 <= 0.0F) && (rtDW.Filter_PrevResetState_kt == 1)))
+    {
+      rtDW.Filter_DSTATE_day = 0.0F;
+    }
 
-    /* Sum: '<S709>/Sum' incorporates:
-     *  DiscreteIntegrator: '<S700>/Integrator'
-     *  Gain: '<S705>/Proportional Gain'
+    /* Gain: '<S739>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S731>/Filter'
+     *  Gain: '<S729>/Derivative Gain'
+     *  Sum: '<S731>/SumD'
      */
-    u0 = (rtP.ANG_S_P_CH1_5 * rtb_Sum_pp + rtDW.Integrator_DSTATE_ep) +
-      rtb_FilterCoefficient_e4;
+    rtb_FilterCoefficient_nkj = (rtP.ANG_S_D_CH1_5 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_day) * 100.0F;
 
-    /* Saturate: '<S707>/Saturation' */
+    /* DiscreteIntegrator: '<S736>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status1_5'
+     */
+    if (((rtU.reset_status1_5 > 0.0F) && (rtDW.Integrator_PrevResetState_a <= 0))
+        || ((rtU.reset_status1_5 <= 0.0F) && (rtDW.Integrator_PrevResetState_a ==
+          1))) {
+      rtDW.Integrator_DSTATE_ih = 0.0F;
+    }
+
+    /* Sum: '<S745>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S736>/Integrator'
+     *  Gain: '<S741>/Proportional Gain'
+     */
+    u0 = (rtP.ANG_S_P_CH1_5 * rtb_Sum_cz + rtDW.Integrator_DSTATE_ih) +
+      rtb_FilterCoefficient_nkj;
+
+    /* Saturate: '<S743>/Saturation' */
     if (u0 > 16384.0F) {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH1_5' */
-      rtY.yaw_ANG_OUT_CH1_5 = 16384.0F;
+      /* Outport: '<Root>/ANG_OUT_CH1_5' */
+      rtY.ANG_OUT_CH1_5 = 16384.0F;
     } else if (u0 < -16384.0F) {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH1_5' */
-      rtY.yaw_ANG_OUT_CH1_5 = -16384.0F;
+      /* Outport: '<Root>/ANG_OUT_CH1_5' */
+      rtY.ANG_OUT_CH1_5 = -16384.0F;
     } else {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH1_5' */
-      rtY.yaw_ANG_OUT_CH1_5 = u0;
+      /* Outport: '<Root>/ANG_OUT_CH1_5' */
+      rtY.ANG_OUT_CH1_5 = u0;
     }
 
-    /* End of Saturate: '<S707>/Saturation' */
+    /* End of Saturate: '<S743>/Saturation' */
 
-    /* Chart: '<S616>/Chart1' incorporates:
-     *  Inport: '<Root>/yaw_ecd_CH1_5'
-     *  Inport: '<Root>/yaw_last_ecd_CH1_5'
-     *  Sum: '<S616>/Sum3'
+    /* Chart: '<S648>/Chart1' incorporates:
+     *  Inport: '<Root>/ecd_CH1_5'
+     *  Inport: '<Root>/last_ecd_CH1_5'
+     *  Sum: '<S648>/Sum3'
      */
-    Chart1(rtU.yaw_ecd_CH1_5 - rtU.yaw_last_ecd_CH1_5, &rtDW.u2_c,
-           &rtDW.sf_Chart1_n);
+    Chart1(rtU.ecd_CH1_5 - rtU.last_ecd_CH1_5, &rtDW.u2_c, &rtDW.sf_Chart1_p);
 
-    /* Outport: '<Root>/yaw_circle_out_CH1_5' incorporates:
-     *  Inport: '<Root>/yaw_circle_CH1_5'
-     *  Sum: '<S616>/Sum4'
+    /* Outport: '<Root>/circle_out_CH1_5' incorporates:
+     *  Inport: '<Root>/circle_CH1_5'
+     *  Sum: '<S648>/Sum4'
      */
-    rtY.yaw_circle_out_CH1_5 = rtDW.u2_c + rtU.yaw_circle_CH1_5;
+    rtY.circle_out_CH1_5 = rtDW.u2_c + rtU.circle_CH1_5;
 
-    /* Update for DiscreteIntegrator: '<S748>/Integrator' incorporates:
-     *  Gain: '<S745>/Integral Gain'
+    /* Update for DiscreteIntegrator: '<S786>/Integrator' incorporates:
+     *  Gain: '<S783>/Integral Gain'
      */
-    rtDW.Integrator_DSTATE_p += rtP.ANG_A_I_CH1_5 * rtb_FilterCoefficient_k *
+    rtDW.Integrator_DSTATE_gp += rtP.ANG_A_I_CH1_5 * rtb_FilterCoefficient_eu *
       0.001F;
 
-    /* Update for DiscreteIntegrator: '<S743>/Filter' */
-    rtDW.Filter_DSTATE_p += 0.001F * rtb_FilterCoefficient_dy;
+    /* Update for DiscreteIntegrator: '<S781>/Filter' */
+    rtDW.Filter_DSTATE_nq += 0.001F * rtb_FilterCoefficient_ch;
 
-    /* Update for DiscreteIntegrator: '<S695>/Filter' */
-    rtDW.Filter_DSTATE_bm += 0.001F * rtb_FilterCoefficient_e4;
-
-    /* Update for DiscreteIntegrator: '<S700>/Integrator' incorporates:
-     *  Gain: '<S697>/Integral Gain'
+    /* Update for DiscreteIntegrator: '<S731>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S736>/Integrator'
+     *  Inport: '<Root>/reset_status1_5'
      */
-    rtDW.Integrator_DSTATE_ep += rtP.ANG_S_I_CH1_5 * rtb_Sum_pp * 0.001F;
+    rtDW.Filter_DSTATE_day += 0.001F * rtb_FilterCoefficient_nkj;
+    if (rtU.reset_status1_5 > 0.0F) {
+      rtDW.Filter_PrevResetState_kt = 1;
+      rtDW.Integrator_PrevResetState_a = 1;
+    } else {
+      if (rtU.reset_status1_5 < 0.0F) {
+        rtDW.Filter_PrevResetState_kt = -1;
+      } else if (rtU.reset_status1_5 == 0.0F) {
+        rtDW.Filter_PrevResetState_kt = 0;
+      } else {
+        rtDW.Filter_PrevResetState_kt = 2;
+      }
+
+      if (rtU.reset_status1_5 < 0.0F) {
+        rtDW.Integrator_PrevResetState_a = -1;
+      } else if (rtU.reset_status1_5 == 0.0F) {
+        rtDW.Integrator_PrevResetState_a = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_a = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S731>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S736>/Integrator' incorporates:
+     *  Gain: '<S733>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_ih += rtP.ANG_S_I_CH1_5 * rtb_Sum_cz * 0.001F;
 
     /* End of Outputs for SubSystem: '<S5>/If Action_speed Subsystem1' */
     break;
@@ -1228,181 +1502,266 @@ void PID_MODEL_step(void)
   /* End of SwitchCase: '<S5>/Switch Case' */
 
   /* SwitchCase: '<S6>/Switch Case' incorporates:
-   *  Inport: '<Root>/yaw_status_CH1_6'
+   *  Inport: '<Root>/status_CH1_6'
    */
-  switch ((int32_T)rtU.yaw_status_CH1_6) {
+  switch ((int32_T)rtU.status_CH1_6) {
    case 1:
     /* Outputs for IfAction SubSystem: '<S6>/If Action_speed Subsystem' incorporates:
-     *  ActionPort: '<S765>/Action Port'
+     *  ActionPort: '<S803>/Action Port'
      */
-    /* Sum: '<S765>/Sum' incorporates:
-     *  Inport: '<Root>/yaw_speed_rpm_CH1_6'
-     *  Inport: '<Root>/yaw_target_CH1_6'
+    /* Sum: '<S803>/Sum' incorporates:
+     *  Inport: '<Root>/speed_rpm_CH1_6'
+     *  Inport: '<Root>/target_CH1_6'
      */
-    rtb_Sum_pp = rtU.yaw_target_CH1_6 - rtU.yaw_speed_rpm_CH1_6;
+    rtb_Sum_cz = rtU.target_CH1_6 - rtU.speed_rpm_CH1_6;
 
-    /* Gain: '<S802>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S794>/Filter'
-     *  Gain: '<S793>/Derivative Gain'
-     *  Sum: '<S794>/SumD'
+    /* DiscreteIntegrator: '<S834>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status1_6'
      */
-    rtb_FilterCoefficient_k = (rtP.SPD_D_CH1_6 * rtb_Sum_pp -
-      rtDW.Filter_DSTATE_ke) * 100.0F;
-
-    /* Sum: '<S808>/Sum' incorporates:
-     *  DiscreteIntegrator: '<S799>/Integrator'
-     *  Gain: '<S804>/Proportional Gain'
-     */
-    u0 = (rtP.SPD_P_CH1_6 * rtb_Sum_pp + rtDW.Integrator_DSTATE_jz) +
-      rtb_FilterCoefficient_k;
-
-    /* Saturate: '<S806>/Saturation' */
-    if (u0 > 16384.0F) {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH1_6' */
-      rtY.yaw_SPD_OUT_CH1_6 = 16384.0F;
-    } else if (u0 < -16384.0F) {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH1_6' */
-      rtY.yaw_SPD_OUT_CH1_6 = -16384.0F;
-    } else {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH1_6' */
-      rtY.yaw_SPD_OUT_CH1_6 = u0;
+    if (((rtU.reset_status1_6 > 0.0F) && (rtDW.Filter_PrevResetState_fp <= 0)) ||
+        ((rtU.reset_status1_6 <= 0.0F) && (rtDW.Filter_PrevResetState_fp == 1)))
+    {
+      rtDW.Filter_DSTATE_c = 0.0F;
     }
 
-    /* End of Saturate: '<S806>/Saturation' */
-
-    /* Update for DiscreteIntegrator: '<S794>/Filter' */
-    rtDW.Filter_DSTATE_ke += 0.001F * rtb_FilterCoefficient_k;
-
-    /* Update for DiscreteIntegrator: '<S799>/Integrator' incorporates:
-     *  Gain: '<S796>/Integral Gain'
+    /* Gain: '<S842>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S834>/Filter'
+     *  Gain: '<S832>/Derivative Gain'
+     *  Sum: '<S834>/SumD'
      */
-    rtDW.Integrator_DSTATE_jz += rtP.SPD_I_CH1_6 * rtb_Sum_pp * 0.001F;
+    rtb_FilterCoefficient_eu = (rtP.SPD_D_CH1_6 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_c) * 100.0F;
+
+    /* DiscreteIntegrator: '<S839>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status1_6'
+     */
+    if (((rtU.reset_status1_6 > 0.0F) && (rtDW.Integrator_PrevResetState_ds <= 0))
+        || ((rtU.reset_status1_6 <= 0.0F) && (rtDW.Integrator_PrevResetState_ds ==
+          1))) {
+      rtDW.Integrator_DSTATE_b = 0.0F;
+    }
+
+    /* Sum: '<S848>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S839>/Integrator'
+     *  Gain: '<S844>/Proportional Gain'
+     */
+    u0 = (rtP.SPD_P_CH1_6 * rtb_Sum_cz + rtDW.Integrator_DSTATE_b) +
+      rtb_FilterCoefficient_eu;
+
+    /* Saturate: '<S846>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH1_6' */
+      rtY.SPD_OUT_CH1_6 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH1_6' */
+      rtY.SPD_OUT_CH1_6 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/SPD_OUT_CH1_6' */
+      rtY.SPD_OUT_CH1_6 = u0;
+    }
+
+    /* End of Saturate: '<S846>/Saturation' */
+
+    /* Update for DiscreteIntegrator: '<S834>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S839>/Integrator'
+     *  Inport: '<Root>/reset_status1_6'
+     */
+    rtDW.Filter_DSTATE_c += 0.001F * rtb_FilterCoefficient_eu;
+    if (rtU.reset_status1_6 > 0.0F) {
+      rtDW.Filter_PrevResetState_fp = 1;
+      rtDW.Integrator_PrevResetState_ds = 1;
+    } else {
+      if (rtU.reset_status1_6 < 0.0F) {
+        rtDW.Filter_PrevResetState_fp = -1;
+      } else if (rtU.reset_status1_6 == 0.0F) {
+        rtDW.Filter_PrevResetState_fp = 0;
+      } else {
+        rtDW.Filter_PrevResetState_fp = 2;
+      }
+
+      if (rtU.reset_status1_6 < 0.0F) {
+        rtDW.Integrator_PrevResetState_ds = -1;
+      } else if (rtU.reset_status1_6 == 0.0F) {
+        rtDW.Integrator_PrevResetState_ds = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_ds = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S834>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S839>/Integrator' incorporates:
+     *  Gain: '<S836>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_b += rtP.SPD_I_CH1_6 * rtb_Sum_cz * 0.001F;
 
     /* End of Outputs for SubSystem: '<S6>/If Action_speed Subsystem' */
     break;
 
    case 2:
     /* Outputs for IfAction SubSystem: '<S6>/If Action_speed Subsystem1' incorporates:
-     *  ActionPort: '<S766>/Action Port'
+     *  ActionPort: '<S804>/Action Port'
      */
-    /* Sum: '<S766>/Sum' incorporates:
-     *  Gain: '<S766>/Gain'
-     *  Inport: '<Root>/yaw_circle_CH1_6'
-     *  Inport: '<Root>/yaw_ecd_CH1_6'
-     *  Inport: '<Root>/yaw_target_CH1_6'
-     *  Sum: '<S766>/Sum2'
+    /* Sum: '<S804>/Sum' incorporates:
+     *  Gain: '<S804>/Gain'
+     *  Inport: '<Root>/circle_CH1_6'
+     *  Inport: '<Root>/ecd_CH1_6'
+     *  Inport: '<Root>/target_CH1_6'
+     *  Sum: '<S804>/Sum2'
      */
-    rtb_FilterCoefficient_k = rtU.yaw_target_CH1_6 - (8191.0F *
-      rtU.yaw_circle_CH1_6 + rtU.yaw_ecd_CH1_6);
+    rtb_FilterCoefficient_eu = rtU.target_CH1_6 - (8191.0F * rtU.circle_CH1_6 +
+      rtU.ecd_CH1_6);
 
-    /* Abs: '<S766>/Abs' */
-    rtb_Sum_pp = (real32_T)fabs(rtb_FilterCoefficient_k);
+    /* Abs: '<S804>/Abs' */
+    rtb_Sum_cz = (real32_T)fabs(rtb_FilterCoefficient_eu);
 
-    /* Switch: '<S766>/Switch2' incorporates:
-     *  Constant: '<S766>/Constant'
+    /* Switch: '<S804>/Switch2' incorporates:
+     *  Constant: '<S804>/Constant'
      */
-    if (!(rtb_Sum_pp > rtP.DEADBAND_CH1_6)) {
-      rtb_FilterCoefficient_k = 0.0F;
+    if (!(rtb_Sum_cz > rtP.DEADBAND_CH1_6)) {
+      rtb_FilterCoefficient_eu = 0.0F;
     }
 
-    /* End of Switch: '<S766>/Switch2' */
+    /* End of Switch: '<S804>/Switch2' */
 
-    /* Gain: '<S901>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S893>/Filter'
-     *  Gain: '<S892>/Derivative Gain'
-     *  Sum: '<S893>/SumD'
+    /* Gain: '<S945>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S937>/Filter'
+     *  Gain: '<S935>/Derivative Gain'
+     *  Sum: '<S937>/SumD'
      */
-    rtb_FilterCoefficient_dy = (rtP.ANG_A_D_CH1_6 * rtb_FilterCoefficient_k -
-      rtDW.Filter_DSTATE_b3) * 100.0F;
+    rtb_FilterCoefficient_ch = (rtP.ANG_A_D_CH1_6 * rtb_FilterCoefficient_eu -
+      rtDW.Filter_DSTATE_pn) * 100.0F;
 
-    /* Switch: '<S766>/Switch1' incorporates:
-     *  Constant: '<S766>/Constant'
-     *  Gain: '<S766>/Multiply'
-     *  Inport: '<Root>/yaw_speed_rpm_CH1_6'
-     *  Saturate: '<S905>/Saturation'
-     *  Sum: '<S766>/Sum1'
+    /* Switch: '<S804>/Switch1' incorporates:
+     *  Constant: '<S804>/Constant'
+     *  Gain: '<S804>/Multiply'
+     *  Inport: '<Root>/speed_rpm_CH1_6'
+     *  Saturate: '<S949>/Saturation'
+     *  Sum: '<S804>/Sum1'
      */
-    if (rtb_Sum_pp > rtP.DEADBAND_CH1_6) {
-      /* Sum: '<S907>/Sum' incorporates:
-       *  DiscreteIntegrator: '<S898>/Integrator'
-       *  Gain: '<S903>/Proportional Gain'
+    if (rtb_Sum_cz > rtP.DEADBAND_CH1_6) {
+      /* Sum: '<S951>/Sum' incorporates:
+       *  DiscreteIntegrator: '<S942>/Integrator'
+       *  Gain: '<S947>/Proportional Gain'
        */
-      u0 = (rtP.ANG_A_P_CH1_6 * rtb_FilterCoefficient_k +
-            rtDW.Integrator_DSTATE_en) + rtb_FilterCoefficient_dy;
+      u0 = (rtP.ANG_A_P_CH1_6 * rtb_FilterCoefficient_eu +
+            rtDW.Integrator_DSTATE_m) + rtb_FilterCoefficient_ch;
 
-      /* Saturate: '<S905>/Saturation' */
+      /* Saturate: '<S949>/Saturation' */
       if (u0 > 16384.0F) {
         u0 = 16384.0F;
       } else if (u0 < -16384.0F) {
         u0 = -16384.0F;
       }
 
-      rtb_Sum_pp = rtP.TRANS_CH1_6 * u0 - rtU.yaw_speed_rpm_CH1_6;
+      rtb_Sum_cz = rtP.TRANS_CH1_6 * u0 - rtU.speed_rpm_CH1_6;
     } else {
-      rtb_Sum_pp = 0.0F;
+      rtb_Sum_cz = 0.0F;
     }
 
-    /* End of Switch: '<S766>/Switch1' */
+    /* End of Switch: '<S804>/Switch1' */
 
-    /* Gain: '<S853>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S845>/Filter'
-     *  Gain: '<S844>/Derivative Gain'
-     *  Sum: '<S845>/SumD'
+    /* DiscreteIntegrator: '<S887>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status1_6'
      */
-    rtb_FilterCoefficient_e4 = (rtP.ANG_S_D_CH1_6 * rtb_Sum_pp -
-      rtDW.Filter_DSTATE_e) * 100.0F;
+    if (((rtU.reset_status1_6 > 0.0F) && (rtDW.Filter_PrevResetState_lp <= 0)) ||
+        ((rtU.reset_status1_6 <= 0.0F) && (rtDW.Filter_PrevResetState_lp == 1)))
+    {
+      rtDW.Filter_DSTATE_da = 0.0F;
+    }
 
-    /* Sum: '<S859>/Sum' incorporates:
-     *  DiscreteIntegrator: '<S850>/Integrator'
-     *  Gain: '<S855>/Proportional Gain'
+    /* Gain: '<S895>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S887>/Filter'
+     *  Gain: '<S885>/Derivative Gain'
+     *  Sum: '<S887>/SumD'
      */
-    u0 = (rtP.ANG_S_P_CH1_6 * rtb_Sum_pp + rtDW.Integrator_DSTATE_j) +
-      rtb_FilterCoefficient_e4;
+    rtb_FilterCoefficient_nkj = (rtP.ANG_S_D_CH1_6 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_da) * 100.0F;
 
-    /* Saturate: '<S857>/Saturation' */
+    /* DiscreteIntegrator: '<S892>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status1_6'
+     */
+    if (((rtU.reset_status1_6 > 0.0F) && (rtDW.Integrator_PrevResetState_je <= 0))
+        || ((rtU.reset_status1_6 <= 0.0F) && (rtDW.Integrator_PrevResetState_je ==
+          1))) {
+      rtDW.Integrator_DSTATE_oo = 0.0F;
+    }
+
+    /* Sum: '<S901>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S892>/Integrator'
+     *  Gain: '<S897>/Proportional Gain'
+     */
+    u0 = (rtP.ANG_S_P_CH1_6 * rtb_Sum_cz + rtDW.Integrator_DSTATE_oo) +
+      rtb_FilterCoefficient_nkj;
+
+    /* Saturate: '<S899>/Saturation' */
     if (u0 > 16384.0F) {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH1_6' */
-      rtY.yaw_ANG_OUT_CH1_6 = 16384.0F;
+      /* Outport: '<Root>/ANG_OUT_CH1_6' */
+      rtY.ANG_OUT_CH1_6 = 16384.0F;
     } else if (u0 < -16384.0F) {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH1_6' */
-      rtY.yaw_ANG_OUT_CH1_6 = -16384.0F;
+      /* Outport: '<Root>/ANG_OUT_CH1_6' */
+      rtY.ANG_OUT_CH1_6 = -16384.0F;
     } else {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH1_6' */
-      rtY.yaw_ANG_OUT_CH1_6 = u0;
+      /* Outport: '<Root>/ANG_OUT_CH1_6' */
+      rtY.ANG_OUT_CH1_6 = u0;
     }
 
-    /* End of Saturate: '<S857>/Saturation' */
+    /* End of Saturate: '<S899>/Saturation' */
 
-    /* Chart: '<S766>/Chart1' incorporates:
-     *  Inport: '<Root>/yaw_ecd_CH1_6'
-     *  Inport: '<Root>/yaw_last_ecd_CH1_6'
-     *  Sum: '<S766>/Sum3'
+    /* Chart: '<S804>/Chart1' incorporates:
+     *  Inport: '<Root>/ecd_CH1_6'
+     *  Inport: '<Root>/last_ecd_CH1_6'
+     *  Sum: '<S804>/Sum3'
      */
-    Chart1(rtU.yaw_ecd_CH1_6 - rtU.yaw_last_ecd_CH1_6, &rtDW.u2_jm,
-           &rtDW.sf_Chart1_f);
+    Chart1(rtU.ecd_CH1_6 - rtU.last_ecd_CH1_6, &rtDW.u2_nn, &rtDW.sf_Chart1_j);
 
-    /* Outport: '<Root>/yaw_circle_out_CH1_6' incorporates:
-     *  Inport: '<Root>/yaw_circle_CH1_6'
-     *  Sum: '<S766>/Sum4'
+    /* Outport: '<Root>/circle_out_CH1_6' incorporates:
+     *  Inport: '<Root>/circle_CH1_6'
+     *  Sum: '<S804>/Sum4'
      */
-    rtY.yaw_circle_out_CH1_6 = rtDW.u2_jm + rtU.yaw_circle_CH1_6;
+    rtY.circle_out_CH1_6 = rtDW.u2_nn + rtU.circle_CH1_6;
 
-    /* Update for DiscreteIntegrator: '<S898>/Integrator' incorporates:
-     *  Gain: '<S895>/Integral Gain'
+    /* Update for DiscreteIntegrator: '<S942>/Integrator' incorporates:
+     *  Gain: '<S939>/Integral Gain'
      */
-    rtDW.Integrator_DSTATE_en += rtP.ANG_A_I_CH1_6 * rtb_FilterCoefficient_k *
+    rtDW.Integrator_DSTATE_m += rtP.ANG_A_I_CH1_6 * rtb_FilterCoefficient_eu *
       0.001F;
 
-    /* Update for DiscreteIntegrator: '<S893>/Filter' */
-    rtDW.Filter_DSTATE_b3 += 0.001F * rtb_FilterCoefficient_dy;
+    /* Update for DiscreteIntegrator: '<S937>/Filter' */
+    rtDW.Filter_DSTATE_pn += 0.001F * rtb_FilterCoefficient_ch;
 
-    /* Update for DiscreteIntegrator: '<S845>/Filter' */
-    rtDW.Filter_DSTATE_e += 0.001F * rtb_FilterCoefficient_e4;
-
-    /* Update for DiscreteIntegrator: '<S850>/Integrator' incorporates:
-     *  Gain: '<S847>/Integral Gain'
+    /* Update for DiscreteIntegrator: '<S887>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S892>/Integrator'
+     *  Inport: '<Root>/reset_status1_6'
      */
-    rtDW.Integrator_DSTATE_j += rtP.ANG_S_I_CH1_6 * rtb_Sum_pp * 0.001F;
+    rtDW.Filter_DSTATE_da += 0.001F * rtb_FilterCoefficient_nkj;
+    if (rtU.reset_status1_6 > 0.0F) {
+      rtDW.Filter_PrevResetState_lp = 1;
+      rtDW.Integrator_PrevResetState_je = 1;
+    } else {
+      if (rtU.reset_status1_6 < 0.0F) {
+        rtDW.Filter_PrevResetState_lp = -1;
+      } else if (rtU.reset_status1_6 == 0.0F) {
+        rtDW.Filter_PrevResetState_lp = 0;
+      } else {
+        rtDW.Filter_PrevResetState_lp = 2;
+      }
+
+      if (rtU.reset_status1_6 < 0.0F) {
+        rtDW.Integrator_PrevResetState_je = -1;
+      } else if (rtU.reset_status1_6 == 0.0F) {
+        rtDW.Integrator_PrevResetState_je = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_je = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S887>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S892>/Integrator' incorporates:
+     *  Gain: '<S889>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_oo += rtP.ANG_S_I_CH1_6 * rtb_Sum_cz * 0.001F;
 
     /* End of Outputs for SubSystem: '<S6>/If Action_speed Subsystem1' */
     break;
@@ -1411,181 +1770,266 @@ void PID_MODEL_step(void)
   /* End of SwitchCase: '<S6>/Switch Case' */
 
   /* SwitchCase: '<S7>/Switch Case' incorporates:
-   *  Inport: '<Root>/yaw_status_CH1_7'
+   *  Inport: '<Root>/status_CH1_7'
    */
-  switch ((int32_T)rtU.yaw_status_CH1_7) {
+  switch ((int32_T)rtU.status_CH1_7) {
    case 1:
     /* Outputs for IfAction SubSystem: '<S7>/If Action_speed Subsystem' incorporates:
-     *  ActionPort: '<S915>/Action Port'
+     *  ActionPort: '<S959>/Action Port'
      */
-    /* Sum: '<S915>/Sum' incorporates:
-     *  Inport: '<Root>/yaw_speed_rpm_CH1_7'
-     *  Inport: '<Root>/yaw_target_CH1_7'
+    /* Sum: '<S959>/Sum' incorporates:
+     *  Inport: '<Root>/speed_rpm_CH1_7'
+     *  Inport: '<Root>/target_CH1_7'
      */
-    rtb_Sum_pp = rtU.yaw_target_CH1_7 - rtU.yaw_speed_rpm_CH1_7;
+    rtb_Sum_cz = rtU.target_CH1_7 - rtU.speed_rpm_CH1_7;
 
-    /* Gain: '<S952>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S944>/Filter'
-     *  Gain: '<S943>/Derivative Gain'
-     *  Sum: '<S944>/SumD'
+    /* DiscreteIntegrator: '<S990>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status1_7'
      */
-    rtb_FilterCoefficient_k = (rtP.SPD_D_CH1_7 * rtb_Sum_pp -
-      rtDW.Filter_DSTATE_nv) * 100.0F;
-
-    /* Sum: '<S958>/Sum' incorporates:
-     *  DiscreteIntegrator: '<S949>/Integrator'
-     *  Gain: '<S954>/Proportional Gain'
-     */
-    u0 = (rtP.SPD_P_CH1_7 * rtb_Sum_pp + rtDW.Integrator_DSTATE_mp) +
-      rtb_FilterCoefficient_k;
-
-    /* Saturate: '<S956>/Saturation' */
-    if (u0 > 3000.0F) {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH1_7' */
-      rtY.yaw_SPD_OUT_CH1_7 = 3000.0F;
-    } else if (u0 < -3000.0F) {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH1_7' */
-      rtY.yaw_SPD_OUT_CH1_7 = -3000.0F;
-    } else {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH1_7' */
-      rtY.yaw_SPD_OUT_CH1_7 = u0;
+    if (((rtU.reset_status1_7 > 0.0F) && (rtDW.Filter_PrevResetState_kk <= 0)) ||
+        ((rtU.reset_status1_7 <= 0.0F) && (rtDW.Filter_PrevResetState_kk == 1)))
+    {
+      rtDW.Filter_DSTATE_kg = 0.0F;
     }
 
-    /* End of Saturate: '<S956>/Saturation' */
-
-    /* Update for DiscreteIntegrator: '<S944>/Filter' */
-    rtDW.Filter_DSTATE_nv += 0.001F * rtb_FilterCoefficient_k;
-
-    /* Update for DiscreteIntegrator: '<S949>/Integrator' incorporates:
-     *  Gain: '<S946>/Integral Gain'
+    /* Gain: '<S998>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S990>/Filter'
+     *  Gain: '<S988>/Derivative Gain'
+     *  Sum: '<S990>/SumD'
      */
-    rtDW.Integrator_DSTATE_mp += rtP.SPD_I_CH1_7 * rtb_Sum_pp * 0.001F;
+    rtb_FilterCoefficient_eu = (rtP.SPD_D_CH1_7 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_kg) * 100.0F;
+
+    /* DiscreteIntegrator: '<S995>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status1_7'
+     */
+    if (((rtU.reset_status1_7 > 0.0F) && (rtDW.Integrator_PrevResetState_od <= 0))
+        || ((rtU.reset_status1_7 <= 0.0F) && (rtDW.Integrator_PrevResetState_od ==
+          1))) {
+      rtDW.Integrator_DSTATE_cb = 0.0F;
+    }
+
+    /* Sum: '<S1004>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S995>/Integrator'
+     *  Gain: '<S1000>/Proportional Gain'
+     */
+    u0 = (rtP.SPD_P_CH1_7 * rtb_Sum_cz + rtDW.Integrator_DSTATE_cb) +
+      rtb_FilterCoefficient_eu;
+
+    /* Saturate: '<S1002>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH1_7' */
+      rtY.SPD_OUT_CH1_7 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH1_7' */
+      rtY.SPD_OUT_CH1_7 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/SPD_OUT_CH1_7' */
+      rtY.SPD_OUT_CH1_7 = u0;
+    }
+
+    /* End of Saturate: '<S1002>/Saturation' */
+
+    /* Update for DiscreteIntegrator: '<S990>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S995>/Integrator'
+     *  Inport: '<Root>/reset_status1_7'
+     */
+    rtDW.Filter_DSTATE_kg += 0.001F * rtb_FilterCoefficient_eu;
+    if (rtU.reset_status1_7 > 0.0F) {
+      rtDW.Filter_PrevResetState_kk = 1;
+      rtDW.Integrator_PrevResetState_od = 1;
+    } else {
+      if (rtU.reset_status1_7 < 0.0F) {
+        rtDW.Filter_PrevResetState_kk = -1;
+      } else if (rtU.reset_status1_7 == 0.0F) {
+        rtDW.Filter_PrevResetState_kk = 0;
+      } else {
+        rtDW.Filter_PrevResetState_kk = 2;
+      }
+
+      if (rtU.reset_status1_7 < 0.0F) {
+        rtDW.Integrator_PrevResetState_od = -1;
+      } else if (rtU.reset_status1_7 == 0.0F) {
+        rtDW.Integrator_PrevResetState_od = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_od = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S990>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S995>/Integrator' incorporates:
+     *  Gain: '<S992>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_cb += rtP.SPD_I_CH1_7 * rtb_Sum_cz * 0.001F;
 
     /* End of Outputs for SubSystem: '<S7>/If Action_speed Subsystem' */
     break;
 
    case 2:
     /* Outputs for IfAction SubSystem: '<S7>/If Action_speed Subsystem1' incorporates:
-     *  ActionPort: '<S916>/Action Port'
+     *  ActionPort: '<S960>/Action Port'
      */
-    /* Sum: '<S916>/Sum' incorporates:
-     *  Gain: '<S916>/Gain'
-     *  Inport: '<Root>/yaw_circle_CH1_7'
-     *  Inport: '<Root>/yaw_ecd_CH1_7'
-     *  Inport: '<Root>/yaw_target_CH1_7'
-     *  Sum: '<S916>/Sum2'
+    /* Sum: '<S960>/Sum' incorporates:
+     *  Gain: '<S960>/Gain'
+     *  Inport: '<Root>/circle_CH1_7'
+     *  Inport: '<Root>/ecd_CH1_7'
+     *  Inport: '<Root>/target_CH1_7'
+     *  Sum: '<S960>/Sum2'
      */
-    rtb_FilterCoefficient_k = rtU.yaw_target_CH1_7 - (8191.0F *
-      rtU.yaw_circle_CH1_7 + rtU.yaw_ecd_CH1_7);
+    rtb_FilterCoefficient_eu = rtU.target_CH1_7 - (8191.0F * rtU.circle_CH1_7 +
+      rtU.ecd_CH1_7);
 
-    /* Abs: '<S916>/Abs' */
-    rtb_Sum_pp = (real32_T)fabs(rtb_FilterCoefficient_k);
+    /* Abs: '<S960>/Abs' */
+    rtb_Sum_cz = (real32_T)fabs(rtb_FilterCoefficient_eu);
 
-    /* Switch: '<S916>/Switch2' incorporates:
-     *  Constant: '<S916>/Constant'
+    /* Switch: '<S960>/Switch2' incorporates:
+     *  Constant: '<S960>/Constant'
      */
-    if (!(rtb_Sum_pp > rtP.DEADBAND_CH1_7)) {
-      rtb_FilterCoefficient_k = 0.0F;
+    if (!(rtb_Sum_cz > rtP.DEADBAND_CH1_7)) {
+      rtb_FilterCoefficient_eu = 0.0F;
     }
 
-    /* End of Switch: '<S916>/Switch2' */
+    /* End of Switch: '<S960>/Switch2' */
+
+    /* Gain: '<S1101>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S1093>/Filter'
+     *  Gain: '<S1091>/Derivative Gain'
+     *  Sum: '<S1093>/SumD'
+     */
+    rtb_FilterCoefficient_ch = (rtP.ANG_A_D_CH1_7 * rtb_FilterCoefficient_eu -
+      rtDW.Filter_DSTATE_hk) * 100.0F;
+
+    /* Switch: '<S960>/Switch1' incorporates:
+     *  Constant: '<S960>/Constant'
+     *  Gain: '<S960>/Multiply'
+     *  Inport: '<Root>/speed_rpm_CH1_7'
+     *  Saturate: '<S1105>/Saturation'
+     *  Sum: '<S960>/Sum1'
+     */
+    if (rtb_Sum_cz > rtP.DEADBAND_CH1_7) {
+      /* Sum: '<S1107>/Sum' incorporates:
+       *  DiscreteIntegrator: '<S1098>/Integrator'
+       *  Gain: '<S1103>/Proportional Gain'
+       */
+      u0 = (rtP.ANG_A_P_CH1_7 * rtb_FilterCoefficient_eu +
+            rtDW.Integrator_DSTATE_g) + rtb_FilterCoefficient_ch;
+
+      /* Saturate: '<S1105>/Saturation' */
+      if (u0 > 16384.0F) {
+        u0 = 16384.0F;
+      } else if (u0 < -16384.0F) {
+        u0 = -16384.0F;
+      }
+
+      rtb_Sum_cz = rtP.TRANS_CH1_7 * u0 - rtU.speed_rpm_CH1_7;
+    } else {
+      rtb_Sum_cz = 0.0F;
+    }
+
+    /* End of Switch: '<S960>/Switch1' */
+
+    /* DiscreteIntegrator: '<S1043>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status1_7'
+     */
+    if (((rtU.reset_status1_7 > 0.0F) && (rtDW.Filter_PrevResetState_nc <= 0)) ||
+        ((rtU.reset_status1_7 <= 0.0F) && (rtDW.Filter_PrevResetState_nc == 1)))
+    {
+      rtDW.Filter_DSTATE_ax = 0.0F;
+    }
 
     /* Gain: '<S1051>/Filter Coefficient' incorporates:
      *  DiscreteIntegrator: '<S1043>/Filter'
-     *  Gain: '<S1042>/Derivative Gain'
+     *  Gain: '<S1041>/Derivative Gain'
      *  Sum: '<S1043>/SumD'
      */
-    rtb_FilterCoefficient_dy = (rtP.ANG_A_D_CH1_7 * rtb_FilterCoefficient_k -
-      rtDW.Filter_DSTATE_m0) * 100.0F;
+    rtb_FilterCoefficient_nkj = (rtP.ANG_S_D_CH1_7 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_ax) * 100.0F;
 
-    /* Switch: '<S916>/Switch1' incorporates:
-     *  Constant: '<S916>/Constant'
-     *  Gain: '<S916>/Multiply'
-     *  Inport: '<Root>/yaw_speed_rpm_CH1_7'
-     *  Saturate: '<S1055>/Saturation'
-     *  Sum: '<S916>/Sum1'
+    /* DiscreteIntegrator: '<S1048>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status1_7'
      */
-    if (rtb_Sum_pp > rtP.DEADBAND_CH1_7) {
-      /* Sum: '<S1057>/Sum' incorporates:
-       *  DiscreteIntegrator: '<S1048>/Integrator'
-       *  Gain: '<S1053>/Proportional Gain'
-       */
-      u0 = (rtP.ANG_A_P_CH1_7 * rtb_FilterCoefficient_k +
-            rtDW.Integrator_DSTATE_gf) + rtb_FilterCoefficient_dy;
+    if (((rtU.reset_status1_7 > 0.0F) && (rtDW.Integrator_PrevResetState_gr <= 0))
+        || ((rtU.reset_status1_7 <= 0.0F) && (rtDW.Integrator_PrevResetState_gr ==
+          1))) {
+      rtDW.Integrator_DSTATE_jo = 0.0F;
+    }
 
-      /* Saturate: '<S1055>/Saturation' */
-      if (u0 > 3000.0F) {
-        u0 = 3000.0F;
-      } else if (u0 < -3000.0F) {
-        u0 = -3000.0F;
+    /* Sum: '<S1057>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S1048>/Integrator'
+     *  Gain: '<S1053>/Proportional Gain'
+     */
+    u0 = (rtP.ANG_S_P_CH1_7 * rtb_Sum_cz + rtDW.Integrator_DSTATE_jo) +
+      rtb_FilterCoefficient_nkj;
+
+    /* Saturate: '<S1055>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/ANG_OUT_CH1_7' */
+      rtY.ANG_OUT_CH1_7 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/ANG_OUT_CH1_7' */
+      rtY.ANG_OUT_CH1_7 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/ANG_OUT_CH1_7' */
+      rtY.ANG_OUT_CH1_7 = u0;
+    }
+
+    /* End of Saturate: '<S1055>/Saturation' */
+
+    /* Chart: '<S960>/Chart1' incorporates:
+     *  Inport: '<Root>/ecd_CH1_7'
+     *  Inport: '<Root>/last_ecd_CH1_7'
+     *  Sum: '<S960>/Sum3'
+     */
+    Chart1(rtU.ecd_CH1_7 - rtU.last_ecd_CH1_7, &rtDW.u2_f4, &rtDW.sf_Chart1_o);
+
+    /* Outport: '<Root>/circle_out_CH1_7' incorporates:
+     *  Inport: '<Root>/circle_CH1_7'
+     *  Sum: '<S960>/Sum4'
+     */
+    rtY.circle_out_CH1_7 = rtDW.u2_f4 + rtU.circle_CH1_7;
+
+    /* Update for DiscreteIntegrator: '<S1098>/Integrator' incorporates:
+     *  Gain: '<S1095>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_g += rtP.ANG_A_I_CH1_7 * rtb_FilterCoefficient_eu *
+      0.001F;
+
+    /* Update for DiscreteIntegrator: '<S1093>/Filter' */
+    rtDW.Filter_DSTATE_hk += 0.001F * rtb_FilterCoefficient_ch;
+
+    /* Update for DiscreteIntegrator: '<S1043>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S1048>/Integrator'
+     *  Inport: '<Root>/reset_status1_7'
+     */
+    rtDW.Filter_DSTATE_ax += 0.001F * rtb_FilterCoefficient_nkj;
+    if (rtU.reset_status1_7 > 0.0F) {
+      rtDW.Filter_PrevResetState_nc = 1;
+      rtDW.Integrator_PrevResetState_gr = 1;
+    } else {
+      if (rtU.reset_status1_7 < 0.0F) {
+        rtDW.Filter_PrevResetState_nc = -1;
+      } else if (rtU.reset_status1_7 == 0.0F) {
+        rtDW.Filter_PrevResetState_nc = 0;
+      } else {
+        rtDW.Filter_PrevResetState_nc = 2;
       }
 
-      rtb_Sum_pp = rtP.TRANS_CH1_7 * u0 - rtU.yaw_speed_rpm_CH1_7;
-    } else {
-      rtb_Sum_pp = 0.0F;
+      if (rtU.reset_status1_7 < 0.0F) {
+        rtDW.Integrator_PrevResetState_gr = -1;
+      } else if (rtU.reset_status1_7 == 0.0F) {
+        rtDW.Integrator_PrevResetState_gr = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_gr = 2;
+      }
     }
 
-    /* End of Switch: '<S916>/Switch1' */
-
-    /* Gain: '<S1003>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S995>/Filter'
-     *  Gain: '<S994>/Derivative Gain'
-     *  Sum: '<S995>/SumD'
-     */
-    rtb_FilterCoefficient_e4 = (rtP.ANG_S_D_CH1_7 * rtb_Sum_pp -
-      rtDW.Filter_DSTATE_hb) * 100.0F;
-
-    /* Sum: '<S1009>/Sum' incorporates:
-     *  DiscreteIntegrator: '<S1000>/Integrator'
-     *  Gain: '<S1005>/Proportional Gain'
-     */
-    u0 = (rtP.ANG_S_P_CH1_7 * rtb_Sum_pp + rtDW.Integrator_DSTATE_li) +
-      rtb_FilterCoefficient_e4;
-
-    /* Saturate: '<S1007>/Saturation' */
-    if (u0 > 3000.0F) {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH1_7' */
-      rtY.yaw_ANG_OUT_CH1_7 = 3000.0F;
-    } else if (u0 < -3000.0F) {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH1_7' */
-      rtY.yaw_ANG_OUT_CH1_7 = -3000.0F;
-    } else {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH1_7' */
-      rtY.yaw_ANG_OUT_CH1_7 = u0;
-    }
-
-    /* End of Saturate: '<S1007>/Saturation' */
-
-    /* Chart: '<S916>/Chart1' incorporates:
-     *  Inport: '<Root>/yaw_ecd_CH1_7'
-     *  Inport: '<Root>/yaw_last_ecd_CH1_7'
-     *  Sum: '<S916>/Sum3'
-     */
-    Chart1(rtU.yaw_ecd_CH1_7 - rtU.yaw_last_ecd_CH1_7, &rtDW.u2_nr,
-           &rtDW.sf_Chart1_in);
-
-    /* Outport: '<Root>/yaw_circle_out_CH1_7' incorporates:
-     *  Inport: '<Root>/yaw_circle_CH1_7'
-     *  Sum: '<S916>/Sum4'
-     */
-    rtY.yaw_circle_out_CH1_7 = rtDW.u2_nr + rtU.yaw_circle_CH1_7;
+    /* End of Update for DiscreteIntegrator: '<S1043>/Filter' */
 
     /* Update for DiscreteIntegrator: '<S1048>/Integrator' incorporates:
      *  Gain: '<S1045>/Integral Gain'
      */
-    rtDW.Integrator_DSTATE_gf += rtP.ANG_A_I_CH1_7 * rtb_FilterCoefficient_k *
-      0.001F;
-
-    /* Update for DiscreteIntegrator: '<S1043>/Filter' */
-    rtDW.Filter_DSTATE_m0 += 0.001F * rtb_FilterCoefficient_dy;
-
-    /* Update for DiscreteIntegrator: '<S995>/Filter' */
-    rtDW.Filter_DSTATE_hb += 0.001F * rtb_FilterCoefficient_e4;
-
-    /* Update for DiscreteIntegrator: '<S1000>/Integrator' incorporates:
-     *  Gain: '<S997>/Integral Gain'
-     */
-    rtDW.Integrator_DSTATE_li += rtP.ANG_S_I_CH1_7 * rtb_Sum_pp * 0.001F;
+    rtDW.Integrator_DSTATE_jo += rtP.ANG_S_I_CH1_7 * rtb_Sum_cz * 0.001F;
 
     /* End of Outputs for SubSystem: '<S7>/If Action_speed Subsystem1' */
     break;
@@ -1593,182 +2037,535 @@ void PID_MODEL_step(void)
 
   /* End of SwitchCase: '<S7>/Switch Case' */
 
-  /* SwitchCase: '<S9>/Switch Case' incorporates:
-   *  Inport: '<Root>/yaw_status_CH2_2'
+  /* SwitchCase: '<S8>/Switch Case' incorporates:
+   *  Inport: '<Root>/status_CH2_1'
    */
-  switch ((int32_T)rtU.yaw_status_CH2_2) {
+  switch ((int32_T)rtU.status_CH2_1) {
    case 1:
-    /* Outputs for IfAction SubSystem: '<S9>/If Action_speed Subsystem' incorporates:
-     *  ActionPort: '<S1215>/Action Port'
+    /* Outputs for IfAction SubSystem: '<S8>/If Action_speed Subsystem' incorporates:
+     *  ActionPort: '<S1115>/Action Port'
      */
-    /* Sum: '<S1215>/Sum' incorporates:
-     *  Inport: '<Root>/yaw_speed_rpm_CH2_2'
-     *  Inport: '<Root>/yaw_target_CH2_2'
+    /* Sum: '<S1115>/Sum' incorporates:
+     *  Inport: '<Root>/speed_rpm_CH2_1'
+     *  Inport: '<Root>/target_CH2_1'
      */
-    rtb_Sum_pp = rtU.yaw_target_CH2_2 - rtU.yaw_speed_rpm_CH2_2;
+    rtb_Sum_cz = rtU.target_CH2_1 - rtU.speed_rpm_CH2_1;
 
-    /* Gain: '<S1252>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S1244>/Filter'
-     *  Gain: '<S1243>/Derivative Gain'
-     *  Sum: '<S1244>/SumD'
+    /* DiscreteIntegrator: '<S1146>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status2_1'
      */
-    rtb_FilterCoefficient_k = (rtP.SPD_D_CH2_2 * rtb_Sum_pp -
-      rtDW.Filter_DSTATE_l) * 100.0F;
-
-    /* Sum: '<S1258>/Sum' incorporates:
-     *  DiscreteIntegrator: '<S1249>/Integrator'
-     *  Gain: '<S1254>/Proportional Gain'
-     */
-    u0 = (rtP.SPD_P_CH2_2 * rtb_Sum_pp + rtDW.Integrator_DSTATE_m) +
-      rtb_FilterCoefficient_k;
-
-    /* Saturate: '<S1256>/Saturation' */
-    if (u0 > 16384.0F) {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH2_2' */
-      rtY.yaw_SPD_OUT_CH2_2 = 16384.0F;
-    } else if (u0 < -16384.0F) {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH2_2' */
-      rtY.yaw_SPD_OUT_CH2_2 = -16384.0F;
-    } else {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH2_2' */
-      rtY.yaw_SPD_OUT_CH2_2 = u0;
+    if (((rtU.reset_status2_1 > 0.0F) && (rtDW.Filter_PrevResetState_a <= 0)) ||
+        ((rtU.reset_status2_1 <= 0.0F) && (rtDW.Filter_PrevResetState_a == 1)))
+    {
+      rtDW.Filter_DSTATE_gl = 0.0F;
     }
 
-    /* End of Saturate: '<S1256>/Saturation' */
-
-    /* Update for DiscreteIntegrator: '<S1244>/Filter' */
-    rtDW.Filter_DSTATE_l += 0.001F * rtb_FilterCoefficient_k;
-
-    /* Update for DiscreteIntegrator: '<S1249>/Integrator' incorporates:
-     *  Gain: '<S1246>/Integral Gain'
+    /* Gain: '<S1154>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S1146>/Filter'
+     *  Gain: '<S1144>/Derivative Gain'
+     *  Sum: '<S1146>/SumD'
      */
-    rtDW.Integrator_DSTATE_m += rtP.SPD_I_CH2_2 * rtb_Sum_pp * 0.001F;
+    rtb_FilterCoefficient_eu = (rtP.SPD_D_CH2_1 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_gl) * 100.0F;
 
-    /* End of Outputs for SubSystem: '<S9>/If Action_speed Subsystem' */
+    /* DiscreteIntegrator: '<S1151>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status2_1'
+     */
+    if (((rtU.reset_status2_1 > 0.0F) && (rtDW.Integrator_PrevResetState_j <= 0))
+        || ((rtU.reset_status2_1 <= 0.0F) && (rtDW.Integrator_PrevResetState_j ==
+          1))) {
+      rtDW.Integrator_DSTATE_pft = 0.0F;
+    }
+
+    /* Sum: '<S1160>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S1151>/Integrator'
+     *  Gain: '<S1156>/Proportional Gain'
+     */
+    u0 = (rtP.SPD_P_CH2_1 * rtb_Sum_cz + rtDW.Integrator_DSTATE_pft) +
+      rtb_FilterCoefficient_eu;
+
+    /* Saturate: '<S1158>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH2_1' */
+      rtY.SPD_OUT_CH2_1 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH2_1' */
+      rtY.SPD_OUT_CH2_1 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/SPD_OUT_CH2_1' */
+      rtY.SPD_OUT_CH2_1 = u0;
+    }
+
+    /* End of Saturate: '<S1158>/Saturation' */
+
+    /* Update for DiscreteIntegrator: '<S1146>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S1151>/Integrator'
+     *  Inport: '<Root>/reset_status2_1'
+     */
+    rtDW.Filter_DSTATE_gl += 0.001F * rtb_FilterCoefficient_eu;
+    if (rtU.reset_status2_1 > 0.0F) {
+      rtDW.Filter_PrevResetState_a = 1;
+      rtDW.Integrator_PrevResetState_j = 1;
+    } else {
+      if (rtU.reset_status2_1 < 0.0F) {
+        rtDW.Filter_PrevResetState_a = -1;
+      } else if (rtU.reset_status2_1 == 0.0F) {
+        rtDW.Filter_PrevResetState_a = 0;
+      } else {
+        rtDW.Filter_PrevResetState_a = 2;
+      }
+
+      if (rtU.reset_status2_1 < 0.0F) {
+        rtDW.Integrator_PrevResetState_j = -1;
+      } else if (rtU.reset_status2_1 == 0.0F) {
+        rtDW.Integrator_PrevResetState_j = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_j = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S1146>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S1151>/Integrator' incorporates:
+     *  Gain: '<S1148>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_pft += rtP.SPD_I_CH2_1 * rtb_Sum_cz * 0.001F;
+
+    /* End of Outputs for SubSystem: '<S8>/If Action_speed Subsystem' */
     break;
 
    case 2:
-    /* Outputs for IfAction SubSystem: '<S9>/If Action_speed Subsystem1' incorporates:
-     *  ActionPort: '<S1216>/Action Port'
+    /* Outputs for IfAction SubSystem: '<S8>/If Action_speed Subsystem1' incorporates:
+     *  ActionPort: '<S1116>/Action Port'
      */
-    /* Sum: '<S1216>/Sum' incorporates:
-     *  Gain: '<S1216>/Gain'
-     *  Inport: '<Root>/yaw_circle_CH2_2'
-     *  Inport: '<Root>/yaw_ecd_CH2_2'
-     *  Inport: '<Root>/yaw_target_CH2_2'
-     *  Sum: '<S1216>/Sum2'
+    /* Sum: '<S1116>/Sum' incorporates:
+     *  Gain: '<S1116>/Gain'
+     *  Inport: '<Root>/circle_CH2_1'
+     *  Inport: '<Root>/ecd_CH2_1'
+     *  Inport: '<Root>/target_CH2_1'
+     *  Sum: '<S1116>/Sum2'
      */
-    rtb_FilterCoefficient_k = rtU.yaw_target_CH2_2 - (8191.0F *
-      rtU.yaw_circle_CH2_2 + rtU.yaw_ecd_CH2_2);
+    rtb_FilterCoefficient_eu = rtU.target_CH2_1 - (8191.0F * rtU.circle_CH2_1 +
+      rtU.ecd_CH2_1);
 
-    /* Abs: '<S1216>/Abs' */
-    rtb_Sum_pp = (real32_T)fabs(rtb_FilterCoefficient_k);
+    /* Abs: '<S1116>/Abs' */
+    rtb_Sum_cz = (real32_T)fabs(rtb_FilterCoefficient_eu);
 
-    /* Switch: '<S1216>/Switch2' incorporates:
-     *  Constant: '<S1216>/Constant'
+    /* Switch: '<S1116>/Switch2' incorporates:
+     *  Constant: '<S1116>/Constant'
      */
-    if (!(rtb_Sum_pp > rtP.DEADBAND_CH2_2)) {
-      rtb_FilterCoefficient_k = 0.0F;
+    if (!(rtb_Sum_cz > rtP.DEADBAND_CH2_1)) {
+      rtb_FilterCoefficient_eu = 0.0F;
     }
 
-    /* End of Switch: '<S1216>/Switch2' */
+    /* End of Switch: '<S1116>/Switch2' */
 
-    /* Gain: '<S1351>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S1343>/Filter'
-     *  Gain: '<S1342>/Derivative Gain'
-     *  Sum: '<S1343>/SumD'
+    /* Gain: '<S1257>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S1249>/Filter'
+     *  Gain: '<S1247>/Derivative Gain'
+     *  Sum: '<S1249>/SumD'
      */
-    rtb_FilterCoefficient_dy = (rtP.ANG_A_D_CH2_2 * rtb_FilterCoefficient_k -
-      rtDW.Filter_DSTATE_b) * 100.0F;
+    rtb_FilterCoefficient_ch = (rtP.ANG_A_D_CH2_1 * rtb_FilterCoefficient_eu -
+      rtDW.Filter_DSTATE_g) * 100.0F;
 
-    /* Switch: '<S1216>/Switch1' incorporates:
-     *  Constant: '<S1216>/Constant'
-     *  Gain: '<S1216>/Multiply'
-     *  Inport: '<Root>/yaw_speed_rpm_CH2_2'
-     *  Saturate: '<S1355>/Saturation'
-     *  Sum: '<S1216>/Sum1'
+    /* Switch: '<S1116>/Switch1' incorporates:
+     *  Constant: '<S1116>/Constant'
+     *  Gain: '<S1116>/Multiply'
+     *  Inport: '<Root>/speed_rpm_CH2_1'
+     *  Saturate: '<S1261>/Saturation'
+     *  Sum: '<S1116>/Sum1'
      */
-    if (rtb_Sum_pp > rtP.DEADBAND_CH2_2) {
-      /* Sum: '<S1357>/Sum' incorporates:
-       *  DiscreteIntegrator: '<S1348>/Integrator'
-       *  Gain: '<S1353>/Proportional Gain'
+    if (rtb_Sum_cz > rtP.DEADBAND_CH2_1) {
+      /* Sum: '<S1263>/Sum' incorporates:
+       *  DiscreteIntegrator: '<S1254>/Integrator'
+       *  Gain: '<S1259>/Proportional Gain'
        */
-      u0 = (rtP.ANG_A_P_CH2_2 * rtb_FilterCoefficient_k +
-            rtDW.Integrator_DSTATE_e) + rtb_FilterCoefficient_dy;
+      u0 = (rtP.ANG_A_P_CH2_1 * rtb_FilterCoefficient_eu +
+            rtDW.Integrator_DSTATE_ap) + rtb_FilterCoefficient_ch;
 
-      /* Saturate: '<S1355>/Saturation' */
+      /* Saturate: '<S1261>/Saturation' */
       if (u0 > 16384.0F) {
         u0 = 16384.0F;
       } else if (u0 < -16384.0F) {
         u0 = -16384.0F;
       }
 
-      rtb_Sum_pp = rtP.TRANS_CH2_2 * u0 - rtU.yaw_speed_rpm_CH2_2;
+      rtb_Sum_cz = rtP.TRANS_CH2_1 * u0 - rtU.speed_rpm_CH2_1;
     } else {
-      rtb_Sum_pp = 0.0F;
+      rtb_Sum_cz = 0.0F;
     }
 
-    /* End of Switch: '<S1216>/Switch1' */
+    /* End of Switch: '<S1116>/Switch1' */
 
-    /* Gain: '<S1303>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S1295>/Filter'
-     *  Gain: '<S1294>/Derivative Gain'
-     *  Sum: '<S1295>/SumD'
+    /* DiscreteIntegrator: '<S1199>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status2_1'
      */
-    rtb_FilterCoefficient_e4 = (rtP.ANG_S_D_CH2_2 * rtb_Sum_pp -
-      rtDW.Filter_DSTATE_gy) * 100.0F;
+    if (((rtU.reset_status2_1 > 0.0F) && (rtDW.Filter_PrevResetState_k3 <= 0)) ||
+        ((rtU.reset_status2_1 <= 0.0F) && (rtDW.Filter_PrevResetState_k3 == 1)))
+    {
+      rtDW.Filter_DSTATE_h = 0.0F;
+    }
 
-    /* Sum: '<S1309>/Sum' incorporates:
-     *  DiscreteIntegrator: '<S1300>/Integrator'
-     *  Gain: '<S1305>/Proportional Gain'
+    /* Gain: '<S1207>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S1199>/Filter'
+     *  Gain: '<S1197>/Derivative Gain'
+     *  Sum: '<S1199>/SumD'
      */
-    u0 = (rtP.ANG_S_P_CH2_2 * rtb_Sum_pp + rtDW.Integrator_DSTATE_ds) +
-      rtb_FilterCoefficient_e4;
+    rtb_FilterCoefficient_nkj = (rtP.ANG_S_D_CH2_1 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_h) * 100.0F;
 
-    /* Saturate: '<S1307>/Saturation' */
+    /* DiscreteIntegrator: '<S1204>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status2_1'
+     */
+    if (((rtU.reset_status2_1 > 0.0F) && (rtDW.Integrator_PrevResetState_k5 <= 0))
+        || ((rtU.reset_status2_1 <= 0.0F) && (rtDW.Integrator_PrevResetState_k5 ==
+          1))) {
+      rtDW.Integrator_DSTATE_lj = 0.0F;
+    }
+
+    /* Sum: '<S1213>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S1204>/Integrator'
+     *  Gain: '<S1209>/Proportional Gain'
+     */
+    u0 = (rtP.ANG_S_P_CH2_1 * rtb_Sum_cz + rtDW.Integrator_DSTATE_lj) +
+      rtb_FilterCoefficient_nkj;
+
+    /* Saturate: '<S1211>/Saturation' */
     if (u0 > 16384.0F) {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH2_2' */
-      rtY.yaw_ANG_OUT_CH2_2 = 16384.0F;
+      /* Outport: '<Root>/ANG_OUT_CH2_1' */
+      rtY.ANG_OUT_CH2_1 = 16384.0F;
     } else if (u0 < -16384.0F) {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH2_2' */
-      rtY.yaw_ANG_OUT_CH2_2 = -16384.0F;
+      /* Outport: '<Root>/ANG_OUT_CH2_1' */
+      rtY.ANG_OUT_CH2_1 = -16384.0F;
     } else {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH2_2' */
-      rtY.yaw_ANG_OUT_CH2_2 = u0;
+      /* Outport: '<Root>/ANG_OUT_CH2_1' */
+      rtY.ANG_OUT_CH2_1 = u0;
     }
 
-    /* End of Saturate: '<S1307>/Saturation' */
+    /* End of Saturate: '<S1211>/Saturation' */
 
-    /* Chart: '<S1216>/Chart1' incorporates:
-     *  Inport: '<Root>/yaw_ecd_CH2_2'
-     *  Inport: '<Root>/yaw_last_ecd_CH2_2'
-     *  Sum: '<S1216>/Sum3'
+    /* Chart: '<S1116>/Chart1' incorporates:
+     *  Inport: '<Root>/ecd_CH2_1'
+     *  Inport: '<Root>/last_ecd_CH2_1'
+     *  Sum: '<S1116>/Sum3'
      */
-    Chart1(rtU.yaw_ecd_CH2_2 - rtU.yaw_last_ecd_CH2_2, &rtDW.u2_a,
-           &rtDW.sf_Chart1_b);
+    Chart1(rtU.ecd_CH2_1 - rtU.last_ecd_CH2_1, &rtDW.u2_f, &rtDW.sf_Chart1_k);
 
-    /* Outport: '<Root>/yaw_circle_out_CH2_2' incorporates:
-     *  Inport: '<Root>/yaw_circle_CH2_2'
-     *  Sum: '<S1216>/Sum4'
+    /* Outport: '<Root>/circle_out_CH2_1' incorporates:
+     *  Inport: '<Root>/circle_CH2_1'
+     *  Sum: '<S1116>/Sum4'
      */
-    rtY.yaw_circle_out_CH2_2 = rtDW.u2_a + rtU.yaw_circle_CH2_2;
+    rtY.circle_out_CH2_1 = rtDW.u2_f + rtU.circle_CH2_1;
 
-    /* Update for DiscreteIntegrator: '<S1348>/Integrator' incorporates:
-     *  Gain: '<S1345>/Integral Gain'
+    /* Update for DiscreteIntegrator: '<S1254>/Integrator' incorporates:
+     *  Gain: '<S1251>/Integral Gain'
      */
-    rtDW.Integrator_DSTATE_e += rtP.ANG_A_I_CH2_2 * rtb_FilterCoefficient_k *
+    rtDW.Integrator_DSTATE_ap += rtP.ANG_A_I_CH2_1 * rtb_FilterCoefficient_eu *
       0.001F;
 
-    /* Update for DiscreteIntegrator: '<S1343>/Filter' */
-    rtDW.Filter_DSTATE_b += 0.001F * rtb_FilterCoefficient_dy;
+    /* Update for DiscreteIntegrator: '<S1249>/Filter' */
+    rtDW.Filter_DSTATE_g += 0.001F * rtb_FilterCoefficient_ch;
 
-    /* Update for DiscreteIntegrator: '<S1295>/Filter' */
-    rtDW.Filter_DSTATE_gy += 0.001F * rtb_FilterCoefficient_e4;
-
-    /* Update for DiscreteIntegrator: '<S1300>/Integrator' incorporates:
-     *  Gain: '<S1297>/Integral Gain'
+    /* Update for DiscreteIntegrator: '<S1199>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S1204>/Integrator'
+     *  Inport: '<Root>/reset_status2_1'
      */
-    rtDW.Integrator_DSTATE_ds += rtP.ANG_S_I_CH2_2 * rtb_Sum_pp * 0.001F;
+    rtDW.Filter_DSTATE_h += 0.001F * rtb_FilterCoefficient_nkj;
+    if (rtU.reset_status2_1 > 0.0F) {
+      rtDW.Filter_PrevResetState_k3 = 1;
+      rtDW.Integrator_PrevResetState_k5 = 1;
+    } else {
+      if (rtU.reset_status2_1 < 0.0F) {
+        rtDW.Filter_PrevResetState_k3 = -1;
+      } else if (rtU.reset_status2_1 == 0.0F) {
+        rtDW.Filter_PrevResetState_k3 = 0;
+      } else {
+        rtDW.Filter_PrevResetState_k3 = 2;
+      }
+
+      if (rtU.reset_status2_1 < 0.0F) {
+        rtDW.Integrator_PrevResetState_k5 = -1;
+      } else if (rtU.reset_status2_1 == 0.0F) {
+        rtDW.Integrator_PrevResetState_k5 = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_k5 = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S1199>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S1204>/Integrator' incorporates:
+     *  Gain: '<S1201>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_lj += rtP.ANG_S_I_CH2_1 * rtb_Sum_cz * 0.001F;
+
+    /* End of Outputs for SubSystem: '<S8>/If Action_speed Subsystem1' */
+    break;
+  }
+
+  /* End of SwitchCase: '<S8>/Switch Case' */
+
+  /* SwitchCase: '<S9>/Switch Case' incorporates:
+   *  Inport: '<Root>/status_CH2_2'
+   */
+  switch ((int32_T)rtU.status_CH2_2) {
+   case 1:
+    /* Outputs for IfAction SubSystem: '<S9>/If Action_speed Subsystem' incorporates:
+     *  ActionPort: '<S1271>/Action Port'
+     */
+    /* Sum: '<S1271>/Sum' incorporates:
+     *  Inport: '<Root>/speed_rpm_CH2_2'
+     *  Inport: '<Root>/target_CH2_2'
+     */
+    rtb_Sum_cz = rtU.target_CH2_2 - rtU.speed_rpm_CH2_2;
+
+    /* DiscreteIntegrator: '<S1302>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status2_2'
+     */
+    if (((rtU.reset_status2_2 > 0.0F) && (rtDW.Filter_PrevResetState_lr <= 0)) ||
+        ((rtU.reset_status2_2 <= 0.0F) && (rtDW.Filter_PrevResetState_lr == 1)))
+    {
+      rtDW.Filter_DSTATE_ix = 0.0F;
+    }
+
+    /* Gain: '<S1310>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S1302>/Filter'
+     *  Gain: '<S1300>/Derivative Gain'
+     *  Sum: '<S1302>/SumD'
+     */
+    rtb_FilterCoefficient_eu = (rtP.SPD_D_CH2_2 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_ix) * 100.0F;
+
+    /* DiscreteIntegrator: '<S1307>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status2_2'
+     */
+    if (((rtU.reset_status2_2 > 0.0F) && (rtDW.Integrator_PrevResetState_dv <= 0))
+        || ((rtU.reset_status2_2 <= 0.0F) && (rtDW.Integrator_PrevResetState_dv ==
+          1))) {
+      rtDW.Integrator_DSTATE_cc = 0.0F;
+    }
+
+    /* Sum: '<S1316>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S1307>/Integrator'
+     *  Gain: '<S1312>/Proportional Gain'
+     */
+    u0 = (rtP.SPD_P_CH2_2 * rtb_Sum_cz + rtDW.Integrator_DSTATE_cc) +
+      rtb_FilterCoefficient_eu;
+
+    /* Saturate: '<S1314>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH2_2' */
+      rtY.SPD_OUT_CH2_2 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH2_2' */
+      rtY.SPD_OUT_CH2_2 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/SPD_OUT_CH2_2' */
+      rtY.SPD_OUT_CH2_2 = u0;
+    }
+
+    /* End of Saturate: '<S1314>/Saturation' */
+
+    /* Update for DiscreteIntegrator: '<S1302>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S1307>/Integrator'
+     *  Inport: '<Root>/reset_status2_2'
+     */
+    rtDW.Filter_DSTATE_ix += 0.001F * rtb_FilterCoefficient_eu;
+    if (rtU.reset_status2_2 > 0.0F) {
+      rtDW.Filter_PrevResetState_lr = 1;
+      rtDW.Integrator_PrevResetState_dv = 1;
+    } else {
+      if (rtU.reset_status2_2 < 0.0F) {
+        rtDW.Filter_PrevResetState_lr = -1;
+      } else if (rtU.reset_status2_2 == 0.0F) {
+        rtDW.Filter_PrevResetState_lr = 0;
+      } else {
+        rtDW.Filter_PrevResetState_lr = 2;
+      }
+
+      if (rtU.reset_status2_2 < 0.0F) {
+        rtDW.Integrator_PrevResetState_dv = -1;
+      } else if (rtU.reset_status2_2 == 0.0F) {
+        rtDW.Integrator_PrevResetState_dv = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_dv = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S1302>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S1307>/Integrator' incorporates:
+     *  Gain: '<S1304>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_cc += rtP.SPD_I_CH2_2 * rtb_Sum_cz * 0.001F;
+
+    /* End of Outputs for SubSystem: '<S9>/If Action_speed Subsystem' */
+    break;
+
+   case 2:
+    /* Outputs for IfAction SubSystem: '<S9>/If Action_speed Subsystem1' incorporates:
+     *  ActionPort: '<S1272>/Action Port'
+     */
+    /* Sum: '<S1272>/Sum' incorporates:
+     *  Gain: '<S1272>/Gain'
+     *  Inport: '<Root>/circle_CH2_2'
+     *  Inport: '<Root>/ecd_CH2_2'
+     *  Inport: '<Root>/target_CH2_2'
+     *  Sum: '<S1272>/Sum2'
+     */
+    rtb_FilterCoefficient_eu = rtU.target_CH2_2 - (8191.0F * rtU.circle_CH2_2 +
+      rtU.ecd_CH2_2);
+
+    /* Abs: '<S1272>/Abs' */
+    rtb_Sum_cz = (real32_T)fabs(rtb_FilterCoefficient_eu);
+
+    /* Switch: '<S1272>/Switch2' incorporates:
+     *  Constant: '<S1272>/Constant'
+     */
+    if (!(rtb_Sum_cz > rtP.DEADBAND_CH2_2)) {
+      rtb_FilterCoefficient_eu = 0.0F;
+    }
+
+    /* End of Switch: '<S1272>/Switch2' */
+
+    /* Gain: '<S1413>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S1405>/Filter'
+     *  Gain: '<S1403>/Derivative Gain'
+     *  Sum: '<S1405>/SumD'
+     */
+    rtb_FilterCoefficient_ch = (rtP.ANG_A_D_CH2_2 * rtb_FilterCoefficient_eu -
+      rtDW.Filter_DSTATE_ie) * 100.0F;
+
+    /* Switch: '<S1272>/Switch1' incorporates:
+     *  Constant: '<S1272>/Constant'
+     *  Gain: '<S1272>/Multiply'
+     *  Inport: '<Root>/speed_rpm_CH2_2'
+     *  Saturate: '<S1417>/Saturation'
+     *  Sum: '<S1272>/Sum1'
+     */
+    if (rtb_Sum_cz > rtP.DEADBAND_CH2_2) {
+      /* Sum: '<S1419>/Sum' incorporates:
+       *  DiscreteIntegrator: '<S1410>/Integrator'
+       *  Gain: '<S1415>/Proportional Gain'
+       */
+      u0 = (rtP.ANG_A_P_CH2_2 * rtb_FilterCoefficient_eu +
+            rtDW.Integrator_DSTATE_fn) + rtb_FilterCoefficient_ch;
+
+      /* Saturate: '<S1417>/Saturation' */
+      if (u0 > 16384.0F) {
+        u0 = 16384.0F;
+      } else if (u0 < -16384.0F) {
+        u0 = -16384.0F;
+      }
+
+      rtb_Sum_cz = rtP.TRANS_CH2_2 * u0 - rtU.speed_rpm_CH2_2;
+    } else {
+      rtb_Sum_cz = 0.0F;
+    }
+
+    /* End of Switch: '<S1272>/Switch1' */
+
+    /* DiscreteIntegrator: '<S1355>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status2_2'
+     */
+    if (((rtU.reset_status2_2 > 0.0F) && (rtDW.Filter_PrevResetState_mx <= 0)) ||
+        ((rtU.reset_status2_2 <= 0.0F) && (rtDW.Filter_PrevResetState_mx == 1)))
+    {
+      rtDW.Filter_DSTATE_j1 = 0.0F;
+    }
+
+    /* Gain: '<S1363>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S1355>/Filter'
+     *  Gain: '<S1353>/Derivative Gain'
+     *  Sum: '<S1355>/SumD'
+     */
+    rtb_FilterCoefficient_nkj = (rtP.ANG_S_D_CH2_2 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_j1) * 100.0F;
+
+    /* DiscreteIntegrator: '<S1360>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status2_2'
+     */
+    if (((rtU.reset_status2_2 > 0.0F) && (rtDW.Integrator_PrevResetState_d0 <= 0))
+        || ((rtU.reset_status2_2 <= 0.0F) && (rtDW.Integrator_PrevResetState_d0 ==
+          1))) {
+      rtDW.Integrator_DSTATE_a = 0.0F;
+    }
+
+    /* Sum: '<S1369>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S1360>/Integrator'
+     *  Gain: '<S1365>/Proportional Gain'
+     */
+    u0 = (rtP.ANG_S_P_CH2_2 * rtb_Sum_cz + rtDW.Integrator_DSTATE_a) +
+      rtb_FilterCoefficient_nkj;
+
+    /* Saturate: '<S1367>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/ANG_OUT_CH2_2' */
+      rtY.ANG_OUT_CH2_2 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/ANG_OUT_CH2_2' */
+      rtY.ANG_OUT_CH2_2 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/ANG_OUT_CH2_2' */
+      rtY.ANG_OUT_CH2_2 = u0;
+    }
+
+    /* End of Saturate: '<S1367>/Saturation' */
+
+    /* Chart: '<S1272>/Chart1' incorporates:
+     *  Inport: '<Root>/ecd_CH2_2'
+     *  Inport: '<Root>/last_ecd_CH2_2'
+     *  Sum: '<S1272>/Sum3'
+     */
+    Chart1(rtU.ecd_CH2_2 - rtU.last_ecd_CH2_2, &rtDW.u2_k, &rtDW.sf_Chart1_l);
+
+    /* Outport: '<Root>/circle_out_CH2_2' incorporates:
+     *  Inport: '<Root>/circle_CH2_2'
+     *  Sum: '<S1272>/Sum4'
+     */
+    rtY.circle_out_CH2_2 = rtDW.u2_k + rtU.circle_CH2_2;
+
+    /* Update for DiscreteIntegrator: '<S1410>/Integrator' incorporates:
+     *  Gain: '<S1407>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_fn += rtP.ANG_A_I_CH2_2 * rtb_FilterCoefficient_eu *
+      0.001F;
+
+    /* Update for DiscreteIntegrator: '<S1405>/Filter' */
+    rtDW.Filter_DSTATE_ie += 0.001F * rtb_FilterCoefficient_ch;
+
+    /* Update for DiscreteIntegrator: '<S1355>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S1360>/Integrator'
+     *  Inport: '<Root>/reset_status2_2'
+     */
+    rtDW.Filter_DSTATE_j1 += 0.001F * rtb_FilterCoefficient_nkj;
+    if (rtU.reset_status2_2 > 0.0F) {
+      rtDW.Filter_PrevResetState_mx = 1;
+      rtDW.Integrator_PrevResetState_d0 = 1;
+    } else {
+      if (rtU.reset_status2_2 < 0.0F) {
+        rtDW.Filter_PrevResetState_mx = -1;
+      } else if (rtU.reset_status2_2 == 0.0F) {
+        rtDW.Filter_PrevResetState_mx = 0;
+      } else {
+        rtDW.Filter_PrevResetState_mx = 2;
+      }
+
+      if (rtU.reset_status2_2 < 0.0F) {
+        rtDW.Integrator_PrevResetState_d0 = -1;
+      } else if (rtU.reset_status2_2 == 0.0F) {
+        rtDW.Integrator_PrevResetState_d0 = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_d0 = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S1355>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S1360>/Integrator' incorporates:
+     *  Gain: '<S1357>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_a += rtP.ANG_S_I_CH2_2 * rtb_Sum_cz * 0.001F;
 
     /* End of Outputs for SubSystem: '<S9>/If Action_speed Subsystem1' */
     break;
@@ -1777,181 +2574,266 @@ void PID_MODEL_step(void)
   /* End of SwitchCase: '<S9>/Switch Case' */
 
   /* SwitchCase: '<S10>/Switch Case' incorporates:
-   *  Inport: '<Root>/yaw_status_CH2_3'
+   *  Inport: '<Root>/status_CH2_3'
    */
-  switch ((int32_T)rtU.yaw_status_CH2_3) {
+  switch ((int32_T)rtU.status_CH2_3) {
    case 1:
     /* Outputs for IfAction SubSystem: '<S10>/If Action_speed Subsystem' incorporates:
-     *  ActionPort: '<S1365>/Action Port'
+     *  ActionPort: '<S1427>/Action Port'
      */
-    /* Sum: '<S1365>/Sum' incorporates:
-     *  Inport: '<Root>/yaw_speed_rpm_CH2_3'
-     *  Inport: '<Root>/yaw_target_CH2_3'
+    /* Sum: '<S1427>/Sum' incorporates:
+     *  Inport: '<Root>/speed_rpm_CH2_3'
+     *  Inport: '<Root>/target_CH2_3'
      */
-    rtb_Sum_pp = rtU.yaw_target_CH2_3 - rtU.yaw_speed_rpm_CH2_3;
+    rtb_Sum_cz = rtU.target_CH2_3 - rtU.speed_rpm_CH2_3;
 
-    /* Gain: '<S1402>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S1394>/Filter'
-     *  Gain: '<S1393>/Derivative Gain'
-     *  Sum: '<S1394>/SumD'
+    /* DiscreteIntegrator: '<S1458>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status2_3'
      */
-    rtb_FilterCoefficient_k = (rtP.SPD_D_CH2_3 * rtb_Sum_pp -
-      rtDW.Filter_DSTATE_n) * 100.0F;
-
-    /* Sum: '<S1408>/Sum' incorporates:
-     *  DiscreteIntegrator: '<S1399>/Integrator'
-     *  Gain: '<S1404>/Proportional Gain'
-     */
-    u0 = (rtP.SPD_P_CH2_3 * rtb_Sum_pp + rtDW.Integrator_DSTATE_i) +
-      rtb_FilterCoefficient_k;
-
-    /* Saturate: '<S1406>/Saturation' */
-    if (u0 > 16384.0F) {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH2_3' */
-      rtY.yaw_SPD_OUT_CH2_3 = 16384.0F;
-    } else if (u0 < -16384.0F) {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH2_3' */
-      rtY.yaw_SPD_OUT_CH2_3 = -16384.0F;
-    } else {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH2_3' */
-      rtY.yaw_SPD_OUT_CH2_3 = u0;
+    if (((rtU.reset_status2_3 > 0.0F) && (rtDW.Filter_PrevResetState_k <= 0)) ||
+        ((rtU.reset_status2_3 <= 0.0F) && (rtDW.Filter_PrevResetState_k == 1)))
+    {
+      rtDW.Filter_DSTATE_nob = 0.0F;
     }
 
-    /* End of Saturate: '<S1406>/Saturation' */
-
-    /* Update for DiscreteIntegrator: '<S1394>/Filter' */
-    rtDW.Filter_DSTATE_n += 0.001F * rtb_FilterCoefficient_k;
-
-    /* Update for DiscreteIntegrator: '<S1399>/Integrator' incorporates:
-     *  Gain: '<S1396>/Integral Gain'
+    /* Gain: '<S1466>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S1458>/Filter'
+     *  Gain: '<S1456>/Derivative Gain'
+     *  Sum: '<S1458>/SumD'
      */
-    rtDW.Integrator_DSTATE_i += rtP.SPD_I_CH2_3 * rtb_Sum_pp * 0.001F;
+    rtb_FilterCoefficient_eu = (rtP.SPD_D_CH2_3 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_nob) * 100.0F;
+
+    /* DiscreteIntegrator: '<S1463>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status2_3'
+     */
+    if (((rtU.reset_status2_3 > 0.0F) && (rtDW.Integrator_PrevResetState_o2 <= 0))
+        || ((rtU.reset_status2_3 <= 0.0F) && (rtDW.Integrator_PrevResetState_o2 ==
+          1))) {
+      rtDW.Integrator_DSTATE_c2 = 0.0F;
+    }
+
+    /* Sum: '<S1472>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S1463>/Integrator'
+     *  Gain: '<S1468>/Proportional Gain'
+     */
+    u0 = (rtP.SPD_P_CH2_3 * rtb_Sum_cz + rtDW.Integrator_DSTATE_c2) +
+      rtb_FilterCoefficient_eu;
+
+    /* Saturate: '<S1470>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH2_3' */
+      rtY.SPD_OUT_CH2_3 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH2_3' */
+      rtY.SPD_OUT_CH2_3 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/SPD_OUT_CH2_3' */
+      rtY.SPD_OUT_CH2_3 = u0;
+    }
+
+    /* End of Saturate: '<S1470>/Saturation' */
+
+    /* Update for DiscreteIntegrator: '<S1458>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S1463>/Integrator'
+     *  Inport: '<Root>/reset_status2_3'
+     */
+    rtDW.Filter_DSTATE_nob += 0.001F * rtb_FilterCoefficient_eu;
+    if (rtU.reset_status2_3 > 0.0F) {
+      rtDW.Filter_PrevResetState_k = 1;
+      rtDW.Integrator_PrevResetState_o2 = 1;
+    } else {
+      if (rtU.reset_status2_3 < 0.0F) {
+        rtDW.Filter_PrevResetState_k = -1;
+      } else if (rtU.reset_status2_3 == 0.0F) {
+        rtDW.Filter_PrevResetState_k = 0;
+      } else {
+        rtDW.Filter_PrevResetState_k = 2;
+      }
+
+      if (rtU.reset_status2_3 < 0.0F) {
+        rtDW.Integrator_PrevResetState_o2 = -1;
+      } else if (rtU.reset_status2_3 == 0.0F) {
+        rtDW.Integrator_PrevResetState_o2 = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_o2 = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S1458>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S1463>/Integrator' incorporates:
+     *  Gain: '<S1460>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_c2 += rtP.SPD_I_CH2_3 * rtb_Sum_cz * 0.001F;
 
     /* End of Outputs for SubSystem: '<S10>/If Action_speed Subsystem' */
     break;
 
    case 2:
     /* Outputs for IfAction SubSystem: '<S10>/If Action_speed Subsystem1' incorporates:
-     *  ActionPort: '<S1366>/Action Port'
+     *  ActionPort: '<S1428>/Action Port'
      */
-    /* Sum: '<S1366>/Sum' incorporates:
-     *  Gain: '<S1366>/Gain'
-     *  Inport: '<Root>/yaw_circle_CH2_3'
-     *  Inport: '<Root>/yaw_ecd_CH2_3'
-     *  Inport: '<Root>/yaw_target_CH2_3'
-     *  Sum: '<S1366>/Sum2'
+    /* Sum: '<S1428>/Sum' incorporates:
+     *  Gain: '<S1428>/Gain'
+     *  Inport: '<Root>/circle_CH2_3'
+     *  Inport: '<Root>/ecd_CH2_3'
+     *  Inport: '<Root>/target_CH2_3'
+     *  Sum: '<S1428>/Sum2'
      */
-    rtb_FilterCoefficient_k = rtU.yaw_target_CH2_3 - (8191.0F *
-      rtU.yaw_circle_CH2_3 + rtU.yaw_ecd_CH2_3);
+    rtb_FilterCoefficient_eu = rtU.target_CH2_3 - (8191.0F * rtU.circle_CH2_3 +
+      rtU.ecd_CH2_3);
 
-    /* Abs: '<S1366>/Abs' */
-    rtb_Sum_pp = (real32_T)fabs(rtb_FilterCoefficient_k);
+    /* Abs: '<S1428>/Abs' */
+    rtb_Sum_cz = (real32_T)fabs(rtb_FilterCoefficient_eu);
 
-    /* Switch: '<S1366>/Switch2' incorporates:
-     *  Constant: '<S1366>/Constant'
+    /* Switch: '<S1428>/Switch2' incorporates:
+     *  Constant: '<S1428>/Constant'
      */
-    if (!(rtb_Sum_pp > rtP.DEADBAND_CH2_3)) {
-      rtb_FilterCoefficient_k = 0.0F;
+    if (!(rtb_Sum_cz > rtP.DEADBAND_CH2_3)) {
+      rtb_FilterCoefficient_eu = 0.0F;
     }
 
-    /* End of Switch: '<S1366>/Switch2' */
+    /* End of Switch: '<S1428>/Switch2' */
 
-    /* Gain: '<S1501>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S1493>/Filter'
-     *  Gain: '<S1492>/Derivative Gain'
-     *  Sum: '<S1493>/SumD'
+    /* Gain: '<S1569>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S1561>/Filter'
+     *  Gain: '<S1559>/Derivative Gain'
+     *  Sum: '<S1561>/SumD'
      */
-    rtb_FilterCoefficient_dy = (rtP.ANG_A_D_CH2_3 * rtb_FilterCoefficient_k -
-      rtDW.Filter_DSTATE_a) * 100.0F;
+    rtb_FilterCoefficient_ch = (rtP.ANG_A_D_CH2_3 * rtb_FilterCoefficient_eu -
+      rtDW.Filter_DSTATE_ag) * 100.0F;
 
-    /* Switch: '<S1366>/Switch1' incorporates:
-     *  Constant: '<S1366>/Constant'
-     *  Gain: '<S1366>/Multiply'
-     *  Inport: '<Root>/yaw_speed_rpm_CH2_3'
-     *  Saturate: '<S1505>/Saturation'
-     *  Sum: '<S1366>/Sum1'
+    /* Switch: '<S1428>/Switch1' incorporates:
+     *  Constant: '<S1428>/Constant'
+     *  Gain: '<S1428>/Multiply'
+     *  Inport: '<Root>/speed_rpm_CH2_3'
+     *  Saturate: '<S1573>/Saturation'
+     *  Sum: '<S1428>/Sum1'
      */
-    if (rtb_Sum_pp > rtP.DEADBAND_CH2_3) {
-      /* Sum: '<S1507>/Sum' incorporates:
-       *  DiscreteIntegrator: '<S1498>/Integrator'
-       *  Gain: '<S1503>/Proportional Gain'
+    if (rtb_Sum_cz > rtP.DEADBAND_CH2_3) {
+      /* Sum: '<S1575>/Sum' incorporates:
+       *  DiscreteIntegrator: '<S1566>/Integrator'
+       *  Gain: '<S1571>/Proportional Gain'
        */
-      u0 = (rtP.ANG_A_P_CH2_3 * rtb_FilterCoefficient_k +
-            rtDW.Integrator_DSTATE_hc) + rtb_FilterCoefficient_dy;
+      u0 = (rtP.ANG_A_P_CH2_3 * rtb_FilterCoefficient_eu +
+            rtDW.Integrator_DSTATE_pf) + rtb_FilterCoefficient_ch;
 
-      /* Saturate: '<S1505>/Saturation' */
+      /* Saturate: '<S1573>/Saturation' */
       if (u0 > 16384.0F) {
         u0 = 16384.0F;
       } else if (u0 < -16384.0F) {
         u0 = -16384.0F;
       }
 
-      rtb_Sum_pp = rtP.TRANS_CH2_3 * u0 - rtU.yaw_speed_rpm_CH2_3;
+      rtb_Sum_cz = rtP.TRANS_CH2_3 * u0 - rtU.speed_rpm_CH2_3;
     } else {
-      rtb_Sum_pp = 0.0F;
+      rtb_Sum_cz = 0.0F;
     }
 
-    /* End of Switch: '<S1366>/Switch1' */
+    /* End of Switch: '<S1428>/Switch1' */
 
-    /* Gain: '<S1453>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S1445>/Filter'
-     *  Gain: '<S1444>/Derivative Gain'
-     *  Sum: '<S1445>/SumD'
+    /* DiscreteIntegrator: '<S1511>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status2_3'
      */
-    rtb_FilterCoefficient_e4 = (rtP.ANG_S_D_CH2_3 * rtb_Sum_pp -
-      rtDW.Filter_DSTATE_k) * 100.0F;
+    if (((rtU.reset_status2_3 > 0.0F) && (rtDW.Filter_PrevResetState_m <= 0)) ||
+        ((rtU.reset_status2_3 <= 0.0F) && (rtDW.Filter_PrevResetState_m == 1)))
+    {
+      rtDW.Filter_DSTATE_aw = 0.0F;
+    }
 
-    /* Sum: '<S1459>/Sum' incorporates:
-     *  DiscreteIntegrator: '<S1450>/Integrator'
-     *  Gain: '<S1455>/Proportional Gain'
+    /* Gain: '<S1519>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S1511>/Filter'
+     *  Gain: '<S1509>/Derivative Gain'
+     *  Sum: '<S1511>/SumD'
      */
-    u0 = (rtP.ANG_S_P_CH2_3 * rtb_Sum_pp + rtDW.Integrator_DSTATE_o) +
-      rtb_FilterCoefficient_e4;
+    rtb_FilterCoefficient_nkj = (rtP.ANG_S_D_CH2_3 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_aw) * 100.0F;
 
-    /* Saturate: '<S1457>/Saturation' */
+    /* DiscreteIntegrator: '<S1516>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status2_3'
+     */
+    if (((rtU.reset_status2_3 > 0.0F) && (rtDW.Integrator_PrevResetState_dj <= 0))
+        || ((rtU.reset_status2_3 <= 0.0F) && (rtDW.Integrator_PrevResetState_dj ==
+          1))) {
+      rtDW.Integrator_DSTATE_no = 0.0F;
+    }
+
+    /* Sum: '<S1525>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S1516>/Integrator'
+     *  Gain: '<S1521>/Proportional Gain'
+     */
+    u0 = (rtP.ANG_S_P_CH2_3 * rtb_Sum_cz + rtDW.Integrator_DSTATE_no) +
+      rtb_FilterCoefficient_nkj;
+
+    /* Saturate: '<S1523>/Saturation' */
     if (u0 > 16384.0F) {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH2_3' */
-      rtY.yaw_ANG_OUT_CH2_3 = 16384.0F;
+      /* Outport: '<Root>/ANG_OUT_CH2_3' */
+      rtY.ANG_OUT_CH2_3 = 16384.0F;
     } else if (u0 < -16384.0F) {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH2_3' */
-      rtY.yaw_ANG_OUT_CH2_3 = -16384.0F;
+      /* Outport: '<Root>/ANG_OUT_CH2_3' */
+      rtY.ANG_OUT_CH2_3 = -16384.0F;
     } else {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH2_3' */
-      rtY.yaw_ANG_OUT_CH2_3 = u0;
+      /* Outport: '<Root>/ANG_OUT_CH2_3' */
+      rtY.ANG_OUT_CH2_3 = u0;
     }
 
-    /* End of Saturate: '<S1457>/Saturation' */
+    /* End of Saturate: '<S1523>/Saturation' */
 
-    /* Chart: '<S1366>/Chart1' incorporates:
-     *  Inport: '<Root>/yaw_ecd_CH2_3'
-     *  Inport: '<Root>/yaw_last_ecd_CH2_3'
-     *  Sum: '<S1366>/Sum3'
+    /* Chart: '<S1428>/Chart1' incorporates:
+     *  Inport: '<Root>/ecd_CH2_3'
+     *  Inport: '<Root>/last_ecd_CH2_3'
+     *  Sum: '<S1428>/Sum3'
      */
-    Chart1(rtU.yaw_ecd_CH2_3 - rtU.yaw_last_ecd_CH2_3, &rtDW.u2_ge,
-           &rtDW.sf_Chart1_nh);
+    Chart1(rtU.ecd_CH2_3 - rtU.last_ecd_CH2_3, &rtDW.u2_or, &rtDW.sf_Chart1_mk);
 
-    /* Outport: '<Root>/yaw_circle_out_CH2_3' incorporates:
-     *  Inport: '<Root>/yaw_circle_CH2_3'
-     *  Sum: '<S1366>/Sum4'
+    /* Outport: '<Root>/circle_out_CH2_3' incorporates:
+     *  Inport: '<Root>/circle_CH2_3'
+     *  Sum: '<S1428>/Sum4'
      */
-    rtY.yaw_circle_out_CH2_3 = rtDW.u2_ge + rtU.yaw_circle_CH2_3;
+    rtY.circle_out_CH2_3 = rtDW.u2_or + rtU.circle_CH2_3;
 
-    /* Update for DiscreteIntegrator: '<S1498>/Integrator' incorporates:
-     *  Gain: '<S1495>/Integral Gain'
+    /* Update for DiscreteIntegrator: '<S1566>/Integrator' incorporates:
+     *  Gain: '<S1563>/Integral Gain'
      */
-    rtDW.Integrator_DSTATE_hc += rtP.ANG_A_I_CH2_3 * rtb_FilterCoefficient_k *
+    rtDW.Integrator_DSTATE_pf += rtP.ANG_A_I_CH2_3 * rtb_FilterCoefficient_eu *
       0.001F;
 
-    /* Update for DiscreteIntegrator: '<S1493>/Filter' */
-    rtDW.Filter_DSTATE_a += 0.001F * rtb_FilterCoefficient_dy;
+    /* Update for DiscreteIntegrator: '<S1561>/Filter' */
+    rtDW.Filter_DSTATE_ag += 0.001F * rtb_FilterCoefficient_ch;
 
-    /* Update for DiscreteIntegrator: '<S1445>/Filter' */
-    rtDW.Filter_DSTATE_k += 0.001F * rtb_FilterCoefficient_e4;
-
-    /* Update for DiscreteIntegrator: '<S1450>/Integrator' incorporates:
-     *  Gain: '<S1447>/Integral Gain'
+    /* Update for DiscreteIntegrator: '<S1511>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S1516>/Integrator'
+     *  Inport: '<Root>/reset_status2_3'
      */
-    rtDW.Integrator_DSTATE_o += rtP.ANG_S_I_CH2_3 * rtb_Sum_pp * 0.001F;
+    rtDW.Filter_DSTATE_aw += 0.001F * rtb_FilterCoefficient_nkj;
+    if (rtU.reset_status2_3 > 0.0F) {
+      rtDW.Filter_PrevResetState_m = 1;
+      rtDW.Integrator_PrevResetState_dj = 1;
+    } else {
+      if (rtU.reset_status2_3 < 0.0F) {
+        rtDW.Filter_PrevResetState_m = -1;
+      } else if (rtU.reset_status2_3 == 0.0F) {
+        rtDW.Filter_PrevResetState_m = 0;
+      } else {
+        rtDW.Filter_PrevResetState_m = 2;
+      }
+
+      if (rtU.reset_status2_3 < 0.0F) {
+        rtDW.Integrator_PrevResetState_dj = -1;
+      } else if (rtU.reset_status2_3 == 0.0F) {
+        rtDW.Integrator_PrevResetState_dj = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_dj = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S1511>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S1516>/Integrator' incorporates:
+     *  Gain: '<S1513>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_no += rtP.ANG_S_I_CH2_3 * rtb_Sum_cz * 0.001F;
 
     /* End of Outputs for SubSystem: '<S10>/If Action_speed Subsystem1' */
     break;
@@ -1960,181 +2842,266 @@ void PID_MODEL_step(void)
   /* End of SwitchCase: '<S10>/Switch Case' */
 
   /* SwitchCase: '<S11>/Switch Case' incorporates:
-   *  Inport: '<Root>/yaw_status_CH2_4'
+   *  Inport: '<Root>/status_CH2_4'
    */
-  switch ((int32_T)rtU.yaw_status_CH2_4) {
+  switch ((int32_T)rtU.status_CH2_4) {
    case 1:
     /* Outputs for IfAction SubSystem: '<S11>/If Action_speed Subsystem' incorporates:
-     *  ActionPort: '<S1515>/Action Port'
+     *  ActionPort: '<S1583>/Action Port'
      */
-    /* Sum: '<S1515>/Sum' incorporates:
-     *  Inport: '<Root>/yaw_speed_rpm_CH2_4'
-     *  Inport: '<Root>/yaw_target_CH2_4'
+    /* Sum: '<S1583>/Sum' incorporates:
+     *  Inport: '<Root>/speed_rpm_CH2_4'
+     *  Inport: '<Root>/target_CH2_4'
      */
-    rtb_Sum_pp = rtU.yaw_target_CH2_4 - rtU.yaw_speed_rpm_CH2_4;
+    rtb_Sum_cz = rtU.target_CH2_4 - rtU.speed_rpm_CH2_4;
 
-    /* Gain: '<S1552>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S1544>/Filter'
-     *  Gain: '<S1543>/Derivative Gain'
-     *  Sum: '<S1544>/SumD'
+    /* DiscreteIntegrator: '<S1614>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status2_4'
      */
-    rtb_FilterCoefficient_k = (rtP.SPD_D_CH2_4 * rtb_Sum_pp -
-      rtDW.Filter_DSTATE_g) * 100.0F;
-
-    /* Sum: '<S1558>/Sum' incorporates:
-     *  DiscreteIntegrator: '<S1549>/Integrator'
-     *  Gain: '<S1554>/Proportional Gain'
-     */
-    u0 = (rtP.SPD_P_CH2_4 * rtb_Sum_pp + rtDW.Integrator_DSTATE_a1) +
-      rtb_FilterCoefficient_k;
-
-    /* Saturate: '<S1556>/Saturation' */
-    if (u0 > 16384.0F) {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH2_4' */
-      rtY.yaw_SPD_OUT_CH2_4 = 16384.0F;
-    } else if (u0 < -16384.0F) {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH2_4' */
-      rtY.yaw_SPD_OUT_CH2_4 = -16384.0F;
-    } else {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH2_4' */
-      rtY.yaw_SPD_OUT_CH2_4 = u0;
+    if (((rtU.reset_status2_4 > 0.0F) && (rtDW.Filter_PrevResetState_lf <= 0)) ||
+        ((rtU.reset_status2_4 <= 0.0F) && (rtDW.Filter_PrevResetState_lf == 1)))
+    {
+      rtDW.Filter_DSTATE_mi = 0.0F;
     }
 
-    /* End of Saturate: '<S1556>/Saturation' */
-
-    /* Update for DiscreteIntegrator: '<S1544>/Filter' */
-    rtDW.Filter_DSTATE_g += 0.001F * rtb_FilterCoefficient_k;
-
-    /* Update for DiscreteIntegrator: '<S1549>/Integrator' incorporates:
-     *  Gain: '<S1546>/Integral Gain'
+    /* Gain: '<S1622>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S1614>/Filter'
+     *  Gain: '<S1612>/Derivative Gain'
+     *  Sum: '<S1614>/SumD'
      */
-    rtDW.Integrator_DSTATE_a1 += rtP.SPD_I_CH2_4 * rtb_Sum_pp * 0.001F;
+    rtb_FilterCoefficient_eu = (rtP.SPD_D_CH2_4 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_mi) * 100.0F;
+
+    /* DiscreteIntegrator: '<S1619>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status2_4'
+     */
+    if (((rtU.reset_status2_4 > 0.0F) && (rtDW.Integrator_PrevResetState_d <= 0))
+        || ((rtU.reset_status2_4 <= 0.0F) && (rtDW.Integrator_PrevResetState_d ==
+          1))) {
+      rtDW.Integrator_DSTATE_n0 = 0.0F;
+    }
+
+    /* Sum: '<S1628>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S1619>/Integrator'
+     *  Gain: '<S1624>/Proportional Gain'
+     */
+    u0 = (rtP.SPD_P_CH2_4 * rtb_Sum_cz + rtDW.Integrator_DSTATE_n0) +
+      rtb_FilterCoefficient_eu;
+
+    /* Saturate: '<S1626>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH2_4' */
+      rtY.SPD_OUT_CH2_4 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH2_4' */
+      rtY.SPD_OUT_CH2_4 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/SPD_OUT_CH2_4' */
+      rtY.SPD_OUT_CH2_4 = u0;
+    }
+
+    /* End of Saturate: '<S1626>/Saturation' */
+
+    /* Update for DiscreteIntegrator: '<S1614>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S1619>/Integrator'
+     *  Inport: '<Root>/reset_status2_4'
+     */
+    rtDW.Filter_DSTATE_mi += 0.001F * rtb_FilterCoefficient_eu;
+    if (rtU.reset_status2_4 > 0.0F) {
+      rtDW.Filter_PrevResetState_lf = 1;
+      rtDW.Integrator_PrevResetState_d = 1;
+    } else {
+      if (rtU.reset_status2_4 < 0.0F) {
+        rtDW.Filter_PrevResetState_lf = -1;
+      } else if (rtU.reset_status2_4 == 0.0F) {
+        rtDW.Filter_PrevResetState_lf = 0;
+      } else {
+        rtDW.Filter_PrevResetState_lf = 2;
+      }
+
+      if (rtU.reset_status2_4 < 0.0F) {
+        rtDW.Integrator_PrevResetState_d = -1;
+      } else if (rtU.reset_status2_4 == 0.0F) {
+        rtDW.Integrator_PrevResetState_d = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_d = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S1614>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S1619>/Integrator' incorporates:
+     *  Gain: '<S1616>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_n0 += rtP.SPD_I_CH2_4 * rtb_Sum_cz * 0.001F;
 
     /* End of Outputs for SubSystem: '<S11>/If Action_speed Subsystem' */
     break;
 
    case 2:
     /* Outputs for IfAction SubSystem: '<S11>/If Action_speed Subsystem1' incorporates:
-     *  ActionPort: '<S1516>/Action Port'
+     *  ActionPort: '<S1584>/Action Port'
      */
-    /* Sum: '<S1516>/Sum' incorporates:
-     *  Gain: '<S1516>/Gain'
-     *  Inport: '<Root>/yaw_circle_CH2_4'
-     *  Inport: '<Root>/yaw_ecd_CH2_4'
-     *  Inport: '<Root>/yaw_target_CH2_4'
-     *  Sum: '<S1516>/Sum2'
+    /* Sum: '<S1584>/Sum' incorporates:
+     *  Gain: '<S1584>/Gain'
+     *  Inport: '<Root>/circle_CH2_4'
+     *  Inport: '<Root>/ecd_CH2_4'
+     *  Inport: '<Root>/target_CH2_4'
+     *  Sum: '<S1584>/Sum2'
      */
-    rtb_FilterCoefficient_k = rtU.yaw_target_CH2_4 - (8191.0F *
-      rtU.yaw_circle_CH2_4 + rtU.yaw_ecd_CH2_4);
+    rtb_FilterCoefficient_eu = rtU.target_CH2_4 - (8191.0F * rtU.circle_CH2_4 +
+      rtU.ecd_CH2_4);
 
-    /* Abs: '<S1516>/Abs' */
-    rtb_Sum_pp = (real32_T)fabs(rtb_FilterCoefficient_k);
+    /* Abs: '<S1584>/Abs' */
+    rtb_Sum_cz = (real32_T)fabs(rtb_FilterCoefficient_eu);
 
-    /* Switch: '<S1516>/Switch2' incorporates:
-     *  Constant: '<S1516>/Constant'
+    /* Switch: '<S1584>/Switch2' incorporates:
+     *  Constant: '<S1584>/Constant'
      */
-    if (!(rtb_Sum_pp > rtP.DEADBAND_CH2_4)) {
-      rtb_FilterCoefficient_k = 0.0F;
+    if (!(rtb_Sum_cz > rtP.DEADBAND_CH2_4)) {
+      rtb_FilterCoefficient_eu = 0.0F;
     }
 
-    /* End of Switch: '<S1516>/Switch2' */
+    /* End of Switch: '<S1584>/Switch2' */
 
-    /* Gain: '<S1651>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S1643>/Filter'
-     *  Gain: '<S1642>/Derivative Gain'
-     *  Sum: '<S1643>/SumD'
+    /* Gain: '<S1725>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S1717>/Filter'
+     *  Gain: '<S1715>/Derivative Gain'
+     *  Sum: '<S1717>/SumD'
      */
-    rtb_FilterCoefficient_dy = (rtP.ANG_A_D_CH2_4 * rtb_FilterCoefficient_k -
-      rtDW.Filter_DSTATE_m) * 100.0F;
+    rtb_FilterCoefficient_ch = (rtP.ANG_A_D_CH2_4 * rtb_FilterCoefficient_eu -
+      rtDW.Filter_DSTATE_a4) * 100.0F;
 
-    /* Switch: '<S1516>/Switch1' incorporates:
-     *  Constant: '<S1516>/Constant'
-     *  Gain: '<S1516>/Multiply'
-     *  Inport: '<Root>/yaw_speed_rpm_CH2_4'
-     *  Saturate: '<S1655>/Saturation'
-     *  Sum: '<S1516>/Sum1'
+    /* Switch: '<S1584>/Switch1' incorporates:
+     *  Constant: '<S1584>/Constant'
+     *  Gain: '<S1584>/Multiply'
+     *  Inport: '<Root>/speed_rpm_CH2_4'
+     *  Saturate: '<S1729>/Saturation'
+     *  Sum: '<S1584>/Sum1'
      */
-    if (rtb_Sum_pp > rtP.DEADBAND_CH2_4) {
-      /* Sum: '<S1657>/Sum' incorporates:
-       *  DiscreteIntegrator: '<S1648>/Integrator'
-       *  Gain: '<S1653>/Proportional Gain'
+    if (rtb_Sum_cz > rtP.DEADBAND_CH2_4) {
+      /* Sum: '<S1731>/Sum' incorporates:
+       *  DiscreteIntegrator: '<S1722>/Integrator'
+       *  Gain: '<S1727>/Proportional Gain'
        */
-      u0 = (rtP.ANG_A_P_CH2_4 * rtb_FilterCoefficient_k +
-            rtDW.Integrator_DSTATE_g) + rtb_FilterCoefficient_dy;
+      u0 = (rtP.ANG_A_P_CH2_4 * rtb_FilterCoefficient_eu +
+            rtDW.Integrator_DSTATE_oqb) + rtb_FilterCoefficient_ch;
 
-      /* Saturate: '<S1655>/Saturation' */
+      /* Saturate: '<S1729>/Saturation' */
       if (u0 > 16384.0F) {
         u0 = 16384.0F;
       } else if (u0 < -16384.0F) {
         u0 = -16384.0F;
       }
 
-      rtb_Sum_pp = rtP.TRANS_CH2_4 * u0 - rtU.yaw_speed_rpm_CH2_4;
+      rtb_Sum_cz = rtP.TRANS_CH2_4 * u0 - rtU.speed_rpm_CH2_4;
     } else {
-      rtb_Sum_pp = 0.0F;
+      rtb_Sum_cz = 0.0F;
     }
 
-    /* End of Switch: '<S1516>/Switch1' */
+    /* End of Switch: '<S1584>/Switch1' */
 
-    /* Gain: '<S1603>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S1595>/Filter'
-     *  Gain: '<S1594>/Derivative Gain'
-     *  Sum: '<S1595>/SumD'
+    /* DiscreteIntegrator: '<S1667>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status2_4'
      */
-    rtb_FilterCoefficient_e4 = (rtP.ANG_S_D_CH2_4 * rtb_Sum_pp -
-      rtDW.Filter_DSTATE_dx) * 100.0F;
+    if (((rtU.reset_status2_4 > 0.0F) && (rtDW.Filter_PrevResetState_i <= 0)) ||
+        ((rtU.reset_status2_4 <= 0.0F) && (rtDW.Filter_PrevResetState_i == 1)))
+    {
+      rtDW.Filter_DSTATE_lg = 0.0F;
+    }
 
-    /* Sum: '<S1609>/Sum' incorporates:
-     *  DiscreteIntegrator: '<S1600>/Integrator'
-     *  Gain: '<S1605>/Proportional Gain'
+    /* Gain: '<S1675>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S1667>/Filter'
+     *  Gain: '<S1665>/Derivative Gain'
+     *  Sum: '<S1667>/SumD'
      */
-    u0 = (rtP.ANG_S_P_CH2_4 * rtb_Sum_pp + rtDW.Integrator_DSTATE_k) +
-      rtb_FilterCoefficient_e4;
+    rtb_FilterCoefficient_nkj = (rtP.ANG_S_D_CH2_4 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_lg) * 100.0F;
 
-    /* Saturate: '<S1607>/Saturation' */
+    /* DiscreteIntegrator: '<S1672>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status2_4'
+     */
+    if (((rtU.reset_status2_4 > 0.0F) && (rtDW.Integrator_PrevResetState_ih <= 0))
+        || ((rtU.reset_status2_4 <= 0.0F) && (rtDW.Integrator_PrevResetState_ih ==
+          1))) {
+      rtDW.Integrator_DSTATE_pv = 0.0F;
+    }
+
+    /* Sum: '<S1681>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S1672>/Integrator'
+     *  Gain: '<S1677>/Proportional Gain'
+     */
+    u0 = (rtP.ANG_S_P_CH2_4 * rtb_Sum_cz + rtDW.Integrator_DSTATE_pv) +
+      rtb_FilterCoefficient_nkj;
+
+    /* Saturate: '<S1679>/Saturation' */
     if (u0 > 16384.0F) {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH2_4' */
-      rtY.yaw_ANG_OUT_CH2_4 = 16384.0F;
+      /* Outport: '<Root>/ANG_OUT_CH2_4' */
+      rtY.ANG_OUT_CH2_4 = 16384.0F;
     } else if (u0 < -16384.0F) {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH2_4' */
-      rtY.yaw_ANG_OUT_CH2_4 = -16384.0F;
+      /* Outport: '<Root>/ANG_OUT_CH2_4' */
+      rtY.ANG_OUT_CH2_4 = -16384.0F;
     } else {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH2_4' */
-      rtY.yaw_ANG_OUT_CH2_4 = u0;
+      /* Outport: '<Root>/ANG_OUT_CH2_4' */
+      rtY.ANG_OUT_CH2_4 = u0;
     }
 
-    /* End of Saturate: '<S1607>/Saturation' */
+    /* End of Saturate: '<S1679>/Saturation' */
 
-    /* Chart: '<S1516>/Chart1' incorporates:
-     *  Inport: '<Root>/yaw_ecd_CH2_4'
-     *  Inport: '<Root>/yaw_last_ecd_CH2_4'
-     *  Sum: '<S1516>/Sum3'
+    /* Chart: '<S1584>/Chart1' incorporates:
+     *  Inport: '<Root>/ecd_CH2_4'
+     *  Inport: '<Root>/last_ecd_CH2_4'
+     *  Sum: '<S1584>/Sum3'
      */
-    Chart1(rtU.yaw_ecd_CH2_4 - rtU.yaw_last_ecd_CH2_4, &rtDW.u2_j,
-           &rtDW.sf_Chart1_k);
+    Chart1(rtU.ecd_CH2_4 - rtU.last_ecd_CH2_4, &rtDW.u2_o, &rtDW.sf_Chart1_n);
 
-    /* Outport: '<Root>/yaw_circle_out_CH2_4' incorporates:
-     *  Inport: '<Root>/yaw_circle_CH2_4'
-     *  Sum: '<S1516>/Sum4'
+    /* Outport: '<Root>/circle_out_CH2_4' incorporates:
+     *  Inport: '<Root>/circle_CH2_4'
+     *  Sum: '<S1584>/Sum4'
      */
-    rtY.yaw_circle_out_CH2_4 = rtDW.u2_j + rtU.yaw_circle_CH2_4;
+    rtY.circle_out_CH2_4 = rtDW.u2_o + rtU.circle_CH2_4;
 
-    /* Update for DiscreteIntegrator: '<S1648>/Integrator' incorporates:
-     *  Gain: '<S1645>/Integral Gain'
+    /* Update for DiscreteIntegrator: '<S1722>/Integrator' incorporates:
+     *  Gain: '<S1719>/Integral Gain'
      */
-    rtDW.Integrator_DSTATE_g += rtP.ANG_A_I_CH2_4 * rtb_FilterCoefficient_k *
+    rtDW.Integrator_DSTATE_oqb += rtP.ANG_A_I_CH2_4 * rtb_FilterCoefficient_eu *
       0.001F;
 
-    /* Update for DiscreteIntegrator: '<S1643>/Filter' */
-    rtDW.Filter_DSTATE_m += 0.001F * rtb_FilterCoefficient_dy;
+    /* Update for DiscreteIntegrator: '<S1717>/Filter' */
+    rtDW.Filter_DSTATE_a4 += 0.001F * rtb_FilterCoefficient_ch;
 
-    /* Update for DiscreteIntegrator: '<S1595>/Filter' */
-    rtDW.Filter_DSTATE_dx += 0.001F * rtb_FilterCoefficient_e4;
-
-    /* Update for DiscreteIntegrator: '<S1600>/Integrator' incorporates:
-     *  Gain: '<S1597>/Integral Gain'
+    /* Update for DiscreteIntegrator: '<S1667>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S1672>/Integrator'
+     *  Inport: '<Root>/reset_status2_4'
      */
-    rtDW.Integrator_DSTATE_k += rtP.ANG_S_I_CH2_4 * rtb_Sum_pp * 0.001F;
+    rtDW.Filter_DSTATE_lg += 0.001F * rtb_FilterCoefficient_nkj;
+    if (rtU.reset_status2_4 > 0.0F) {
+      rtDW.Filter_PrevResetState_i = 1;
+      rtDW.Integrator_PrevResetState_ih = 1;
+    } else {
+      if (rtU.reset_status2_4 < 0.0F) {
+        rtDW.Filter_PrevResetState_i = -1;
+      } else if (rtU.reset_status2_4 == 0.0F) {
+        rtDW.Filter_PrevResetState_i = 0;
+      } else {
+        rtDW.Filter_PrevResetState_i = 2;
+      }
+
+      if (rtU.reset_status2_4 < 0.0F) {
+        rtDW.Integrator_PrevResetState_ih = -1;
+      } else if (rtU.reset_status2_4 == 0.0F) {
+        rtDW.Integrator_PrevResetState_ih = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_ih = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S1667>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S1672>/Integrator' incorporates:
+     *  Gain: '<S1669>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_pv += rtP.ANG_S_I_CH2_4 * rtb_Sum_cz * 0.001F;
 
     /* End of Outputs for SubSystem: '<S11>/If Action_speed Subsystem1' */
     break;
@@ -2143,182 +3110,266 @@ void PID_MODEL_step(void)
   /* End of SwitchCase: '<S11>/Switch Case' */
 
   /* SwitchCase: '<S12>/Switch Case' incorporates:
-   *  Inport: '<Root>/yaw_status_CH2_5'
+   *  Inport: '<Root>/status_CH2_5'
    */
-  switch ((int32_T)rtU.yaw_status_CH2_5) {
+  switch ((int32_T)rtU.status_CH2_5) {
    case 1:
     /* Outputs for IfAction SubSystem: '<S12>/If Action_speed Subsystem' incorporates:
-     *  ActionPort: '<S1665>/Action Port'
+     *  ActionPort: '<S1739>/Action Port'
      */
-    /* Sum: '<S1665>/Sum' incorporates:
-     *  Inport: '<Root>/yaw_speed_rpm_CH2_5'
-     *  Inport: '<Root>/yaw_target_CH2_5'
+    /* Sum: '<S1739>/Sum' incorporates:
+     *  Inport: '<Root>/speed_rpm_CH2_5'
+     *  Inport: '<Root>/target_CH2_5'
      */
-    rtb_Sum_pp = rtU.yaw_target_CH2_5 - rtU.yaw_speed_rpm_CH2_5;
+    rtb_Sum_cz = rtU.target_CH2_5 - rtU.speed_rpm_CH2_5;
 
-    /* Gain: '<S1702>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S1694>/Filter'
-     *  Gain: '<S1693>/Derivative Gain'
-     *  Sum: '<S1694>/SumD'
+    /* DiscreteIntegrator: '<S1770>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status2_5'
      */
-    rtb_FilterCoefficient_k = (rtP.SPD_D_CH2_5 * rtb_Sum_pp -
-      rtDW.Filter_DSTATE_om) * 100.0F;
-
-    /* Sum: '<S1708>/Sum' incorporates:
-     *  DiscreteIntegrator: '<S1699>/Integrator'
-     *  Gain: '<S1704>/Proportional Gain'
-     */
-    u0 = (rtP.SPD_P_CH2_5 * rtb_Sum_pp + rtDW.Integrator_DSTATE_a) +
-      rtb_FilterCoefficient_k;
-
-    /* Saturate: '<S1706>/Saturation' */
-    if (u0 > 25000.0F) {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH2_5' */
-      rtY.yaw_SPD_OUT_CH2_5 = 25000.0F;
-    } else if (u0 < -25000.0F) {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH2_5' */
-      rtY.yaw_SPD_OUT_CH2_5 = -25000.0F;
-    } else {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH2_5' */
-      rtY.yaw_SPD_OUT_CH2_5 = u0;
+    if (((rtU.reset_status2_5 > 0.0F) && (rtDW.Filter_PrevResetState_o <= 0)) ||
+        ((rtU.reset_status2_5 <= 0.0F) && (rtDW.Filter_PrevResetState_o == 1)))
+    {
+      rtDW.Filter_DSTATE_d = 0.0F;
     }
 
-    /* End of Saturate: '<S1706>/Saturation' */
-
-    /* Update for DiscreteIntegrator: '<S1694>/Filter' */
-    rtDW.Filter_DSTATE_om += 0.001F * rtb_FilterCoefficient_k;
-
-    /* Update for DiscreteIntegrator: '<S1699>/Integrator' incorporates:
-     *  Gain: '<S1696>/Integral Gain'
+    /* Gain: '<S1778>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S1770>/Filter'
+     *  Gain: '<S1768>/Derivative Gain'
+     *  Sum: '<S1770>/SumD'
      */
-    rtDW.Integrator_DSTATE_a += rtP.SPD_I_CH2_5 * rtb_Sum_pp * 0.001F;
+    rtb_FilterCoefficient_eu = (rtP.SPD_D_CH2_5 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_d) * 100.0F;
+
+    /* DiscreteIntegrator: '<S1775>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status2_5'
+     */
+    if (((rtU.reset_status2_5 > 0.0F) && (rtDW.Integrator_PrevResetState_f <= 0))
+        || ((rtU.reset_status2_5 <= 0.0F) && (rtDW.Integrator_PrevResetState_f ==
+          1))) {
+      rtDW.Integrator_DSTATE_hm = 0.0F;
+    }
+
+    /* Sum: '<S1784>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S1775>/Integrator'
+     *  Gain: '<S1780>/Proportional Gain'
+     */
+    u0 = (rtP.SPD_P_CH2_5 * rtb_Sum_cz + rtDW.Integrator_DSTATE_hm) +
+      rtb_FilterCoefficient_eu;
+
+    /* Saturate: '<S1782>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH2_5' */
+      rtY.SPD_OUT_CH2_5 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH2_5' */
+      rtY.SPD_OUT_CH2_5 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/SPD_OUT_CH2_5' */
+      rtY.SPD_OUT_CH2_5 = u0;
+    }
+
+    /* End of Saturate: '<S1782>/Saturation' */
+
+    /* Update for DiscreteIntegrator: '<S1770>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S1775>/Integrator'
+     *  Inport: '<Root>/reset_status2_5'
+     */
+    rtDW.Filter_DSTATE_d += 0.001F * rtb_FilterCoefficient_eu;
+    if (rtU.reset_status2_5 > 0.0F) {
+      rtDW.Filter_PrevResetState_o = 1;
+      rtDW.Integrator_PrevResetState_f = 1;
+    } else {
+      if (rtU.reset_status2_5 < 0.0F) {
+        rtDW.Filter_PrevResetState_o = -1;
+      } else if (rtU.reset_status2_5 == 0.0F) {
+        rtDW.Filter_PrevResetState_o = 0;
+      } else {
+        rtDW.Filter_PrevResetState_o = 2;
+      }
+
+      if (rtU.reset_status2_5 < 0.0F) {
+        rtDW.Integrator_PrevResetState_f = -1;
+      } else if (rtU.reset_status2_5 == 0.0F) {
+        rtDW.Integrator_PrevResetState_f = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_f = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S1770>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S1775>/Integrator' incorporates:
+     *  Gain: '<S1772>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_hm += rtP.SPD_I_CH2_5 * rtb_Sum_cz * 0.001F;
 
     /* End of Outputs for SubSystem: '<S12>/If Action_speed Subsystem' */
     break;
 
    case 2:
     /* Outputs for IfAction SubSystem: '<S12>/If Action_speed Subsystem1' incorporates:
-     *  ActionPort: '<S1666>/Action Port'
+     *  ActionPort: '<S1740>/Action Port'
      */
-    /* Sum: '<S1666>/Sum' incorporates:
-     *  Gain: '<S1666>/Gain'
-     *  Inport: '<Root>/yaw_circle_CH2_5'
-     *  Inport: '<Root>/yaw_ecd_CH2_5'
-     *  Inport: '<Root>/yaw_target_CH2_5'
-     *  Sum: '<S1666>/Sum2'
+    /* Sum: '<S1740>/Sum' incorporates:
+     *  Gain: '<S1740>/Gain'
+     *  Inport: '<Root>/circle_CH2_5'
+     *  Inport: '<Root>/ecd_CH2_5'
+     *  Inport: '<Root>/target_CH2_5'
+     *  Sum: '<S1740>/Sum2'
      */
-    rtb_FilterCoefficient_k = rtU.yaw_target_CH2_5 - (8191.0F *
-      rtU.yaw_circle_CH2_5 + rtU.yaw_ecd_CH2_5);
+    rtb_FilterCoefficient_eu = rtU.target_CH2_5 - (8191.0F * rtU.circle_CH2_5 +
+      rtU.ecd_CH2_5);
 
-    /* Abs: '<S1666>/Abs' */
-    rtb_Sum_pp = (real32_T)fabs(rtb_FilterCoefficient_k);
+    /* Abs: '<S1740>/Abs' */
+    rtb_Sum_cz = (real32_T)fabs(rtb_FilterCoefficient_eu);
 
-    /* Switch: '<S1666>/Switch2' incorporates:
-     *  Constant: '<S1666>/Constant'
+    /* Switch: '<S1740>/Switch2' incorporates:
+     *  Constant: '<S1740>/Constant'
      */
-    if (!(rtb_Sum_pp > rtP.DEADBAND_CH2_5)) {
-      rtb_FilterCoefficient_k = 0.0F;
-			rtDW.Integrator_DSTATE_d0=0.0F;
+    if (!(rtb_Sum_cz > rtP.DEADBAND_CH2_5)) {
+      rtb_FilterCoefficient_eu = 0.0F;
     }
 
-    /* End of Switch: '<S1666>/Switch2' */
+    /* End of Switch: '<S1740>/Switch2' */
 
-    /* Gain: '<S1801>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S1793>/Filter'
-     *  Gain: '<S1792>/Derivative Gain'
-     *  Sum: '<S1793>/SumD'
+    /* Gain: '<S1881>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S1873>/Filter'
+     *  Gain: '<S1871>/Derivative Gain'
+     *  Sum: '<S1873>/SumD'
      */
-    rtb_FilterCoefficient_dy = (rtP.ANG_A_D_CH2_5 * rtb_FilterCoefficient_k -
-      rtDW.Filter_DSTATE_fg) * 100.0F;
+    rtb_FilterCoefficient_ch = (rtP.ANG_A_D_CH2_5 * rtb_FilterCoefficient_eu -
+      rtDW.Filter_DSTATE_o0) * 100.0F;
 
-    /* Switch: '<S1666>/Switch1' incorporates:
-     *  Constant: '<S1666>/Constant'
-     *  Gain: '<S1666>/Multiply'
-     *  Inport: '<Root>/yaw_speed_rpm_CH2_5'
-     *  Saturate: '<S1805>/Saturation'
-     *  Sum: '<S1666>/Sum1'
+    /* Switch: '<S1740>/Switch1' incorporates:
+     *  Constant: '<S1740>/Constant'
+     *  Gain: '<S1740>/Multiply'
+     *  Inport: '<Root>/speed_rpm_CH2_5'
+     *  Saturate: '<S1885>/Saturation'
+     *  Sum: '<S1740>/Sum1'
      */
-    if (rtb_Sum_pp > rtP.DEADBAND_CH2_5) {
-      /* Sum: '<S1807>/Sum' incorporates:
-       *  DiscreteIntegrator: '<S1798>/Integrator'
-       *  Gain: '<S1803>/Proportional Gain'
+    if (rtb_Sum_cz > rtP.DEADBAND_CH2_5) {
+      /* Sum: '<S1887>/Sum' incorporates:
+       *  DiscreteIntegrator: '<S1878>/Integrator'
+       *  Gain: '<S1883>/Proportional Gain'
        */
-      u0 = (rtP.ANG_A_P_CH2_5 * rtb_FilterCoefficient_k +
-            rtDW.Integrator_DSTATE_l) + rtb_FilterCoefficient_dy;
+      u0 = (rtP.ANG_A_P_CH2_5 * rtb_FilterCoefficient_eu +
+            rtDW.Integrator_DSTATE_oq) + rtb_FilterCoefficient_ch;
 
-      /* Saturate: '<S1805>/Saturation' */
-      if (u0 > 25000.0F) {
-        u0 = 25000.0F;
-      } else if (u0 < -25000.0F) {
-        u0 = -25000.0F;
+      /* Saturate: '<S1885>/Saturation' */
+      if (u0 > 16384.0F) {
+        u0 = 16384.0F;
+      } else if (u0 < -16384.0F) {
+        u0 = -16384.0F;
       }
 
-      rtb_Sum_pp = rtP.TRANS_CH2_5 * u0 - rtU.yaw_speed_rpm_CH2_5;
+      rtb_Sum_cz = rtP.TRANS_CH2_5 * u0 - rtU.speed_rpm_CH2_5;
     } else {
-      rtb_Sum_pp = 0.0F;
+      rtb_Sum_cz = 0.0F;
     }
 
-    /* End of Switch: '<S1666>/Switch1' */
+    /* End of Switch: '<S1740>/Switch1' */
 
-    /* Gain: '<S1753>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S1745>/Filter'
-     *  Gain: '<S1744>/Derivative Gain'
-     *  Sum: '<S1745>/SumD'
+    /* DiscreteIntegrator: '<S1823>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status2_5'
      */
-    rtb_FilterCoefficient_e4 = (rtP.ANG_S_D_CH2_5 * rtb_Sum_pp -
-      rtDW.Filter_DSTATE_d) * 100.0F;
-
-    /* Sum: '<S1759>/Sum' incorporates:
-     *  DiscreteIntegrator: '<S1750>/Integrator'
-     *  Gain: '<S1755>/Proportional Gain'
-     */
-    u0 = (rtP.ANG_S_P_CH2_5 * rtb_Sum_pp + rtDW.Integrator_DSTATE_d0) +
-      rtb_FilterCoefficient_e4;
-
-    /* Saturate: '<S1757>/Saturation' */
-    if (u0 > 25000.0F) {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH2_5' */
-      rtY.yaw_ANG_OUT_CH2_5 = 25000.0F;
-    } else if (u0 < -25000.0F) {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH2_5' */
-      rtY.yaw_ANG_OUT_CH2_5 = -25000.0F;
-    } else {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH2_5' */
-      rtY.yaw_ANG_OUT_CH2_5 = u0;
+    if (((rtU.reset_status2_5 > 0.0F) && (rtDW.Filter_PrevResetState_f3 <= 0)) ||
+        ((rtU.reset_status2_5 <= 0.0F) && (rtDW.Filter_PrevResetState_f3 == 1)))
+    {
+      rtDW.Filter_DSTATE_l = 0.0F;
     }
 
-    /* End of Saturate: '<S1757>/Saturation' */
-
-    /* Chart: '<S1666>/Chart1' incorporates:
-     *  Inport: '<Root>/yaw_ecd_CH2_5'
-     *  Inport: '<Root>/yaw_last_ecd_CH2_5'
-     *  Sum: '<S1666>/Sum3'
+    /* Gain: '<S1831>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S1823>/Filter'
+     *  Gain: '<S1821>/Derivative Gain'
+     *  Sum: '<S1823>/SumD'
      */
-    Chart1(rtU.yaw_ecd_CH2_5 - rtU.yaw_last_ecd_CH2_5, &rtDW.u2_n,
-           &rtDW.sf_Chart1_m);
+    rtb_FilterCoefficient_nkj = (rtP.ANG_S_D_CH2_5 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_l) * 100.0F;
 
-    /* Outport: '<Root>/yaw_circle_out_CH2_5' incorporates:
-     *  Inport: '<Root>/yaw_circle_CH2_5'
-     *  Sum: '<S1666>/Sum4'
+    /* DiscreteIntegrator: '<S1828>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status2_5'
      */
-    rtY.yaw_circle_out_CH2_5 = rtDW.u2_n + rtU.yaw_circle_CH2_5;
+    if (((rtU.reset_status2_5 > 0.0F) && (rtDW.Integrator_PrevResetState_bsc <=
+          0)) || ((rtU.reset_status2_5 <= 0.0F) &&
+                  (rtDW.Integrator_PrevResetState_bsc == 1))) {
+      rtDW.Integrator_DSTATE_o1 = 0.0F;
+    }
 
-    /* Update for DiscreteIntegrator: '<S1798>/Integrator' incorporates:
-     *  Gain: '<S1795>/Integral Gain'
+    /* Sum: '<S1837>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S1828>/Integrator'
+     *  Gain: '<S1833>/Proportional Gain'
      */
-    rtDW.Integrator_DSTATE_l += rtP.ANG_A_I_CH2_5 * rtb_FilterCoefficient_k *
+    u0 = (rtP.ANG_S_P_CH2_5 * rtb_Sum_cz + rtDW.Integrator_DSTATE_o1) +
+      rtb_FilterCoefficient_nkj;
+
+    /* Saturate: '<S1835>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/ANG_OUT_CH2_5' */
+      rtY.ANG_OUT_CH2_5 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/ANG_OUT_CH2_5' */
+      rtY.ANG_OUT_CH2_5 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/ANG_OUT_CH2_5' */
+      rtY.ANG_OUT_CH2_5 = u0;
+    }
+
+    /* End of Saturate: '<S1835>/Saturation' */
+
+    /* Chart: '<S1740>/Chart1' incorporates:
+     *  Inport: '<Root>/ecd_CH2_5'
+     *  Inport: '<Root>/last_ecd_CH2_5'
+     *  Sum: '<S1740>/Sum3'
+     */
+    Chart1(rtU.ecd_CH2_5 - rtU.last_ecd_CH2_5, &rtDW.u2_n2, &rtDW.sf_Chart1_dt);
+
+    /* Outport: '<Root>/circle_out_CH2_5' incorporates:
+     *  Inport: '<Root>/circle_CH2_5'
+     *  Sum: '<S1740>/Sum4'
+     */
+    rtY.circle_out_CH2_5 = rtDW.u2_n2 + rtU.circle_CH2_5;
+
+    /* Update for DiscreteIntegrator: '<S1878>/Integrator' incorporates:
+     *  Gain: '<S1875>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_oq += rtP.ANG_A_I_CH2_5 * rtb_FilterCoefficient_eu *
       0.001F;
 
-    /* Update for DiscreteIntegrator: '<S1793>/Filter' */
-    rtDW.Filter_DSTATE_fg += 0.001F * rtb_FilterCoefficient_dy;
+    /* Update for DiscreteIntegrator: '<S1873>/Filter' */
+    rtDW.Filter_DSTATE_o0 += 0.001F * rtb_FilterCoefficient_ch;
 
-    /* Update for DiscreteIntegrator: '<S1745>/Filter' */
-    rtDW.Filter_DSTATE_d += 0.001F * rtb_FilterCoefficient_e4;
-
-    /* Update for DiscreteIntegrator: '<S1750>/Integrator' incorporates:
-     *  Gain: '<S1747>/Integral Gain'
+    /* Update for DiscreteIntegrator: '<S1823>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S1828>/Integrator'
+     *  Inport: '<Root>/reset_status2_5'
      */
-    rtDW.Integrator_DSTATE_d0 += rtP.ANG_S_I_CH2_5 * rtb_Sum_pp * 0.001F;
+    rtDW.Filter_DSTATE_l += 0.001F * rtb_FilterCoefficient_nkj;
+    if (rtU.reset_status2_5 > 0.0F) {
+      rtDW.Filter_PrevResetState_f3 = 1;
+      rtDW.Integrator_PrevResetState_bsc = 1;
+    } else {
+      if (rtU.reset_status2_5 < 0.0F) {
+        rtDW.Filter_PrevResetState_f3 = -1;
+      } else if (rtU.reset_status2_5 == 0.0F) {
+        rtDW.Filter_PrevResetState_f3 = 0;
+      } else {
+        rtDW.Filter_PrevResetState_f3 = 2;
+      }
+
+      if (rtU.reset_status2_5 < 0.0F) {
+        rtDW.Integrator_PrevResetState_bsc = -1;
+      } else if (rtU.reset_status2_5 == 0.0F) {
+        rtDW.Integrator_PrevResetState_bsc = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_bsc = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S1823>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S1828>/Integrator' incorporates:
+     *  Gain: '<S1825>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_o1 += rtP.ANG_S_I_CH2_5 * rtb_Sum_cz * 0.001F;
 
     /* End of Outputs for SubSystem: '<S12>/If Action_speed Subsystem1' */
     break;
@@ -2327,182 +3378,266 @@ void PID_MODEL_step(void)
   /* End of SwitchCase: '<S12>/Switch Case' */
 
   /* SwitchCase: '<S13>/Switch Case' incorporates:
-   *  Inport: '<Root>/yaw_status_CH2_6'
+   *  Inport: '<Root>/status_CH2_6'
    */
-  switch ((int32_T)rtU.yaw_status_CH2_6) {
+  switch ((int32_T)rtU.status_CH2_6) {
    case 1:
     /* Outputs for IfAction SubSystem: '<S13>/If Action_speed Subsystem' incorporates:
-     *  ActionPort: '<S1815>/Action Port'
+     *  ActionPort: '<S1895>/Action Port'
      */
-    /* Sum: '<S1815>/Sum' incorporates:
-     *  Inport: '<Root>/yaw_speed_rpm_CH2_6'
-     *  Inport: '<Root>/yaw_target_CH2_6'
+    /* Sum: '<S1895>/Sum' incorporates:
+     *  Inport: '<Root>/speed_rpm_CH2_6'
+     *  Inport: '<Root>/target_CH2_6'
      */
-    rtb_Sum_pp = rtU.yaw_target_CH2_6 - rtU.yaw_speed_rpm_CH2_6;
+    rtb_Sum_cz = rtU.target_CH2_6 - rtU.speed_rpm_CH2_6;
 
-    /* Gain: '<S1852>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S1844>/Filter'
-     *  Gain: '<S1843>/Derivative Gain'
-     *  Sum: '<S1844>/SumD'
+    /* DiscreteIntegrator: '<S1926>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status2_6'
      */
-    rtb_FilterCoefficient_k = (rtP.SPD_D_CH2_6 * rtb_Sum_pp -
-      rtDW.Filter_DSTATE_h) * 100.0F;
-
-    /* Sum: '<S1858>/Sum' incorporates:
-     *  DiscreteIntegrator: '<S1849>/Integrator'
-     *  Gain: '<S1854>/Proportional Gain'
-     */
-    u0 = (rtP.SPD_P_CH2_6 * rtb_Sum_pp + rtDW.Integrator_DSTATE_d) +
-      rtb_FilterCoefficient_k;
-
-    /* Saturate: '<S1856>/Saturation' */
-    if (u0 > 25000.0F) {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH2_6' */
-      rtY.yaw_SPD_OUT_CH2_6 = 25000.0F;
-    } else if (u0 < -25000.0F) {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH2_6' */
-      rtY.yaw_SPD_OUT_CH2_6 = -25000.0F;
-    } else {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH2_6' */
-      rtY.yaw_SPD_OUT_CH2_6 = u0;
+    if (((rtU.reset_status2_6 > 0.0F) && (rtDW.Filter_PrevResetState_g <= 0)) ||
+        ((rtU.reset_status2_6 <= 0.0F) && (rtDW.Filter_PrevResetState_g == 1)))
+    {
+      rtDW.Filter_DSTATE_ab = 0.0F;
     }
 
-    /* End of Saturate: '<S1856>/Saturation' */
-
-    /* Update for DiscreteIntegrator: '<S1844>/Filter' */
-    rtDW.Filter_DSTATE_h += 0.001F * rtb_FilterCoefficient_k;
-
-    /* Update for DiscreteIntegrator: '<S1849>/Integrator' incorporates:
-     *  Gain: '<S1846>/Integral Gain'
+    /* Gain: '<S1934>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S1926>/Filter'
+     *  Gain: '<S1924>/Derivative Gain'
+     *  Sum: '<S1926>/SumD'
      */
-    rtDW.Integrator_DSTATE_d += rtP.SPD_I_CH2_6 * rtb_Sum_pp * 0.001F;
+    rtb_FilterCoefficient_eu = (rtP.SPD_D_CH2_6 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_ab) * 100.0F;
+
+    /* DiscreteIntegrator: '<S1931>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status2_6'
+     */
+    if (((rtU.reset_status2_6 > 0.0F) && (rtDW.Integrator_PrevResetState_mq <= 0))
+        || ((rtU.reset_status2_6 <= 0.0F) && (rtDW.Integrator_PrevResetState_mq ==
+          1))) {
+      rtDW.Integrator_DSTATE_hz = 0.0F;
+    }
+
+    /* Sum: '<S1940>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S1931>/Integrator'
+     *  Gain: '<S1936>/Proportional Gain'
+     */
+    u0 = (rtP.SPD_P_CH2_6 * rtb_Sum_cz + rtDW.Integrator_DSTATE_hz) +
+      rtb_FilterCoefficient_eu;
+
+    /* Saturate: '<S1938>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH2_6' */
+      rtY.SPD_OUT_CH2_6 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH2_6' */
+      rtY.SPD_OUT_CH2_6 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/SPD_OUT_CH2_6' */
+      rtY.SPD_OUT_CH2_6 = u0;
+    }
+
+    /* End of Saturate: '<S1938>/Saturation' */
+
+    /* Update for DiscreteIntegrator: '<S1926>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S1931>/Integrator'
+     *  Inport: '<Root>/reset_status2_6'
+     */
+    rtDW.Filter_DSTATE_ab += 0.001F * rtb_FilterCoefficient_eu;
+    if (rtU.reset_status2_6 > 0.0F) {
+      rtDW.Filter_PrevResetState_g = 1;
+      rtDW.Integrator_PrevResetState_mq = 1;
+    } else {
+      if (rtU.reset_status2_6 < 0.0F) {
+        rtDW.Filter_PrevResetState_g = -1;
+      } else if (rtU.reset_status2_6 == 0.0F) {
+        rtDW.Filter_PrevResetState_g = 0;
+      } else {
+        rtDW.Filter_PrevResetState_g = 2;
+      }
+
+      if (rtU.reset_status2_6 < 0.0F) {
+        rtDW.Integrator_PrevResetState_mq = -1;
+      } else if (rtU.reset_status2_6 == 0.0F) {
+        rtDW.Integrator_PrevResetState_mq = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_mq = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S1926>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S1931>/Integrator' incorporates:
+     *  Gain: '<S1928>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_hz += rtP.SPD_I_CH2_6 * rtb_Sum_cz * 0.001F;
 
     /* End of Outputs for SubSystem: '<S13>/If Action_speed Subsystem' */
     break;
 
    case 2:
     /* Outputs for IfAction SubSystem: '<S13>/If Action_speed Subsystem1' incorporates:
-     *  ActionPort: '<S1816>/Action Port'
+     *  ActionPort: '<S1896>/Action Port'
      */
-    /* Sum: '<S1816>/Sum' incorporates:
-     *  Gain: '<S1816>/Gain'
-     *  Inport: '<Root>/yaw_circle_CH2_6'
-     *  Inport: '<Root>/yaw_ecd_CH2_6'
-     *  Inport: '<Root>/yaw_target_CH2_6'
-     *  Sum: '<S1816>/Sum2'
+    /* Sum: '<S1896>/Sum' incorporates:
+     *  Gain: '<S1896>/Gain'
+     *  Inport: '<Root>/circle_CH2_6'
+     *  Inport: '<Root>/ecd_CH2_6'
+     *  Inport: '<Root>/target_CH2_6'
+     *  Sum: '<S1896>/Sum2'
      */
-    rtb_FilterCoefficient_k = rtU.yaw_target_CH2_6 - (8191.0F *
-      rtU.yaw_circle_CH2_6 + rtU.yaw_ecd_CH2_6);
+    rtb_FilterCoefficient_eu = rtU.target_CH2_6 - (8191.0F * rtU.circle_CH2_6 +
+      rtU.ecd_CH2_6);
 
-    /* Abs: '<S1816>/Abs' */
-    rtb_Sum_pp = (real32_T)fabs(rtb_FilterCoefficient_k);
+    /* Abs: '<S1896>/Abs' */
+    rtb_Sum_cz = (real32_T)fabs(rtb_FilterCoefficient_eu);
 
-    /* Switch: '<S1816>/Switch2' incorporates:
-     *  Constant: '<S1816>/Constant'
+    /* Switch: '<S1896>/Switch2' incorporates:
+     *  Constant: '<S1896>/Constant'
      */
-    if (!(rtb_Sum_pp > rtP.DEADBAND_CH2_6)) {
-      rtb_FilterCoefficient_k = 0.0F;
-			rtDW.Integrator_DSTATE_bg = 0.0F;
+    if (!(rtb_Sum_cz > rtP.DEADBAND_CH2_6)) {
+      rtb_FilterCoefficient_eu = 0.0F;
     }
 
-    /* End of Switch: '<S1816>/Switch2' */
+    /* End of Switch: '<S1896>/Switch2' */
 
-    /* Gain: '<S1951>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S1943>/Filter'
-     *  Gain: '<S1942>/Derivative Gain'
-     *  Sum: '<S1943>/SumD'
+    /* Gain: '<S2037>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S2029>/Filter'
+     *  Gain: '<S2027>/Derivative Gain'
+     *  Sum: '<S2029>/SumD'
      */
-    rtb_FilterCoefficient_dy = (rtP.ANG_A_D_CH2_6 * rtb_FilterCoefficient_k -
-      rtDW.Filter_DSTATE_o) * 100.0F;
+    rtb_FilterCoefficient_ch = (rtP.ANG_A_D_CH2_6 * rtb_FilterCoefficient_eu -
+      rtDW.Filter_DSTATE_oz) * 100.0F;
 
-    /* Switch: '<S1816>/Switch1' incorporates:
-     *  Constant: '<S1816>/Constant'
-     *  Gain: '<S1816>/Multiply'
-     *  Inport: '<Root>/yaw_speed_rpm_CH2_6'
-     *  Saturate: '<S1955>/Saturation'
-     *  Sum: '<S1816>/Sum1'
+    /* Switch: '<S1896>/Switch1' incorporates:
+     *  Constant: '<S1896>/Constant'
+     *  Gain: '<S1896>/Multiply'
+     *  Inport: '<Root>/speed_rpm_CH2_6'
+     *  Saturate: '<S2041>/Saturation'
+     *  Sum: '<S1896>/Sum1'
      */
-    if (rtb_Sum_pp > rtP.DEADBAND_CH2_6) {
-      /* Sum: '<S1957>/Sum' incorporates:
-       *  DiscreteIntegrator: '<S1948>/Integrator'
-       *  Gain: '<S1953>/Proportional Gain'
+    if (rtb_Sum_cz > rtP.DEADBAND_CH2_6) {
+      /* Sum: '<S2043>/Sum' incorporates:
+       *  DiscreteIntegrator: '<S2034>/Integrator'
+       *  Gain: '<S2039>/Proportional Gain'
        */
-      u0 = (rtP.ANG_A_P_CH2_6 * rtb_FilterCoefficient_k +
-            rtDW.Integrator_DSTATE_h4) + rtb_FilterCoefficient_dy;
+      u0 = (rtP.ANG_A_P_CH2_6 * rtb_FilterCoefficient_eu +
+            rtDW.Integrator_DSTATE_hd) + rtb_FilterCoefficient_ch;
 
-      /* Saturate: '<S1955>/Saturation' */
-      if (u0 > 25000.0F) {
-        u0 = 25000.0F;
-      } else if (u0 < -25000.0F) {
-        u0 = -25000.0F;
+      /* Saturate: '<S2041>/Saturation' */
+      if (u0 > 16384.0F) {
+        u0 = 16384.0F;
+      } else if (u0 < -16384.0F) {
+        u0 = -16384.0F;
       }
 
-      rtb_Sum_pp = rtP.TRANS_CH2_6 * u0 - rtU.yaw_speed_rpm_CH2_6;
+      rtb_Sum_cz = rtP.TRANS_CH2_6 * u0 - rtU.speed_rpm_CH2_6;
     } else {
-      rtb_Sum_pp = 0.0F;
+      rtb_Sum_cz = 0.0F;
     }
 
-    /* End of Switch: '<S1816>/Switch1' */
+    /* End of Switch: '<S1896>/Switch1' */
 
-    /* Gain: '<S1903>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S1895>/Filter'
-     *  Gain: '<S1894>/Derivative Gain'
-     *  Sum: '<S1895>/SumD'
+    /* DiscreteIntegrator: '<S1979>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status2_6'
      */
-    rtb_FilterCoefficient_e4 = (rtP.ANG_S_D_CH2_6 * rtb_Sum_pp -
-      rtDW.Filter_DSTATE_f) * 100.0F;
-
-    /* Sum: '<S1909>/Sum' incorporates:
-     *  DiscreteIntegrator: '<S1900>/Integrator'
-     *  Gain: '<S1905>/Proportional Gain'
-     */
-    u0 = (rtP.ANG_S_P_CH2_6 * rtb_Sum_pp + rtDW.Integrator_DSTATE_bg) +
-      rtb_FilterCoefficient_e4;
-
-    /* Saturate: '<S1907>/Saturation' */
-    if (u0 > 25000.0F) {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH2_6' */
-      rtY.yaw_ANG_OUT_CH2_6 = 25000.0F;
-    } else if (u0 < -25000.0F) {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH2_6' */
-      rtY.yaw_ANG_OUT_CH2_6 = -25000.0F;
-    } else {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH2_6' */
-      rtY.yaw_ANG_OUT_CH2_6 = u0;
+    if (((rtU.reset_status2_6 > 0.0F) && (rtDW.Filter_PrevResetState_f <= 0)) ||
+        ((rtU.reset_status2_6 <= 0.0F) && (rtDW.Filter_PrevResetState_f == 1)))
+    {
+      rtDW.Filter_DSTATE_ny = 0.0F;
     }
 
-    /* End of Saturate: '<S1907>/Saturation' */
-
-    /* Chart: '<S1816>/Chart1' incorporates:
-     *  Inport: '<Root>/yaw_ecd_CH2_6'
-     *  Inport: '<Root>/yaw_last_ecd_CH2_6'
-     *  Sum: '<S1816>/Sum3'
+    /* Gain: '<S1987>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S1979>/Filter'
+     *  Gain: '<S1977>/Derivative Gain'
+     *  Sum: '<S1979>/SumD'
      */
-    Chart1(rtU.yaw_ecd_CH2_6 - rtU.yaw_last_ecd_CH2_6, &rtDW.u2_g,
-           &rtDW.sf_Chart1_nb);
+    rtb_FilterCoefficient_nkj = (rtP.ANG_S_D_CH2_6 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_ny) * 100.0F;
 
-    /* Outport: '<Root>/yaw_circle_out_CH2_6' incorporates:
-     *  Inport: '<Root>/yaw_circle_CH2_6'
-     *  Sum: '<S1816>/Sum4'
+    /* DiscreteIntegrator: '<S1984>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status2_6'
      */
-    rtY.yaw_circle_out_CH2_6 = rtDW.u2_g + rtU.yaw_circle_CH2_6;
+    if (((rtU.reset_status2_6 > 0.0F) && (rtDW.Integrator_PrevResetState_ny <= 0))
+        || ((rtU.reset_status2_6 <= 0.0F) && (rtDW.Integrator_PrevResetState_ny ==
+          1))) {
+      rtDW.Integrator_DSTATE_e = 0.0F;
+    }
 
-    /* Update for DiscreteIntegrator: '<S1948>/Integrator' incorporates:
-     *  Gain: '<S1945>/Integral Gain'
+    /* Sum: '<S1993>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S1984>/Integrator'
+     *  Gain: '<S1989>/Proportional Gain'
      */
-    rtDW.Integrator_DSTATE_h4 += rtP.ANG_A_I_CH2_6 * rtb_FilterCoefficient_k *
+    u0 = (rtP.ANG_S_P_CH2_6 * rtb_Sum_cz + rtDW.Integrator_DSTATE_e) +
+      rtb_FilterCoefficient_nkj;
+
+    /* Saturate: '<S1991>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/ANG_OUT_CH2_6' */
+      rtY.ANG_OUT_CH2_6 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/ANG_OUT_CH2_6' */
+      rtY.ANG_OUT_CH2_6 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/ANG_OUT_CH2_6' */
+      rtY.ANG_OUT_CH2_6 = u0;
+    }
+
+    /* End of Saturate: '<S1991>/Saturation' */
+
+    /* Chart: '<S1896>/Chart1' incorporates:
+     *  Inport: '<Root>/ecd_CH2_6'
+     *  Inport: '<Root>/last_ecd_CH2_6'
+     *  Sum: '<S1896>/Sum3'
+     */
+    Chart1(rtU.ecd_CH2_6 - rtU.last_ecd_CH2_6, &rtDW.u2_h, &rtDW.sf_Chart1_nl);
+
+    /* Outport: '<Root>/circle_out_CH2_6' incorporates:
+     *  Inport: '<Root>/circle_CH2_6'
+     *  Sum: '<S1896>/Sum4'
+     */
+    rtY.circle_out_CH2_6 = rtDW.u2_h + rtU.circle_CH2_6;
+
+    /* Update for DiscreteIntegrator: '<S2034>/Integrator' incorporates:
+     *  Gain: '<S2031>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_hd += rtP.ANG_A_I_CH2_6 * rtb_FilterCoefficient_eu *
       0.001F;
 
-    /* Update for DiscreteIntegrator: '<S1943>/Filter' */
-    rtDW.Filter_DSTATE_o += 0.001F * rtb_FilterCoefficient_dy;
+    /* Update for DiscreteIntegrator: '<S2029>/Filter' */
+    rtDW.Filter_DSTATE_oz += 0.001F * rtb_FilterCoefficient_ch;
 
-    /* Update for DiscreteIntegrator: '<S1895>/Filter' */
-    rtDW.Filter_DSTATE_f += 0.001F * rtb_FilterCoefficient_e4;
-
-    /* Update for DiscreteIntegrator: '<S1900>/Integrator' incorporates:
-     *  Gain: '<S1897>/Integral Gain'
+    /* Update for DiscreteIntegrator: '<S1979>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S1984>/Integrator'
+     *  Inport: '<Root>/reset_status2_6'
      */
-    rtDW.Integrator_DSTATE_bg += rtP.ANG_S_I_CH2_6 * rtb_Sum_pp * 0.001F;
+    rtDW.Filter_DSTATE_ny += 0.001F * rtb_FilterCoefficient_nkj;
+    if (rtU.reset_status2_6 > 0.0F) {
+      rtDW.Filter_PrevResetState_f = 1;
+      rtDW.Integrator_PrevResetState_ny = 1;
+    } else {
+      if (rtU.reset_status2_6 < 0.0F) {
+        rtDW.Filter_PrevResetState_f = -1;
+      } else if (rtU.reset_status2_6 == 0.0F) {
+        rtDW.Filter_PrevResetState_f = 0;
+      } else {
+        rtDW.Filter_PrevResetState_f = 2;
+      }
+
+      if (rtU.reset_status2_6 < 0.0F) {
+        rtDW.Integrator_PrevResetState_ny = -1;
+      } else if (rtU.reset_status2_6 == 0.0F) {
+        rtDW.Integrator_PrevResetState_ny = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_ny = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S1979>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S1984>/Integrator' incorporates:
+     *  Gain: '<S1981>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_e += rtP.ANG_S_I_CH2_6 * rtb_Sum_cz * 0.001F;
 
     /* End of Outputs for SubSystem: '<S13>/If Action_speed Subsystem1' */
     break;
@@ -2511,290 +3646,2601 @@ void PID_MODEL_step(void)
   /* End of SwitchCase: '<S13>/Switch Case' */
 
   /* SwitchCase: '<S14>/Switch Case' incorporates:
-   *  Inport: '<Root>/yaw_status_CH2_7'
+   *  Inport: '<Root>/status_CH2_7'
    */
-  switch ((int32_T)rtU.yaw_status_CH2_7) {
+  switch ((int32_T)rtU.status_CH2_7) {
    case 1:
     /* Outputs for IfAction SubSystem: '<S14>/If Action_speed Subsystem' incorporates:
-     *  ActionPort: '<S1965>/Action Port'
+     *  ActionPort: '<S2051>/Action Port'
      */
-    /* Sum: '<S1965>/Sum' incorporates:
-     *  Inport: '<Root>/yaw_speed_rpm_CH2_7'
-     *  Inport: '<Root>/yaw_target_CH2_7'
+    /* Sum: '<S2051>/Sum' incorporates:
+     *  Inport: '<Root>/speed_rpm_CH2_7'
+     *  Inport: '<Root>/target_CH2_7'
      */
-    rtb_Sum_pp = rtU.yaw_target_CH2_7 - rtU.yaw_speed_rpm_CH2_7;
+    rtb_Sum_cz = rtU.target_CH2_7 - rtU.speed_rpm_CH2_7;
 
-    /* Gain: '<S2002>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S1994>/Filter'
-     *  Gain: '<S1993>/Derivative Gain'
-     *  Sum: '<S1994>/SumD'
+    /* DiscreteIntegrator: '<S2082>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status2_7'
      */
-    rtb_FilterCoefficient_k = (rtP.SPD_D_CH2_7 * rtb_Sum_pp -
-      rtDW.Filter_DSTATE_j) * 100.0F;
-
-    /* Sum: '<S2008>/Sum' incorporates:
-     *  DiscreteIntegrator: '<S1999>/Integrator'
-     *  Gain: '<S2004>/Proportional Gain'
-     */
-    u0 = (rtP.SPD_P_CH2_7 * rtb_Sum_pp + rtDW.Integrator_DSTATE_b) +
-      rtb_FilterCoefficient_k;
-
-    /* Saturate: '<S2006>/Saturation' */
-    if (u0 > 25000.0F) {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH2_7' */
-      rtY.yaw_SPD_OUT_CH2_7 = 25000.0F;
-    } else if (u0 < -25000.0F) {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH2_7' */
-      rtY.yaw_SPD_OUT_CH2_7 = -25000.0F;
-    } else {
-      /* Outport: '<Root>/yaw_SPD_OUT_CH2_7' */
-      rtY.yaw_SPD_OUT_CH2_7 = u0;
+    if (((rtU.reset_status2_7 > 0.0F) && (rtDW.Filter_PrevResetState_ng <= 0)) ||
+        ((rtU.reset_status2_7 <= 0.0F) && (rtDW.Filter_PrevResetState_ng == 1)))
+    {
+      rtDW.Filter_DSTATE_e2 = 0.0F;
     }
 
-    /* End of Saturate: '<S2006>/Saturation' */
-
-    /* Update for DiscreteIntegrator: '<S1994>/Filter' */
-    rtDW.Filter_DSTATE_j += 0.001F * rtb_FilterCoefficient_k;
-
-    /* Update for DiscreteIntegrator: '<S1999>/Integrator' incorporates:
-     *  Gain: '<S1996>/Integral Gain'
+    /* Gain: '<S2090>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S2082>/Filter'
+     *  Gain: '<S2080>/Derivative Gain'
+     *  Sum: '<S2082>/SumD'
      */
-    rtDW.Integrator_DSTATE_b += rtP.SPD_I_CH2_7 * rtb_Sum_pp * 0.001F;
+    rtb_FilterCoefficient_eu = (rtP.SPD_D_CH2_7 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_e2) * 100.0F;
+
+    /* DiscreteIntegrator: '<S2087>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status2_7'
+     */
+    if (((rtU.reset_status2_7 > 0.0F) && (rtDW.Integrator_PrevResetState_i <= 0))
+        || ((rtU.reset_status2_7 <= 0.0F) && (rtDW.Integrator_PrevResetState_i ==
+          1))) {
+      rtDW.Integrator_DSTATE_pt = 0.0F;
+    }
+
+    /* Sum: '<S2096>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S2087>/Integrator'
+     *  Gain: '<S2092>/Proportional Gain'
+     */
+    u0 = (rtP.SPD_P_CH2_7 * rtb_Sum_cz + rtDW.Integrator_DSTATE_pt) +
+      rtb_FilterCoefficient_eu;
+
+    /* Saturate: '<S2094>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH2_7' */
+      rtY.SPD_OUT_CH2_7 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH2_7' */
+      rtY.SPD_OUT_CH2_7 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/SPD_OUT_CH2_7' */
+      rtY.SPD_OUT_CH2_7 = u0;
+    }
+
+    /* End of Saturate: '<S2094>/Saturation' */
+
+    /* Update for DiscreteIntegrator: '<S2082>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S2087>/Integrator'
+     *  Inport: '<Root>/reset_status2_7'
+     */
+    rtDW.Filter_DSTATE_e2 += 0.001F * rtb_FilterCoefficient_eu;
+    if (rtU.reset_status2_7 > 0.0F) {
+      rtDW.Filter_PrevResetState_ng = 1;
+      rtDW.Integrator_PrevResetState_i = 1;
+    } else {
+      if (rtU.reset_status2_7 < 0.0F) {
+        rtDW.Filter_PrevResetState_ng = -1;
+      } else if (rtU.reset_status2_7 == 0.0F) {
+        rtDW.Filter_PrevResetState_ng = 0;
+      } else {
+        rtDW.Filter_PrevResetState_ng = 2;
+      }
+
+      if (rtU.reset_status2_7 < 0.0F) {
+        rtDW.Integrator_PrevResetState_i = -1;
+      } else if (rtU.reset_status2_7 == 0.0F) {
+        rtDW.Integrator_PrevResetState_i = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_i = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S2082>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S2087>/Integrator' incorporates:
+     *  Gain: '<S2084>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_pt += rtP.SPD_I_CH2_7 * rtb_Sum_cz * 0.001F;
 
     /* End of Outputs for SubSystem: '<S14>/If Action_speed Subsystem' */
     break;
 
    case 2:
     /* Outputs for IfAction SubSystem: '<S14>/If Action_speed Subsystem1' incorporates:
-     *  ActionPort: '<S1966>/Action Port'
+     *  ActionPort: '<S2052>/Action Port'
      */
-    /* Sum: '<S1966>/Sum' incorporates:
-     *  Gain: '<S1966>/Gain'
-     *  Inport: '<Root>/yaw_circle_CH2_7'
-     *  Inport: '<Root>/yaw_ecd_CH2_7'
-     *  Inport: '<Root>/yaw_target_CH2_7'
-     *  Sum: '<S1966>/Sum2'
+    /* Sum: '<S2052>/Sum' incorporates:
+     *  Gain: '<S2052>/Gain'
+     *  Inport: '<Root>/circle_CH2_7'
+     *  Inport: '<Root>/ecd_CH2_7'
+     *  Inport: '<Root>/target_CH2_7'
+     *  Sum: '<S2052>/Sum2'
      */
-    rtb_FilterCoefficient_k = rtU.yaw_target_CH2_7 - (8191.0F *
-      rtU.yaw_circle_CH2_7 + rtU.yaw_ecd_CH2_7);
+    rtb_FilterCoefficient_eu = rtU.target_CH2_7 - (8191.0F * rtU.circle_CH2_7 +
+      rtU.ecd_CH2_7);
 
-    /* Abs: '<S1966>/Abs' */
-    rtb_Sum_pp = (real32_T)fabs(rtb_FilterCoefficient_k);
+    /* Abs: '<S2052>/Abs' */
+    rtb_Sum_cz = (real32_T)fabs(rtb_FilterCoefficient_eu);
 
-    /* Switch: '<S1966>/Switch2' incorporates:
-     *  Constant: '<S1966>/Constant'
+    /* Switch: '<S2052>/Switch2' incorporates:
+     *  Constant: '<S2052>/Constant'
      */
-    if (!(rtb_Sum_pp > rtP.DEADBAND_CH2_7)) {
-      rtb_FilterCoefficient_k = 0.0F;
-			rtDW.Integrator_DSTATE_h=0.0F;
+    if (!(rtb_Sum_cz > rtP.DEADBAND_CH2_7)) {
+      rtb_FilterCoefficient_eu = 0.0F;
     }
 
-    /* End of Switch: '<S1966>/Switch2' */
+    /* End of Switch: '<S2052>/Switch2' */
 
-    /* Gain: '<S2101>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S2093>/Filter'
-     *  Gain: '<S2092>/Derivative Gain'
-     *  Sum: '<S2093>/SumD'
+    /* Gain: '<S2193>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S2185>/Filter'
+     *  Gain: '<S2183>/Derivative Gain'
+     *  Sum: '<S2185>/SumD'
      */
-    rtb_FilterCoefficient_dy = (rtP.ANG_A_D_CH2_7 * rtb_FilterCoefficient_k -
-      rtDW.Filter_DSTATE) * 100.0F;
+    rtb_FilterCoefficient_ch = (rtP.ANG_A_D_CH2_7 * rtb_FilterCoefficient_eu -
+      rtDW.Filter_DSTATE_bs) * 100.0F;
 
-    /* Switch: '<S1966>/Switch1' incorporates:
-     *  Constant: '<S1966>/Constant'
-     *  Gain: '<S1966>/Multiply'
-     *  Inport: '<Root>/yaw_speed_rpm_CH2_7'
-     *  Saturate: '<S2105>/Saturation'
-     *  Sum: '<S1966>/Sum1'
+    /* Switch: '<S2052>/Switch1' incorporates:
+     *  Constant: '<S2052>/Constant'
+     *  Gain: '<S2052>/Multiply'
+     *  Inport: '<Root>/speed_rpm_CH2_7'
+     *  Saturate: '<S2197>/Saturation'
+     *  Sum: '<S2052>/Sum1'
      */
-    if (rtb_Sum_pp > rtP.DEADBAND_CH2_7) {
-      /* Sum: '<S2107>/Sum' incorporates:
-       *  DiscreteIntegrator: '<S2098>/Integrator'
-       *  Gain: '<S2103>/Proportional Gain'
+    if (rtb_Sum_cz > rtP.DEADBAND_CH2_7) {
+      /* Sum: '<S2199>/Sum' incorporates:
+       *  DiscreteIntegrator: '<S2190>/Integrator'
+       *  Gain: '<S2195>/Proportional Gain'
        */
-      u0 = (rtP.ANG_A_P_CH2_7 * rtb_FilterCoefficient_k + rtDW.Integrator_DSTATE)
-        + rtb_FilterCoefficient_dy;
+      u0 = (rtP.ANG_A_P_CH2_7 * rtb_FilterCoefficient_eu +
+            rtDW.Integrator_DSTATE_l3) + rtb_FilterCoefficient_ch;
 
-      /* Saturate: '<S2105>/Saturation' */
-      if (u0 > 25000.0F) {
-        u0 = 25000.0F;
-      } else if (u0 < -25000.0F) {
-        u0 = -25000.0F;
+      /* Saturate: '<S2197>/Saturation' */
+      if (u0 > 16384.0F) {
+        u0 = 16384.0F;
+      } else if (u0 < -16384.0F) {
+        u0 = -16384.0F;
       }
 
-      rtb_Sum_pp = rtP.TRANS_CH2_7 * u0 - rtU.yaw_speed_rpm_CH2_7;
+      rtb_Sum_cz = rtP.TRANS_CH2_7 * u0 - rtU.speed_rpm_CH2_7;
     } else {
-      rtb_Sum_pp = 0.0F;
+      rtb_Sum_cz = 0.0F;
     }
 
-    /* End of Switch: '<S1966>/Switch1' */
+    /* End of Switch: '<S2052>/Switch1' */
 
-    /* Gain: '<S2053>/Filter Coefficient' incorporates:
-     *  DiscreteIntegrator: '<S2045>/Filter'
-     *  Gain: '<S2044>/Derivative Gain'
-     *  Sum: '<S2045>/SumD'
+    /* DiscreteIntegrator: '<S2135>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status2_7'
      */
-    rtb_FilterCoefficient_e4 = (rtP.ANG_S_D_CH2_7 * rtb_Sum_pp -
-      rtDW.Filter_DSTATE_c) * 100.0F;
-
-    /* Sum: '<S2059>/Sum' incorporates:
-     *  DiscreteIntegrator: '<S2050>/Integrator'
-     *  Gain: '<S2055>/Proportional Gain'
-     */
-    u0 = (rtP.ANG_S_P_CH2_7 * rtb_Sum_pp + rtDW.Integrator_DSTATE_h) +
-      rtb_FilterCoefficient_e4;
-
-    /* Saturate: '<S2057>/Saturation' */
-    if (u0 > 25000.0F) {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH2_7' */
-      rtY.yaw_ANG_OUT_CH2_7 = 25000.0F;
-    } else if (u0 < -25000.0F) {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH2_7' */
-      rtY.yaw_ANG_OUT_CH2_7 = -25000.0F;
-    } else {
-      /* Outport: '<Root>/yaw_ANG_OUT_CH2_7' */
-      rtY.yaw_ANG_OUT_CH2_7 = u0;
+    if (((rtU.reset_status2_7 > 0.0F) && (rtDW.Filter_PrevResetState_lt <= 0)) ||
+        ((rtU.reset_status2_7 <= 0.0F) && (rtDW.Filter_PrevResetState_lt == 1)))
+    {
+      rtDW.Filter_DSTATE_op = 0.0F;
     }
 
-    /* End of Saturate: '<S2057>/Saturation' */
-
-    /* Chart: '<S1966>/Chart1' incorporates:
-     *  Inport: '<Root>/yaw_ecd_CH2_7'
-     *  Inport: '<Root>/yaw_last_ecd_CH2_7'
-     *  Sum: '<S1966>/Sum3'
+    /* Gain: '<S2143>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S2135>/Filter'
+     *  Gain: '<S2133>/Derivative Gain'
+     *  Sum: '<S2135>/SumD'
      */
-    Chart1(rtU.yaw_ecd_CH2_7 - rtU.yaw_last_ecd_CH2_7, &rtDW.u2,
-           &rtDW.sf_Chart1_bf);
+    rtb_FilterCoefficient_nkj = (rtP.ANG_S_D_CH2_7 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_op) * 100.0F;
 
-    /* Outport: '<Root>/yaw_circle_out_CH2_7' incorporates:
-     *  Inport: '<Root>/yaw_circle_CH2_7'
-     *  Sum: '<S1966>/Sum4'
+    /* DiscreteIntegrator: '<S2140>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status2_7'
      */
-    rtY.yaw_circle_out_CH2_7 = rtDW.u2 + rtU.yaw_circle_CH2_7;
+    if (((rtU.reset_status2_7 > 0.0F) && (rtDW.Integrator_PrevResetState_k <= 0))
+        || ((rtU.reset_status2_7 <= 0.0F) && (rtDW.Integrator_PrevResetState_k ==
+          1))) {
+      rtDW.Integrator_DSTATE_dz = 0.0F;
+    }
 
-    /* Update for DiscreteIntegrator: '<S2098>/Integrator' incorporates:
-     *  Gain: '<S2095>/Integral Gain'
+    /* Sum: '<S2149>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S2140>/Integrator'
+     *  Gain: '<S2145>/Proportional Gain'
      */
-    rtDW.Integrator_DSTATE += rtP.ANG_A_I_CH2_7 * rtb_FilterCoefficient_k *
+    u0 = (rtP.ANG_S_P_CH2_7 * rtb_Sum_cz + rtDW.Integrator_DSTATE_dz) +
+      rtb_FilterCoefficient_nkj;
+
+    /* Saturate: '<S2147>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/ANG_OUT_CH2_7' */
+      rtY.ANG_OUT_CH2_7 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/ANG_OUT_CH2_7' */
+      rtY.ANG_OUT_CH2_7 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/ANG_OUT_CH2_7' */
+      rtY.ANG_OUT_CH2_7 = u0;
+    }
+
+    /* End of Saturate: '<S2147>/Saturation' */
+
+    /* Chart: '<S2052>/Chart1' incorporates:
+     *  Inport: '<Root>/ecd_CH2_7'
+     *  Inport: '<Root>/last_ecd_CH2_7'
+     *  Sum: '<S2052>/Sum3'
+     */
+    Chart1(rtU.ecd_CH2_7 - rtU.last_ecd_CH2_7, &rtDW.u2_e, &rtDW.sf_Chart1_ke);
+
+    /* Outport: '<Root>/circle_out_CH2_7' incorporates:
+     *  Inport: '<Root>/circle_CH2_7'
+     *  Sum: '<S2052>/Sum4'
+     */
+    rtY.circle_out_CH2_7 = rtDW.u2_e + rtU.circle_CH2_7;
+
+    /* Update for DiscreteIntegrator: '<S2190>/Integrator' incorporates:
+     *  Gain: '<S2187>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_l3 += rtP.ANG_A_I_CH2_7 * rtb_FilterCoefficient_eu *
       0.001F;
 
-    /* Update for DiscreteIntegrator: '<S2093>/Filter' */
-    rtDW.Filter_DSTATE += 0.001F * rtb_FilterCoefficient_dy;
+    /* Update for DiscreteIntegrator: '<S2185>/Filter' */
+    rtDW.Filter_DSTATE_bs += 0.001F * rtb_FilterCoefficient_ch;
 
-    /* Update for DiscreteIntegrator: '<S2045>/Filter' */
-    rtDW.Filter_DSTATE_c += 0.001F * rtb_FilterCoefficient_e4;
-
-    /* Update for DiscreteIntegrator: '<S2050>/Integrator' incorporates:
-     *  Gain: '<S2047>/Integral Gain'
+    /* Update for DiscreteIntegrator: '<S2135>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S2140>/Integrator'
+     *  Inport: '<Root>/reset_status2_7'
      */
-    rtDW.Integrator_DSTATE_h += rtP.ANG_S_I_CH2_7 * rtb_Sum_pp * 0.001F;
+    rtDW.Filter_DSTATE_op += 0.001F * rtb_FilterCoefficient_nkj;
+    if (rtU.reset_status2_7 > 0.0F) {
+      rtDW.Filter_PrevResetState_lt = 1;
+      rtDW.Integrator_PrevResetState_k = 1;
+    } else {
+      if (rtU.reset_status2_7 < 0.0F) {
+        rtDW.Filter_PrevResetState_lt = -1;
+      } else if (rtU.reset_status2_7 == 0.0F) {
+        rtDW.Filter_PrevResetState_lt = 0;
+      } else {
+        rtDW.Filter_PrevResetState_lt = 2;
+      }
+
+      if (rtU.reset_status2_7 < 0.0F) {
+        rtDW.Integrator_PrevResetState_k = -1;
+      } else if (rtU.reset_status2_7 == 0.0F) {
+        rtDW.Integrator_PrevResetState_k = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_k = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S2135>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S2140>/Integrator' incorporates:
+     *  Gain: '<S2137>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_dz += rtP.ANG_S_I_CH2_7 * rtb_Sum_cz * 0.001F;
 
     /* End of Outputs for SubSystem: '<S14>/If Action_speed Subsystem1' */
     break;
   }
 
   /* End of SwitchCase: '<S14>/Switch Case' */
+
+  /* SwitchCase: '<S15>/Switch Case' incorporates:
+   *  Inport: '<Root>/status_CH3_1'
+   */
+  switch ((int32_T)rtU.status_CH3_1) {
+   case 1:
+    /* Outputs for IfAction SubSystem: '<S15>/If Action_speed Subsystem' incorporates:
+     *  ActionPort: '<S2207>/Action Port'
+     */
+    /* Sum: '<S2207>/Sum' incorporates:
+     *  Inport: '<Root>/speed_rpm_CH3_1'
+     *  Inport: '<Root>/target_CH3_1'
+     */
+    rtb_Sum_cz = rtU.target_CH3_1 - rtU.speed_rpm_CH3_1;
+
+    /* DiscreteIntegrator: '<S2238>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status3_1'
+     */
+    if (((rtU.reset_status3_1 > 0.0F) && (rtDW.Filter_PrevResetState_b5 <= 0)) ||
+        ((rtU.reset_status3_1 <= 0.0F) && (rtDW.Filter_PrevResetState_b5 == 1)))
+    {
+      rtDW.Filter_DSTATE_et = 0.0F;
+    }
+
+    /* Gain: '<S2246>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S2238>/Filter'
+     *  Gain: '<S2236>/Derivative Gain'
+     *  Sum: '<S2238>/SumD'
+     */
+    rtb_FilterCoefficient_eu = (rtP.SPD_D_CH3_1 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_et) * 100.0F;
+
+    /* DiscreteIntegrator: '<S2243>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status3_1'
+     */
+    if (((rtU.reset_status3_1 > 0.0F) && (rtDW.Integrator_PrevResetState_ge <= 0))
+        || ((rtU.reset_status3_1 <= 0.0F) && (rtDW.Integrator_PrevResetState_ge ==
+          1))) {
+      rtDW.Integrator_DSTATE_op = 0.0F;
+    }
+
+    /* Sum: '<S2252>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S2243>/Integrator'
+     *  Gain: '<S2248>/Proportional Gain'
+     */
+    u0 = (rtP.SPD_P_CH3_1 * rtb_Sum_cz + rtDW.Integrator_DSTATE_op) +
+      rtb_FilterCoefficient_eu;
+
+    /* Saturate: '<S2250>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH3_1' */
+      rtY.SPD_OUT_CH3_1 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH3_1' */
+      rtY.SPD_OUT_CH3_1 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/SPD_OUT_CH3_1' */
+      rtY.SPD_OUT_CH3_1 = u0;
+    }
+
+    /* End of Saturate: '<S2250>/Saturation' */
+
+    /* Update for DiscreteIntegrator: '<S2238>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S2243>/Integrator'
+     *  Inport: '<Root>/reset_status3_1'
+     */
+    rtDW.Filter_DSTATE_et += 0.001F * rtb_FilterCoefficient_eu;
+    if (rtU.reset_status3_1 > 0.0F) {
+      rtDW.Filter_PrevResetState_b5 = 1;
+      rtDW.Integrator_PrevResetState_ge = 1;
+    } else {
+      if (rtU.reset_status3_1 < 0.0F) {
+        rtDW.Filter_PrevResetState_b5 = -1;
+      } else if (rtU.reset_status3_1 == 0.0F) {
+        rtDW.Filter_PrevResetState_b5 = 0;
+      } else {
+        rtDW.Filter_PrevResetState_b5 = 2;
+      }
+
+      if (rtU.reset_status3_1 < 0.0F) {
+        rtDW.Integrator_PrevResetState_ge = -1;
+      } else if (rtU.reset_status3_1 == 0.0F) {
+        rtDW.Integrator_PrevResetState_ge = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_ge = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S2238>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S2243>/Integrator' incorporates:
+     *  Gain: '<S2240>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_op += rtP.SPD_I_CH3_1 * rtb_Sum_cz * 0.001F;
+
+    /* End of Outputs for SubSystem: '<S15>/If Action_speed Subsystem' */
+    break;
+
+   case 2:
+    /* Outputs for IfAction SubSystem: '<S15>/If Action_speed Subsystem1' incorporates:
+     *  ActionPort: '<S2208>/Action Port'
+     */
+    /* Sum: '<S2208>/Sum' incorporates:
+     *  Gain: '<S2208>/Gain'
+     *  Inport: '<Root>/circle_CH3_1'
+     *  Inport: '<Root>/ecd_CH3_1'
+     *  Inport: '<Root>/target_CH3_1'
+     *  Sum: '<S2208>/Sum2'
+     */
+    rtb_FilterCoefficient_eu = rtU.target_CH3_1 - (8191.0F * rtU.circle_CH3_1 +
+      rtU.ecd_CH3_1);
+
+    /* Abs: '<S2208>/Abs' */
+    rtb_Sum_cz = (real32_T)fabs(rtb_FilterCoefficient_eu);
+
+    /* Switch: '<S2208>/Switch2' incorporates:
+     *  Constant: '<S2208>/Constant'
+     */
+    if (!(rtb_Sum_cz > rtP.DEADBAND_CH3_1)) {
+      rtb_FilterCoefficient_eu = 0.0F;
+    }
+
+    /* End of Switch: '<S2208>/Switch2' */
+
+    /* Gain: '<S2349>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S2341>/Filter'
+     *  Gain: '<S2339>/Derivative Gain'
+     *  Sum: '<S2341>/SumD'
+     */
+    rtb_FilterCoefficient_ch = (rtP.ANG_A_D_CH3_1 * rtb_FilterCoefficient_eu -
+      rtDW.Filter_DSTATE_e4) * 100.0F;
+
+    /* Switch: '<S2208>/Switch1' incorporates:
+     *  Constant: '<S2208>/Constant'
+     *  Gain: '<S2208>/Multiply'
+     *  Inport: '<Root>/speed_rpm_CH3_1'
+     *  Saturate: '<S2353>/Saturation'
+     *  Sum: '<S2208>/Sum1'
+     */
+    if (rtb_Sum_cz > rtP.DEADBAND_CH3_1) {
+      /* Sum: '<S2355>/Sum' incorporates:
+       *  DiscreteIntegrator: '<S2346>/Integrator'
+       *  Gain: '<S2351>/Proportional Gain'
+       */
+      u0 = (rtP.ANG_A_P_CH3_1 * rtb_FilterCoefficient_eu +
+            rtDW.Integrator_DSTATE_ly) + rtb_FilterCoefficient_ch;
+
+      /* Saturate: '<S2353>/Saturation' */
+      if (u0 > 16384.0F) {
+        u0 = 16384.0F;
+      } else if (u0 < -16384.0F) {
+        u0 = -16384.0F;
+      }
+
+      rtb_Sum_cz = rtP.TRANS_CH3_1 * u0 - rtU.speed_rpm_CH3_1;
+    } else {
+      rtb_Sum_cz = 0.0F;
+    }
+
+    /* End of Switch: '<S2208>/Switch1' */
+
+    /* DiscreteIntegrator: '<S2291>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status3_1'
+     */
+    if (((rtU.reset_status3_1 > 0.0F) && (rtDW.Filter_PrevResetState_p <= 0)) ||
+        ((rtU.reset_status3_1 <= 0.0F) && (rtDW.Filter_PrevResetState_p == 1)))
+    {
+      rtDW.Filter_DSTATE_fh = 0.0F;
+    }
+
+    /* Gain: '<S2299>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S2291>/Filter'
+     *  Gain: '<S2289>/Derivative Gain'
+     *  Sum: '<S2291>/SumD'
+     */
+    rtb_FilterCoefficient_nkj = (rtP.ANG_S_D_CH3_1 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_fh) * 100.0F;
+
+    /* DiscreteIntegrator: '<S2296>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status3_1'
+     */
+    if (((rtU.reset_status3_1 > 0.0F) && (rtDW.Integrator_PrevResetState_c <= 0))
+        || ((rtU.reset_status3_1 <= 0.0F) && (rtDW.Integrator_PrevResetState_c ==
+          1))) {
+      rtDW.Integrator_DSTATE_ju = 0.0F;
+    }
+
+    /* Sum: '<S2305>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S2296>/Integrator'
+     *  Gain: '<S2301>/Proportional Gain'
+     */
+    u0 = (rtP.ANG_S_P_CH3_1 * rtb_Sum_cz + rtDW.Integrator_DSTATE_ju) +
+      rtb_FilterCoefficient_nkj;
+
+    /* Saturate: '<S2303>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/ANG_OUT_CH3_1' */
+      rtY.ANG_OUT_CH3_1 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/ANG_OUT_CH3_1' */
+      rtY.ANG_OUT_CH3_1 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/ANG_OUT_CH3_1' */
+      rtY.ANG_OUT_CH3_1 = u0;
+    }
+
+    /* End of Saturate: '<S2303>/Saturation' */
+
+    /* Chart: '<S2208>/Chart1' incorporates:
+     *  Inport: '<Root>/ecd_CH3_1'
+     *  Inport: '<Root>/last_ecd_CH3_1'
+     *  Sum: '<S2208>/Sum3'
+     */
+    Chart1(rtU.ecd_CH3_1 - rtU.last_ecd_CH3_1, &rtDW.u2_jx, &rtDW.sf_Chart1_hq);
+
+    /* Outport: '<Root>/circle_out_CH3_1' incorporates:
+     *  Inport: '<Root>/circle_CH3_1'
+     *  Sum: '<S2208>/Sum4'
+     */
+    rtY.circle_out_CH3_1 = rtDW.u2_jx + rtU.circle_CH3_1;
+
+    /* Update for DiscreteIntegrator: '<S2346>/Integrator' incorporates:
+     *  Gain: '<S2343>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_ly += rtP.ANG_A_I_CH3_1 * rtb_FilterCoefficient_eu *
+      0.001F;
+
+    /* Update for DiscreteIntegrator: '<S2341>/Filter' */
+    rtDW.Filter_DSTATE_e4 += 0.001F * rtb_FilterCoefficient_ch;
+
+    /* Update for DiscreteIntegrator: '<S2291>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S2296>/Integrator'
+     *  Inport: '<Root>/reset_status3_1'
+     */
+    rtDW.Filter_DSTATE_fh += 0.001F * rtb_FilterCoefficient_nkj;
+    if (rtU.reset_status3_1 > 0.0F) {
+      rtDW.Filter_PrevResetState_p = 1;
+      rtDW.Integrator_PrevResetState_c = 1;
+    } else {
+      if (rtU.reset_status3_1 < 0.0F) {
+        rtDW.Filter_PrevResetState_p = -1;
+      } else if (rtU.reset_status3_1 == 0.0F) {
+        rtDW.Filter_PrevResetState_p = 0;
+      } else {
+        rtDW.Filter_PrevResetState_p = 2;
+      }
+
+      if (rtU.reset_status3_1 < 0.0F) {
+        rtDW.Integrator_PrevResetState_c = -1;
+      } else if (rtU.reset_status3_1 == 0.0F) {
+        rtDW.Integrator_PrevResetState_c = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_c = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S2291>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S2296>/Integrator' incorporates:
+     *  Gain: '<S2293>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_ju += rtP.ANG_S_I_CH3_1 * rtb_Sum_cz * 0.001F;
+
+    /* End of Outputs for SubSystem: '<S15>/If Action_speed Subsystem1' */
+    break;
+  }
+
+  /* End of SwitchCase: '<S15>/Switch Case' */
+
+  /* SwitchCase: '<S16>/Switch Case' incorporates:
+   *  Inport: '<Root>/status_CH3_2'
+   */
+  switch ((int32_T)rtU.status_CH3_2) {
+   case 1:
+    /* Outputs for IfAction SubSystem: '<S16>/If Action_speed Subsystem' incorporates:
+     *  ActionPort: '<S2363>/Action Port'
+     */
+    /* Sum: '<S2363>/Sum' incorporates:
+     *  Inport: '<Root>/speed_rpm_CH3_2'
+     *  Inport: '<Root>/target_CH3_2'
+     */
+    rtb_Sum_cz = rtU.target_CH3_2 - rtU.speed_rpm_CH3_2;
+
+    /* DiscreteIntegrator: '<S2394>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status3_2'
+     */
+    if (((rtU.reset_status3_2 > 0.0F) && (rtDW.Filter_PrevResetState_j2 <= 0)) ||
+        ((rtU.reset_status3_2 <= 0.0F) && (rtDW.Filter_PrevResetState_j2 == 1)))
+    {
+      rtDW.Filter_DSTATE_no = 0.0F;
+    }
+
+    /* Gain: '<S2402>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S2394>/Filter'
+     *  Gain: '<S2392>/Derivative Gain'
+     *  Sum: '<S2394>/SumD'
+     */
+    rtb_FilterCoefficient_eu = (rtP.SPD_D_CH3_2 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_no) * 100.0F;
+
+    /* DiscreteIntegrator: '<S2399>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status3_2'
+     */
+    if (((rtU.reset_status3_2 > 0.0F) && (rtDW.Integrator_PrevResetState_bq <= 0))
+        || ((rtU.reset_status3_2 <= 0.0F) && (rtDW.Integrator_PrevResetState_bq ==
+          1))) {
+      rtDW.Integrator_DSTATE_h = 0.0F;
+    }
+
+    /* Sum: '<S2408>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S2399>/Integrator'
+     *  Gain: '<S2404>/Proportional Gain'
+     */
+    u0 = (rtP.SPD_P_CH3_2 * rtb_Sum_cz + rtDW.Integrator_DSTATE_h) +
+      rtb_FilterCoefficient_eu;
+
+    /* Saturate: '<S2406>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH3_2' */
+      rtY.SPD_OUT_CH3_2 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH3_2' */
+      rtY.SPD_OUT_CH3_2 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/SPD_OUT_CH3_2' */
+      rtY.SPD_OUT_CH3_2 = u0;
+    }
+
+    /* End of Saturate: '<S2406>/Saturation' */
+
+    /* Update for DiscreteIntegrator: '<S2394>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S2399>/Integrator'
+     *  Inport: '<Root>/reset_status3_2'
+     */
+    rtDW.Filter_DSTATE_no += 0.001F * rtb_FilterCoefficient_eu;
+    if (rtU.reset_status3_2 > 0.0F) {
+      rtDW.Filter_PrevResetState_j2 = 1;
+      rtDW.Integrator_PrevResetState_bq = 1;
+    } else {
+      if (rtU.reset_status3_2 < 0.0F) {
+        rtDW.Filter_PrevResetState_j2 = -1;
+      } else if (rtU.reset_status3_2 == 0.0F) {
+        rtDW.Filter_PrevResetState_j2 = 0;
+      } else {
+        rtDW.Filter_PrevResetState_j2 = 2;
+      }
+
+      if (rtU.reset_status3_2 < 0.0F) {
+        rtDW.Integrator_PrevResetState_bq = -1;
+      } else if (rtU.reset_status3_2 == 0.0F) {
+        rtDW.Integrator_PrevResetState_bq = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_bq = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S2394>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S2399>/Integrator' incorporates:
+     *  Gain: '<S2396>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_h += rtP.SPD_I_CH3_2 * rtb_Sum_cz * 0.001F;
+
+    /* End of Outputs for SubSystem: '<S16>/If Action_speed Subsystem' */
+    break;
+
+   case 2:
+    /* Outputs for IfAction SubSystem: '<S16>/If Action_speed Subsystem1' incorporates:
+     *  ActionPort: '<S2364>/Action Port'
+     */
+    /* Sum: '<S2364>/Sum' incorporates:
+     *  Gain: '<S2364>/Gain'
+     *  Inport: '<Root>/circle_CH3_2'
+     *  Inport: '<Root>/ecd_CH3_2'
+     *  Inport: '<Root>/target_CH3_2'
+     *  Sum: '<S2364>/Sum2'
+     */
+    rtb_FilterCoefficient_eu = rtU.target_CH3_2 - (8191.0F * rtU.circle_CH3_2 +
+      rtU.ecd_CH3_2);
+
+    /* Abs: '<S2364>/Abs' */
+    rtb_Sum_cz = (real32_T)fabs(rtb_FilterCoefficient_eu);
+
+    /* Switch: '<S2364>/Switch2' incorporates:
+     *  Constant: '<S2364>/Constant'
+     */
+    if (!(rtb_Sum_cz > rtP.DEADBAND_CH3_2)) {
+      rtb_FilterCoefficient_eu = 0.0F;
+    }
+
+    /* End of Switch: '<S2364>/Switch2' */
+
+    /* Gain: '<S2505>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S2497>/Filter'
+     *  Gain: '<S2495>/Derivative Gain'
+     *  Sum: '<S2497>/SumD'
+     */
+    rtb_FilterCoefficient_ch = (rtP.ANG_A_D_CH3_2 * rtb_FilterCoefficient_eu -
+      rtDW.Filter_DSTATE_id) * 100.0F;
+
+    /* Switch: '<S2364>/Switch1' incorporates:
+     *  Constant: '<S2364>/Constant'
+     *  Gain: '<S2364>/Multiply'
+     *  Inport: '<Root>/speed_rpm_CH3_2'
+     *  Saturate: '<S2509>/Saturation'
+     *  Sum: '<S2364>/Sum1'
+     */
+    if (rtb_Sum_cz > rtP.DEADBAND_CH3_2) {
+      /* Sum: '<S2511>/Sum' incorporates:
+       *  DiscreteIntegrator: '<S2502>/Integrator'
+       *  Gain: '<S2507>/Proportional Gain'
+       */
+      u0 = (rtP.ANG_A_P_CH3_2 * rtb_FilterCoefficient_eu +
+            rtDW.Integrator_DSTATE_du) + rtb_FilterCoefficient_ch;
+
+      /* Saturate: '<S2509>/Saturation' */
+      if (u0 > 16384.0F) {
+        u0 = 16384.0F;
+      } else if (u0 < -16384.0F) {
+        u0 = -16384.0F;
+      }
+
+      rtb_Sum_cz = rtP.TRANS_CH3_2 * u0 - rtU.speed_rpm_CH3_2;
+    } else {
+      rtb_Sum_cz = 0.0F;
+    }
+
+    /* End of Switch: '<S2364>/Switch1' */
+
+    /* DiscreteIntegrator: '<S2447>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status3_2'
+     */
+    if (((rtU.reset_status3_2 > 0.0F) && (rtDW.Filter_PrevResetState_b <= 0)) ||
+        ((rtU.reset_status3_2 <= 0.0F) && (rtDW.Filter_PrevResetState_b == 1)))
+    {
+      rtDW.Filter_DSTATE_iu = 0.0F;
+    }
+
+    /* Gain: '<S2455>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S2447>/Filter'
+     *  Gain: '<S2445>/Derivative Gain'
+     *  Sum: '<S2447>/SumD'
+     */
+    rtb_FilterCoefficient_nkj = (rtP.ANG_S_D_CH3_2 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_iu) * 100.0F;
+
+    /* DiscreteIntegrator: '<S2452>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status3_2'
+     */
+    if (((rtU.reset_status3_2 > 0.0F) && (rtDW.Integrator_PrevResetState_mv <= 0))
+        || ((rtU.reset_status3_2 <= 0.0F) && (rtDW.Integrator_PrevResetState_mv ==
+          1))) {
+      rtDW.Integrator_DSTATE_po = 0.0F;
+    }
+
+    /* Sum: '<S2461>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S2452>/Integrator'
+     *  Gain: '<S2457>/Proportional Gain'
+     */
+    u0 = (rtP.ANG_S_P_CH3_2 * rtb_Sum_cz + rtDW.Integrator_DSTATE_po) +
+      rtb_FilterCoefficient_nkj;
+
+    /* Saturate: '<S2459>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/ANG_OUT_CH3_2' */
+      rtY.ANG_OUT_CH3_2 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/ANG_OUT_CH3_2' */
+      rtY.ANG_OUT_CH3_2 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/ANG_OUT_CH3_2' */
+      rtY.ANG_OUT_CH3_2 = u0;
+    }
+
+    /* End of Saturate: '<S2459>/Saturation' */
+
+    /* Chart: '<S2364>/Chart1' incorporates:
+     *  Inport: '<Root>/ecd_CH3_2'
+     *  Inport: '<Root>/last_ecd_CH3_2'
+     *  Sum: '<S2364>/Sum3'
+     */
+    Chart1(rtU.ecd_CH3_2 - rtU.last_ecd_CH3_2, &rtDW.u2_m, &rtDW.sf_Chart1_a);
+
+    /* Outport: '<Root>/circle_out_CH3_2' incorporates:
+     *  Inport: '<Root>/circle_CH3_2'
+     *  Sum: '<S2364>/Sum4'
+     */
+    rtY.circle_out_CH3_2 = rtDW.u2_m + rtU.circle_CH3_2;
+
+    /* Update for DiscreteIntegrator: '<S2502>/Integrator' incorporates:
+     *  Gain: '<S2499>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_du += rtP.ANG_A_I_CH3_2 * rtb_FilterCoefficient_eu *
+      0.001F;
+
+    /* Update for DiscreteIntegrator: '<S2497>/Filter' */
+    rtDW.Filter_DSTATE_id += 0.001F * rtb_FilterCoefficient_ch;
+
+    /* Update for DiscreteIntegrator: '<S2447>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S2452>/Integrator'
+     *  Inport: '<Root>/reset_status3_2'
+     */
+    rtDW.Filter_DSTATE_iu += 0.001F * rtb_FilterCoefficient_nkj;
+    if (rtU.reset_status3_2 > 0.0F) {
+      rtDW.Filter_PrevResetState_b = 1;
+      rtDW.Integrator_PrevResetState_mv = 1;
+    } else {
+      if (rtU.reset_status3_2 < 0.0F) {
+        rtDW.Filter_PrevResetState_b = -1;
+      } else if (rtU.reset_status3_2 == 0.0F) {
+        rtDW.Filter_PrevResetState_b = 0;
+      } else {
+        rtDW.Filter_PrevResetState_b = 2;
+      }
+
+      if (rtU.reset_status3_2 < 0.0F) {
+        rtDW.Integrator_PrevResetState_mv = -1;
+      } else if (rtU.reset_status3_2 == 0.0F) {
+        rtDW.Integrator_PrevResetState_mv = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_mv = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S2447>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S2452>/Integrator' incorporates:
+     *  Gain: '<S2449>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_po += rtP.ANG_S_I_CH3_2 * rtb_Sum_cz * 0.001F;
+
+    /* End of Outputs for SubSystem: '<S16>/If Action_speed Subsystem1' */
+    break;
+  }
+
+  /* End of SwitchCase: '<S16>/Switch Case' */
+
+  /* SwitchCase: '<S17>/Switch Case' incorporates:
+   *  Inport: '<Root>/status_CH3_3'
+   */
+  switch ((int32_T)rtU.status_CH3_3) {
+   case 1:
+    /* Outputs for IfAction SubSystem: '<S17>/If Action_speed Subsystem' incorporates:
+     *  ActionPort: '<S2519>/Action Port'
+     */
+    /* Sum: '<S2519>/Sum' incorporates:
+     *  Inport: '<Root>/speed_rpm_CH3_3'
+     *  Inport: '<Root>/target_CH3_3'
+     */
+    rtb_Sum_cz = rtU.target_CH3_3 - rtU.speed_rpm_CH3_3;
+
+    /* DiscreteIntegrator: '<S2550>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status3_3'
+     */
+    if (((rtU.reset_status3_3 > 0.0F) && (rtDW.Filter_PrevResetState_j <= 0)) ||
+        ((rtU.reset_status3_3 <= 0.0F) && (rtDW.Filter_PrevResetState_j == 1)))
+    {
+      rtDW.Filter_DSTATE_b = 0.0F;
+    }
+
+    /* Gain: '<S2558>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S2550>/Filter'
+     *  Gain: '<S2548>/Derivative Gain'
+     *  Sum: '<S2550>/SumD'
+     */
+    rtb_FilterCoefficient_eu = (rtP.SPD_D_CH3_3 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_b) * 100.0F;
+
+    /* DiscreteIntegrator: '<S2555>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status3_3'
+     */
+    if (((rtU.reset_status3_3 > 0.0F) && (rtDW.Integrator_PrevResetState_bs <= 0))
+        || ((rtU.reset_status3_3 <= 0.0F) && (rtDW.Integrator_PrevResetState_bs ==
+          1))) {
+      rtDW.Integrator_DSTATE_d = 0.0F;
+    }
+
+    /* Sum: '<S2564>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S2555>/Integrator'
+     *  Gain: '<S2560>/Proportional Gain'
+     */
+    u0 = (rtP.SPD_P_CH3_3 * rtb_Sum_cz + rtDW.Integrator_DSTATE_d) +
+      rtb_FilterCoefficient_eu;
+
+    /* Saturate: '<S2562>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH3_3' */
+      rtY.SPD_OUT_CH3_3 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH3_3' */
+      rtY.SPD_OUT_CH3_3 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/SPD_OUT_CH3_3' */
+      rtY.SPD_OUT_CH3_3 = u0;
+    }
+
+    /* End of Saturate: '<S2562>/Saturation' */
+
+    /* Update for DiscreteIntegrator: '<S2550>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S2555>/Integrator'
+     *  Inport: '<Root>/reset_status3_3'
+     */
+    rtDW.Filter_DSTATE_b += 0.001F * rtb_FilterCoefficient_eu;
+    if (rtU.reset_status3_3 > 0.0F) {
+      rtDW.Filter_PrevResetState_j = 1;
+      rtDW.Integrator_PrevResetState_bs = 1;
+    } else {
+      if (rtU.reset_status3_3 < 0.0F) {
+        rtDW.Filter_PrevResetState_j = -1;
+      } else if (rtU.reset_status3_3 == 0.0F) {
+        rtDW.Filter_PrevResetState_j = 0;
+      } else {
+        rtDW.Filter_PrevResetState_j = 2;
+      }
+
+      if (rtU.reset_status3_3 < 0.0F) {
+        rtDW.Integrator_PrevResetState_bs = -1;
+      } else if (rtU.reset_status3_3 == 0.0F) {
+        rtDW.Integrator_PrevResetState_bs = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_bs = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S2550>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S2555>/Integrator' incorporates:
+     *  Gain: '<S2552>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_d += rtP.SPD_I_CH3_3 * rtb_Sum_cz * 0.001F;
+
+    /* End of Outputs for SubSystem: '<S17>/If Action_speed Subsystem' */
+    break;
+
+   case 2:
+    /* Outputs for IfAction SubSystem: '<S17>/If Action_speed Subsystem1' incorporates:
+     *  ActionPort: '<S2520>/Action Port'
+     */
+    /* Sum: '<S2520>/Sum' incorporates:
+     *  Gain: '<S2520>/Gain'
+     *  Inport: '<Root>/circle_CH3_3'
+     *  Inport: '<Root>/ecd_CH3_3'
+     *  Inport: '<Root>/target_CH3_3'
+     *  Sum: '<S2520>/Sum2'
+     */
+    rtb_FilterCoefficient_eu = rtU.target_CH3_3 - (8191.0F * rtU.circle_CH3_3 +
+      rtU.ecd_CH3_3);
+
+    /* Abs: '<S2520>/Abs' */
+    rtb_Sum_cz = (real32_T)fabs(rtb_FilterCoefficient_eu);
+
+    /* Switch: '<S2520>/Switch2' incorporates:
+     *  Constant: '<S2520>/Constant'
+     */
+    if (!(rtb_Sum_cz > rtP.DEADBAND_CH3_3)) {
+      rtb_FilterCoefficient_eu = 0.0F;
+    }
+
+    /* End of Switch: '<S2520>/Switch2' */
+
+    /* Gain: '<S2661>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S2653>/Filter'
+     *  Gain: '<S2651>/Derivative Gain'
+     *  Sum: '<S2653>/SumD'
+     */
+    rtb_FilterCoefficient_ch = (rtP.ANG_A_D_CH3_3 * rtb_FilterCoefficient_eu -
+      rtDW.Filter_DSTATE_a) * 100.0F;
+
+    /* Switch: '<S2520>/Switch1' incorporates:
+     *  Constant: '<S2520>/Constant'
+     *  Gain: '<S2520>/Multiply'
+     *  Inport: '<Root>/speed_rpm_CH3_3'
+     *  Saturate: '<S2665>/Saturation'
+     *  Sum: '<S2520>/Sum1'
+     */
+    if (rtb_Sum_cz > rtP.DEADBAND_CH3_3) {
+      /* Sum: '<S2667>/Sum' incorporates:
+       *  DiscreteIntegrator: '<S2658>/Integrator'
+       *  Gain: '<S2663>/Proportional Gain'
+       */
+      u0 = (rtP.ANG_A_P_CH3_3 * rtb_FilterCoefficient_eu +
+            rtDW.Integrator_DSTATE_p) + rtb_FilterCoefficient_ch;
+
+      /* Saturate: '<S2665>/Saturation' */
+      if (u0 > 16384.0F) {
+        u0 = 16384.0F;
+      } else if (u0 < -16384.0F) {
+        u0 = -16384.0F;
+      }
+
+      rtb_Sum_cz = rtP.TRANS_CH3_3 * u0 - rtU.speed_rpm_CH3_3;
+    } else {
+      rtb_Sum_cz = 0.0F;
+    }
+
+    /* End of Switch: '<S2520>/Switch1' */
+
+    /* DiscreteIntegrator: '<S2603>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status3_3'
+     */
+    if (((rtU.reset_status3_3 > 0.0F) && (rtDW.Filter_PrevResetState_el <= 0)) ||
+        ((rtU.reset_status3_3 <= 0.0F) && (rtDW.Filter_PrevResetState_el == 1)))
+    {
+      rtDW.Filter_DSTATE_of = 0.0F;
+    }
+
+    /* Gain: '<S2611>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S2603>/Filter'
+     *  Gain: '<S2601>/Derivative Gain'
+     *  Sum: '<S2603>/SumD'
+     */
+    rtb_FilterCoefficient_nkj = (rtP.ANG_S_D_CH3_3 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_of) * 100.0F;
+
+    /* DiscreteIntegrator: '<S2608>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status3_3'
+     */
+    if (((rtU.reset_status3_3 > 0.0F) && (rtDW.Integrator_PrevResetState_e <= 0))
+        || ((rtU.reset_status3_3 <= 0.0F) && (rtDW.Integrator_PrevResetState_e ==
+          1))) {
+      rtDW.Integrator_DSTATE_ka = 0.0F;
+    }
+
+    /* Sum: '<S2617>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S2608>/Integrator'
+     *  Gain: '<S2613>/Proportional Gain'
+     */
+    u0 = (rtP.ANG_S_P_CH3_3 * rtb_Sum_cz + rtDW.Integrator_DSTATE_ka) +
+      rtb_FilterCoefficient_nkj;
+
+    /* Saturate: '<S2615>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/ANG_OUT_CH3_3' */
+      rtY.ANG_OUT_CH3_3 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/ANG_OUT_CH3_3' */
+      rtY.ANG_OUT_CH3_3 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/ANG_OUT_CH3_3' */
+      rtY.ANG_OUT_CH3_3 = u0;
+    }
+
+    /* End of Saturate: '<S2615>/Saturation' */
+
+    /* Chart: '<S2520>/Chart1' incorporates:
+     *  Inport: '<Root>/ecd_CH3_3'
+     *  Inport: '<Root>/last_ecd_CH3_3'
+     *  Sum: '<S2520>/Sum3'
+     */
+    Chart1(rtU.ecd_CH3_3 - rtU.last_ecd_CH3_3, &rtDW.u2_n, &rtDW.sf_Chart1_kh);
+
+    /* Outport: '<Root>/circle_out_CH3_3' incorporates:
+     *  Inport: '<Root>/circle_CH3_3'
+     *  Sum: '<S2520>/Sum4'
+     */
+    rtY.circle_out_CH3_3 = rtDW.u2_n + rtU.circle_CH3_3;
+
+    /* Update for DiscreteIntegrator: '<S2658>/Integrator' incorporates:
+     *  Gain: '<S2655>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_p += rtP.ANG_A_I_CH3_3 * rtb_FilterCoefficient_eu *
+      0.001F;
+
+    /* Update for DiscreteIntegrator: '<S2653>/Filter' */
+    rtDW.Filter_DSTATE_a += 0.001F * rtb_FilterCoefficient_ch;
+
+    /* Update for DiscreteIntegrator: '<S2603>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S2608>/Integrator'
+     *  Inport: '<Root>/reset_status3_3'
+     */
+    rtDW.Filter_DSTATE_of += 0.001F * rtb_FilterCoefficient_nkj;
+    if (rtU.reset_status3_3 > 0.0F) {
+      rtDW.Filter_PrevResetState_el = 1;
+      rtDW.Integrator_PrevResetState_e = 1;
+    } else {
+      if (rtU.reset_status3_3 < 0.0F) {
+        rtDW.Filter_PrevResetState_el = -1;
+      } else if (rtU.reset_status3_3 == 0.0F) {
+        rtDW.Filter_PrevResetState_el = 0;
+      } else {
+        rtDW.Filter_PrevResetState_el = 2;
+      }
+
+      if (rtU.reset_status3_3 < 0.0F) {
+        rtDW.Integrator_PrevResetState_e = -1;
+      } else if (rtU.reset_status3_3 == 0.0F) {
+        rtDW.Integrator_PrevResetState_e = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_e = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S2603>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S2608>/Integrator' incorporates:
+     *  Gain: '<S2605>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_ka += rtP.ANG_S_I_CH3_3 * rtb_Sum_cz * 0.001F;
+
+    /* End of Outputs for SubSystem: '<S17>/If Action_speed Subsystem1' */
+    break;
+  }
+
+  /* End of SwitchCase: '<S17>/Switch Case' */
+
+  /* SwitchCase: '<S18>/Switch Case' incorporates:
+   *  Inport: '<Root>/status_CH3_4'
+   */
+  switch ((int32_T)rtU.status_CH3_4) {
+   case 1:
+    /* Outputs for IfAction SubSystem: '<S18>/If Action_speed Subsystem' incorporates:
+     *  ActionPort: '<S2675>/Action Port'
+     */
+    /* Sum: '<S2675>/Sum' incorporates:
+     *  Inport: '<Root>/speed_rpm_CH3_4'
+     *  Inport: '<Root>/target_CH3_4'
+     */
+    rtb_Sum_cz = rtU.target_CH3_4 - rtU.speed_rpm_CH3_4;
+
+    /* DiscreteIntegrator: '<S2706>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status3_4'
+     */
+    if (((rtU.reset_status3_4 > 0.0F) && (rtDW.Filter_PrevResetState_e2 <= 0)) ||
+        ((rtU.reset_status3_4 <= 0.0F) && (rtDW.Filter_PrevResetState_e2 == 1)))
+    {
+      rtDW.Filter_DSTATE_k = 0.0F;
+    }
+
+    /* Gain: '<S2714>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S2706>/Filter'
+     *  Gain: '<S2704>/Derivative Gain'
+     *  Sum: '<S2706>/SumD'
+     */
+    rtb_FilterCoefficient_eu = (rtP.SPD_D_CH3_4 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_k) * 100.0F;
+
+    /* DiscreteIntegrator: '<S2711>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status3_4'
+     */
+    if (((rtU.reset_status3_4 > 0.0F) && (rtDW.Integrator_PrevResetState_n <= 0))
+        || ((rtU.reset_status3_4 <= 0.0F) && (rtDW.Integrator_PrevResetState_n ==
+          1))) {
+      rtDW.Integrator_DSTATE_nm = 0.0F;
+    }
+
+    /* Sum: '<S2720>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S2711>/Integrator'
+     *  Gain: '<S2716>/Proportional Gain'
+     */
+    u0 = (rtP.SPD_P_CH3_4 * rtb_Sum_cz + rtDW.Integrator_DSTATE_nm) +
+      rtb_FilterCoefficient_eu;
+
+    /* Saturate: '<S2718>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH3_4' */
+      rtY.SPD_OUT_CH3_4 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH3_4' */
+      rtY.SPD_OUT_CH3_4 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/SPD_OUT_CH3_4' */
+      rtY.SPD_OUT_CH3_4 = u0;
+    }
+
+    /* End of Saturate: '<S2718>/Saturation' */
+
+    /* Update for DiscreteIntegrator: '<S2706>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S2711>/Integrator'
+     *  Inport: '<Root>/reset_status3_4'
+     */
+    rtDW.Filter_DSTATE_k += 0.001F * rtb_FilterCoefficient_eu;
+    if (rtU.reset_status3_4 > 0.0F) {
+      rtDW.Filter_PrevResetState_e2 = 1;
+      rtDW.Integrator_PrevResetState_n = 1;
+    } else {
+      if (rtU.reset_status3_4 < 0.0F) {
+        rtDW.Filter_PrevResetState_e2 = -1;
+      } else if (rtU.reset_status3_4 == 0.0F) {
+        rtDW.Filter_PrevResetState_e2 = 0;
+      } else {
+        rtDW.Filter_PrevResetState_e2 = 2;
+      }
+
+      if (rtU.reset_status3_4 < 0.0F) {
+        rtDW.Integrator_PrevResetState_n = -1;
+      } else if (rtU.reset_status3_4 == 0.0F) {
+        rtDW.Integrator_PrevResetState_n = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_n = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S2706>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S2711>/Integrator' incorporates:
+     *  Gain: '<S2708>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_nm += rtP.SPD_I_CH3_4 * rtb_Sum_cz * 0.001F;
+
+    /* End of Outputs for SubSystem: '<S18>/If Action_speed Subsystem' */
+    break;
+
+   case 2:
+    /* Outputs for IfAction SubSystem: '<S18>/If Action_speed Subsystem1' incorporates:
+     *  ActionPort: '<S2676>/Action Port'
+     */
+    /* Sum: '<S2676>/Sum' incorporates:
+     *  Gain: '<S2676>/Gain'
+     *  Inport: '<Root>/circle_CH3_4'
+     *  Inport: '<Root>/ecd_CH3_4'
+     *  Inport: '<Root>/target_CH3_4'
+     *  Sum: '<S2676>/Sum2'
+     */
+    rtb_FilterCoefficient_eu = rtU.target_CH3_4 - (8191.0F * rtU.circle_CH3_4 +
+      rtU.ecd_CH3_4);
+
+    /* Abs: '<S2676>/Abs' */
+    rtb_Sum_cz = (real32_T)fabs(rtb_FilterCoefficient_eu);
+
+    /* Switch: '<S2676>/Switch2' incorporates:
+     *  Constant: '<S2676>/Constant'
+     */
+    if (!(rtb_Sum_cz > rtP.DEADBAND_CH3_4)) {
+      rtb_FilterCoefficient_eu = 0.0F;
+    }
+
+    /* End of Switch: '<S2676>/Switch2' */
+
+    /* Gain: '<S2817>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S2809>/Filter'
+     *  Gain: '<S2807>/Derivative Gain'
+     *  Sum: '<S2809>/SumD'
+     */
+    rtb_FilterCoefficient_ch = (rtP.ANG_A_D_CH3_4 * rtb_FilterCoefficient_eu -
+      rtDW.Filter_DSTATE_ip) * 100.0F;
+
+    /* Switch: '<S2676>/Switch1' incorporates:
+     *  Constant: '<S2676>/Constant'
+     *  Gain: '<S2676>/Multiply'
+     *  Inport: '<Root>/speed_rpm_CH3_4'
+     *  Saturate: '<S2821>/Saturation'
+     *  Sum: '<S2676>/Sum1'
+     */
+    if (rtb_Sum_cz > rtP.DEADBAND_CH3_4) {
+      /* Sum: '<S2823>/Sum' incorporates:
+       *  DiscreteIntegrator: '<S2814>/Integrator'
+       *  Gain: '<S2819>/Proportional Gain'
+       */
+      u0 = (rtP.ANG_A_P_CH3_4 * rtb_FilterCoefficient_eu +
+            rtDW.Integrator_DSTATE_j) + rtb_FilterCoefficient_ch;
+
+      /* Saturate: '<S2821>/Saturation' */
+      if (u0 > 16384.0F) {
+        u0 = 16384.0F;
+      } else if (u0 < -16384.0F) {
+        u0 = -16384.0F;
+      }
+
+      rtb_Sum_cz = rtP.TRANS_CH3_4 * u0 - rtU.speed_rpm_CH3_4;
+    } else {
+      rtb_Sum_cz = 0.0F;
+    }
+
+    /* End of Switch: '<S2676>/Switch1' */
+
+    /* DiscreteIntegrator: '<S2759>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status3_4'
+     */
+    if (((rtU.reset_status3_4 > 0.0F) && (rtDW.Filter_PrevResetState_d <= 0)) ||
+        ((rtU.reset_status3_4 <= 0.0F) && (rtDW.Filter_PrevResetState_d == 1)))
+    {
+      rtDW.Filter_DSTATE_f = 0.0F;
+    }
+
+    /* Gain: '<S2767>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S2759>/Filter'
+     *  Gain: '<S2757>/Derivative Gain'
+     *  Sum: '<S2759>/SumD'
+     */
+    rtb_FilterCoefficient_nkj = (rtP.ANG_S_D_CH3_4 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_f) * 100.0F;
+
+    /* DiscreteIntegrator: '<S2764>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status3_4'
+     */
+    if (((rtU.reset_status3_4 > 0.0F) && (rtDW.Integrator_PrevResetState_g <= 0))
+        || ((rtU.reset_status3_4 <= 0.0F) && (rtDW.Integrator_PrevResetState_g ==
+          1))) {
+      rtDW.Integrator_DSTATE_l = 0.0F;
+    }
+
+    /* Sum: '<S2773>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S2764>/Integrator'
+     *  Gain: '<S2769>/Proportional Gain'
+     */
+    u0 = (rtP.ANG_S_P_CH3_4 * rtb_Sum_cz + rtDW.Integrator_DSTATE_l) +
+      rtb_FilterCoefficient_nkj;
+
+    /* Saturate: '<S2771>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/ANG_OUT_CH3_4' */
+      rtY.ANG_OUT_CH3_4 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/ANG_OUT_CH3_4' */
+      rtY.ANG_OUT_CH3_4 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/ANG_OUT_CH3_4' */
+      rtY.ANG_OUT_CH3_4 = u0;
+    }
+
+    /* End of Saturate: '<S2771>/Saturation' */
+
+    /* Chart: '<S2676>/Chart1' incorporates:
+     *  Inport: '<Root>/ecd_CH3_4'
+     *  Inport: '<Root>/last_ecd_CH3_4'
+     *  Sum: '<S2676>/Sum3'
+     */
+    Chart1(rtU.ecd_CH3_4 - rtU.last_ecd_CH3_4, &rtDW.u2_j, &rtDW.sf_Chart1_i);
+
+    /* Outport: '<Root>/circle_out_CH3_4' incorporates:
+     *  Inport: '<Root>/circle_CH3_4'
+     *  Sum: '<S2676>/Sum4'
+     */
+    rtY.circle_out_CH3_4 = rtDW.u2_j + rtU.circle_CH3_4;
+
+    /* Update for DiscreteIntegrator: '<S2814>/Integrator' incorporates:
+     *  Gain: '<S2811>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_j += rtP.ANG_A_I_CH3_4 * rtb_FilterCoefficient_eu *
+      0.001F;
+
+    /* Update for DiscreteIntegrator: '<S2809>/Filter' */
+    rtDW.Filter_DSTATE_ip += 0.001F * rtb_FilterCoefficient_ch;
+
+    /* Update for DiscreteIntegrator: '<S2759>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S2764>/Integrator'
+     *  Inport: '<Root>/reset_status3_4'
+     */
+    rtDW.Filter_DSTATE_f += 0.001F * rtb_FilterCoefficient_nkj;
+    if (rtU.reset_status3_4 > 0.0F) {
+      rtDW.Filter_PrevResetState_d = 1;
+      rtDW.Integrator_PrevResetState_g = 1;
+    } else {
+      if (rtU.reset_status3_4 < 0.0F) {
+        rtDW.Filter_PrevResetState_d = -1;
+      } else if (rtU.reset_status3_4 == 0.0F) {
+        rtDW.Filter_PrevResetState_d = 0;
+      } else {
+        rtDW.Filter_PrevResetState_d = 2;
+      }
+
+      if (rtU.reset_status3_4 < 0.0F) {
+        rtDW.Integrator_PrevResetState_g = -1;
+      } else if (rtU.reset_status3_4 == 0.0F) {
+        rtDW.Integrator_PrevResetState_g = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_g = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S2759>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S2764>/Integrator' incorporates:
+     *  Gain: '<S2761>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_l += rtP.ANG_S_I_CH3_4 * rtb_Sum_cz * 0.001F;
+
+    /* End of Outputs for SubSystem: '<S18>/If Action_speed Subsystem1' */
+    break;
+  }
+
+  /* End of SwitchCase: '<S18>/Switch Case' */
+
+  /* SwitchCase: '<S19>/Switch Case' incorporates:
+   *  Inport: '<Root>/status_CH3_5'
+   */
+  switch ((int32_T)rtU.status_CH3_5) {
+   case 1:
+    /* Outputs for IfAction SubSystem: '<S19>/If Action_speed Subsystem' incorporates:
+     *  ActionPort: '<S2831>/Action Port'
+     */
+    /* Sum: '<S2831>/Sum' incorporates:
+     *  Inport: '<Root>/speed_rpm_CH3_5'
+     *  Inport: '<Root>/target_CH3_5'
+     */
+    rtb_Sum_cz = rtU.target_CH3_5 - rtU.speed_rpm_CH3_5;
+
+    /* DiscreteIntegrator: '<S2862>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status3_5'
+     */
+    if (((rtU.reset_status3_5 > 0.0F) && (rtDW.Filter_PrevResetState_n <= 0)) ||
+        ((rtU.reset_status3_5 <= 0.0F) && (rtDW.Filter_PrevResetState_n == 1)))
+    {
+      rtDW.Filter_DSTATE_jy = 0.0F;
+    }
+
+    /* Gain: '<S2870>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S2862>/Filter'
+     *  Gain: '<S2860>/Derivative Gain'
+     *  Sum: '<S2862>/SumD'
+     */
+    rtb_FilterCoefficient_eu = (rtP.SPD_D_CH3_5 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_jy) * 100.0F;
+
+    /* DiscreteIntegrator: '<S2867>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status3_5'
+     */
+    if (((rtU.reset_status3_5 > 0.0F) && (rtDW.Integrator_PrevResetState_py <= 0))
+        || ((rtU.reset_status3_5 <= 0.0F) && (rtDW.Integrator_PrevResetState_py ==
+          1))) {
+      rtDW.Integrator_DSTATE_f = 0.0F;
+    }
+
+    /* Sum: '<S2876>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S2867>/Integrator'
+     *  Gain: '<S2872>/Proportional Gain'
+     */
+    u0 = (rtP.SPD_P_CH3_5 * rtb_Sum_cz + rtDW.Integrator_DSTATE_f) +
+      rtb_FilterCoefficient_eu;
+
+    /* Saturate: '<S2874>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH3_5' */
+      rtY.SPD_OUT_CH3_5 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH3_5' */
+      rtY.SPD_OUT_CH3_5 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/SPD_OUT_CH3_5' */
+      rtY.SPD_OUT_CH3_5 = u0;
+    }
+
+    /* End of Saturate: '<S2874>/Saturation' */
+
+    /* Update for DiscreteIntegrator: '<S2862>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S2867>/Integrator'
+     *  Inport: '<Root>/reset_status3_5'
+     */
+    rtDW.Filter_DSTATE_jy += 0.001F * rtb_FilterCoefficient_eu;
+    if (rtU.reset_status3_5 > 0.0F) {
+      rtDW.Filter_PrevResetState_n = 1;
+      rtDW.Integrator_PrevResetState_py = 1;
+    } else {
+      if (rtU.reset_status3_5 < 0.0F) {
+        rtDW.Filter_PrevResetState_n = -1;
+      } else if (rtU.reset_status3_5 == 0.0F) {
+        rtDW.Filter_PrevResetState_n = 0;
+      } else {
+        rtDW.Filter_PrevResetState_n = 2;
+      }
+
+      if (rtU.reset_status3_5 < 0.0F) {
+        rtDW.Integrator_PrevResetState_py = -1;
+      } else if (rtU.reset_status3_5 == 0.0F) {
+        rtDW.Integrator_PrevResetState_py = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_py = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S2862>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S2867>/Integrator' incorporates:
+     *  Gain: '<S2864>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_f += rtP.SPD_I_CH3_5 * rtb_Sum_cz * 0.001F;
+
+    /* End of Outputs for SubSystem: '<S19>/If Action_speed Subsystem' */
+    break;
+
+   case 2:
+    /* Outputs for IfAction SubSystem: '<S19>/If Action_speed Subsystem1' incorporates:
+     *  ActionPort: '<S2832>/Action Port'
+     */
+    /* Sum: '<S2832>/Sum' incorporates:
+     *  Gain: '<S2832>/Gain'
+     *  Inport: '<Root>/circle_CH3_5'
+     *  Inport: '<Root>/ecd_CH3_5'
+     *  Inport: '<Root>/target_CH3_5'
+     *  Sum: '<S2832>/Sum2'
+     */
+    rtb_FilterCoefficient_eu = rtU.target_CH3_5 - (8191.0F * rtU.circle_CH3_5 +
+      rtU.ecd_CH3_5);
+
+    /* Abs: '<S2832>/Abs' */
+    rtb_Sum_cz = (real32_T)fabs(rtb_FilterCoefficient_eu);
+
+    /* Switch: '<S2832>/Switch2' incorporates:
+     *  Constant: '<S2832>/Constant'
+     */
+    if (!(rtb_Sum_cz > rtP.DEADBAND_CH3_5)) {
+      rtb_FilterCoefficient_eu = 0.0F;
+    }
+
+    /* End of Switch: '<S2832>/Switch2' */
+
+    /* Gain: '<S2973>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S2965>/Filter'
+     *  Gain: '<S2963>/Derivative Gain'
+     *  Sum: '<S2965>/SumD'
+     */
+    rtb_FilterCoefficient_ch = (rtP.ANG_A_D_CH3_5 * rtb_FilterCoefficient_eu -
+      rtDW.Filter_DSTATE_e) * 100.0F;
+
+    /* Switch: '<S2832>/Switch1' incorporates:
+     *  Constant: '<S2832>/Constant'
+     *  Gain: '<S2832>/Multiply'
+     *  Inport: '<Root>/speed_rpm_CH3_5'
+     *  Saturate: '<S2977>/Saturation'
+     *  Sum: '<S2832>/Sum1'
+     */
+    if (rtb_Sum_cz > rtP.DEADBAND_CH3_5) {
+      /* Sum: '<S2979>/Sum' incorporates:
+       *  DiscreteIntegrator: '<S2970>/Integrator'
+       *  Gain: '<S2975>/Proportional Gain'
+       */
+      u0 = (rtP.ANG_A_P_CH3_5 * rtb_FilterCoefficient_eu +
+            rtDW.Integrator_DSTATE_i0) + rtb_FilterCoefficient_ch;
+
+      /* Saturate: '<S2977>/Saturation' */
+      if (u0 > 16384.0F) {
+        u0 = 16384.0F;
+      } else if (u0 < -16384.0F) {
+        u0 = -16384.0F;
+      }
+
+      rtb_Sum_cz = rtP.TRANS_CH3_5 * u0 - rtU.speed_rpm_CH3_5;
+    } else {
+      rtb_Sum_cz = 0.0F;
+    }
+
+    /* End of Switch: '<S2832>/Switch1' */
+
+    /* DiscreteIntegrator: '<S2915>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status3_5'
+     */
+    if (((rtU.reset_status3_5 > 0.0F) && (rtDW.Filter_PrevResetState_e <= 0)) ||
+        ((rtU.reset_status3_5 <= 0.0F) && (rtDW.Filter_PrevResetState_e == 1)))
+    {
+      rtDW.Filter_DSTATE_o = 0.0F;
+    }
+
+    /* Gain: '<S2923>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S2915>/Filter'
+     *  Gain: '<S2913>/Derivative Gain'
+     *  Sum: '<S2915>/SumD'
+     */
+    rtb_FilterCoefficient_nkj = (rtP.ANG_S_D_CH3_5 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_o) * 100.0F;
+
+    /* DiscreteIntegrator: '<S2920>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status3_5'
+     */
+    if (((rtU.reset_status3_5 > 0.0F) && (rtDW.Integrator_PrevResetState_m <= 0))
+        || ((rtU.reset_status3_5 <= 0.0F) && (rtDW.Integrator_PrevResetState_m ==
+          1))) {
+      rtDW.Integrator_DSTATE_oc = 0.0F;
+    }
+
+    /* Sum: '<S2929>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S2920>/Integrator'
+     *  Gain: '<S2925>/Proportional Gain'
+     */
+    u0 = (rtP.ANG_S_P_CH3_5 * rtb_Sum_cz + rtDW.Integrator_DSTATE_oc) +
+      rtb_FilterCoefficient_nkj;
+
+    /* Saturate: '<S2927>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/ANG_OUT_CH3_5' */
+      rtY.ANG_OUT_CH3_5 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/ANG_OUT_CH3_5' */
+      rtY.ANG_OUT_CH3_5 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/ANG_OUT_CH3_5' */
+      rtY.ANG_OUT_CH3_5 = u0;
+    }
+
+    /* End of Saturate: '<S2927>/Saturation' */
+
+    /* Chart: '<S2832>/Chart1' incorporates:
+     *  Inport: '<Root>/ecd_CH3_5'
+     *  Inport: '<Root>/last_ecd_CH3_5'
+     *  Sum: '<S2832>/Sum3'
+     */
+    Chart1(rtU.ecd_CH3_5 - rtU.last_ecd_CH3_5, &rtDW.u2_p, &rtDW.sf_Chart1_df);
+
+    /* Outport: '<Root>/circle_out_CH3_5' incorporates:
+     *  Inport: '<Root>/circle_CH3_5'
+     *  Sum: '<S2832>/Sum4'
+     */
+    rtY.circle_out_CH3_5 = rtDW.u2_p + rtU.circle_CH3_5;
+
+    /* Update for DiscreteIntegrator: '<S2970>/Integrator' incorporates:
+     *  Gain: '<S2967>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_i0 += rtP.ANG_A_I_CH3_5 * rtb_FilterCoefficient_eu *
+      0.001F;
+
+    /* Update for DiscreteIntegrator: '<S2965>/Filter' */
+    rtDW.Filter_DSTATE_e += 0.001F * rtb_FilterCoefficient_ch;
+
+    /* Update for DiscreteIntegrator: '<S2915>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S2920>/Integrator'
+     *  Inport: '<Root>/reset_status3_5'
+     */
+    rtDW.Filter_DSTATE_o += 0.001F * rtb_FilterCoefficient_nkj;
+    if (rtU.reset_status3_5 > 0.0F) {
+      rtDW.Filter_PrevResetState_e = 1;
+      rtDW.Integrator_PrevResetState_m = 1;
+    } else {
+      if (rtU.reset_status3_5 < 0.0F) {
+        rtDW.Filter_PrevResetState_e = -1;
+      } else if (rtU.reset_status3_5 == 0.0F) {
+        rtDW.Filter_PrevResetState_e = 0;
+      } else {
+        rtDW.Filter_PrevResetState_e = 2;
+      }
+
+      if (rtU.reset_status3_5 < 0.0F) {
+        rtDW.Integrator_PrevResetState_m = -1;
+      } else if (rtU.reset_status3_5 == 0.0F) {
+        rtDW.Integrator_PrevResetState_m = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_m = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S2915>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S2920>/Integrator' incorporates:
+     *  Gain: '<S2917>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_oc += rtP.ANG_S_I_CH3_5 * rtb_Sum_cz * 0.001F;
+
+    /* End of Outputs for SubSystem: '<S19>/If Action_speed Subsystem1' */
+    break;
+  }
+
+  /* End of SwitchCase: '<S19>/Switch Case' */
+
+  /* SwitchCase: '<S20>/Switch Case' incorporates:
+   *  Inport: '<Root>/status_CH3_6'
+   */
+  switch ((int32_T)rtU.status_CH3_6) {
+   case 1:
+    /* Outputs for IfAction SubSystem: '<S20>/If Action_speed Subsystem' incorporates:
+     *  ActionPort: '<S2987>/Action Port'
+     */
+    /* Sum: '<S2987>/Sum' incorporates:
+     *  Inport: '<Root>/speed_rpm_CH3_6'
+     *  Inport: '<Root>/target_CH3_6'
+     */
+    rtb_Sum_cz = rtU.target_CH3_6 - rtU.speed_rpm_CH3_6;
+
+    /* DiscreteIntegrator: '<S3018>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status3_6'
+     */
+    if (((rtU.reset_status3_6 > 0.0F) && (rtDW.Filter_PrevResetState_lk <= 0)) ||
+        ((rtU.reset_status3_6 <= 0.0F) && (rtDW.Filter_PrevResetState_lk == 1)))
+    {
+      rtDW.Filter_DSTATE_jo = 0.0F;
+    }
+
+    /* Gain: '<S3026>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S3018>/Filter'
+     *  Gain: '<S3016>/Derivative Gain'
+     *  Sum: '<S3018>/SumD'
+     */
+    rtb_FilterCoefficient_eu = (rtP.SPD_D_CH3_6 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_jo) * 100.0F;
+
+    /* DiscreteIntegrator: '<S3023>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status3_6'
+     */
+    if (((rtU.reset_status3_6 > 0.0F) && (rtDW.Integrator_PrevResetState_o <= 0))
+        || ((rtU.reset_status3_6 <= 0.0F) && (rtDW.Integrator_PrevResetState_o ==
+          1))) {
+      rtDW.Integrator_DSTATE_n = 0.0F;
+    }
+
+    /* Sum: '<S3032>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S3023>/Integrator'
+     *  Gain: '<S3028>/Proportional Gain'
+     */
+    u0 = (rtP.SPD_P_CH3_6 * rtb_Sum_cz + rtDW.Integrator_DSTATE_n) +
+      rtb_FilterCoefficient_eu;
+
+    /* Saturate: '<S3030>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH3_6' */
+      rtY.SPD_OUT_CH3_6 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH3_6' */
+      rtY.SPD_OUT_CH3_6 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/SPD_OUT_CH3_6' */
+      rtY.SPD_OUT_CH3_6 = u0;
+    }
+
+    /* End of Saturate: '<S3030>/Saturation' */
+
+    /* Update for DiscreteIntegrator: '<S3018>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S3023>/Integrator'
+     *  Inport: '<Root>/reset_status3_6'
+     */
+    rtDW.Filter_DSTATE_jo += 0.001F * rtb_FilterCoefficient_eu;
+    if (rtU.reset_status3_6 > 0.0F) {
+      rtDW.Filter_PrevResetState_lk = 1;
+      rtDW.Integrator_PrevResetState_o = 1;
+    } else {
+      if (rtU.reset_status3_6 < 0.0F) {
+        rtDW.Filter_PrevResetState_lk = -1;
+      } else if (rtU.reset_status3_6 == 0.0F) {
+        rtDW.Filter_PrevResetState_lk = 0;
+      } else {
+        rtDW.Filter_PrevResetState_lk = 2;
+      }
+
+      if (rtU.reset_status3_6 < 0.0F) {
+        rtDW.Integrator_PrevResetState_o = -1;
+      } else if (rtU.reset_status3_6 == 0.0F) {
+        rtDW.Integrator_PrevResetState_o = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_o = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S3018>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S3023>/Integrator' incorporates:
+     *  Gain: '<S3020>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_n += rtP.SPD_I_CH3_6 * rtb_Sum_cz * 0.001F;
+
+    /* End of Outputs for SubSystem: '<S20>/If Action_speed Subsystem' */
+    break;
+
+   case 2:
+    /* Outputs for IfAction SubSystem: '<S20>/If Action_speed Subsystem1' incorporates:
+     *  ActionPort: '<S2988>/Action Port'
+     */
+    /* Sum: '<S2988>/Sum' incorporates:
+     *  Gain: '<S2988>/Gain'
+     *  Inport: '<Root>/circle_CH3_6'
+     *  Inport: '<Root>/ecd_CH3_6'
+     *  Inport: '<Root>/target_CH3_6'
+     *  Sum: '<S2988>/Sum2'
+     */
+    rtb_FilterCoefficient_eu = rtU.target_CH3_6 - (8191.0F * rtU.circle_CH3_6 +
+      rtU.ecd_CH3_6);
+
+    /* Abs: '<S2988>/Abs' */
+    rtb_Sum_cz = (real32_T)fabs(rtb_FilterCoefficient_eu);
+
+    /* Switch: '<S2988>/Switch2' incorporates:
+     *  Constant: '<S2988>/Constant'
+     */
+    if (!(rtb_Sum_cz > rtP.DEADBAND_CH3_6)) {
+      rtb_FilterCoefficient_eu = 0.0F;
+    }
+
+    /* End of Switch: '<S2988>/Switch2' */
+
+    /* Gain: '<S3129>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S3121>/Filter'
+     *  Gain: '<S3119>/Derivative Gain'
+     *  Sum: '<S3121>/SumD'
+     */
+    rtb_FilterCoefficient_ch = (rtP.ANG_A_D_CH3_6 * rtb_FilterCoefficient_eu -
+      rtDW.Filter_DSTATE_m) * 100.0F;
+
+    /* Switch: '<S2988>/Switch1' incorporates:
+     *  Constant: '<S2988>/Constant'
+     *  Gain: '<S2988>/Multiply'
+     *  Inport: '<Root>/speed_rpm_CH3_6'
+     *  Saturate: '<S3133>/Saturation'
+     *  Sum: '<S2988>/Sum1'
+     */
+    if (rtb_Sum_cz > rtP.DEADBAND_CH3_6) {
+      /* Sum: '<S3135>/Sum' incorporates:
+       *  DiscreteIntegrator: '<S3126>/Integrator'
+       *  Gain: '<S3131>/Proportional Gain'
+       */
+      u0 = (rtP.ANG_A_P_CH3_6 * rtb_FilterCoefficient_eu +
+            rtDW.Integrator_DSTATE_c) + rtb_FilterCoefficient_ch;
+
+      /* Saturate: '<S3133>/Saturation' */
+      if (u0 > 16384.0F) {
+        u0 = 16384.0F;
+      } else if (u0 < -16384.0F) {
+        u0 = -16384.0F;
+      }
+
+      rtb_Sum_cz = rtP.TRANS_CH3_6 * u0 - rtU.speed_rpm_CH3_6;
+    } else {
+      rtb_Sum_cz = 0.0F;
+    }
+
+    /* End of Switch: '<S2988>/Switch1' */
+
+    /* DiscreteIntegrator: '<S3071>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status3_6'
+     */
+    if (((rtU.reset_status3_6 > 0.0F) && (rtDW.Filter_PrevResetState_c <= 0)) ||
+        ((rtU.reset_status3_6 <= 0.0F) && (rtDW.Filter_PrevResetState_c == 1)))
+    {
+      rtDW.Filter_DSTATE_n = 0.0F;
+    }
+
+    /* Gain: '<S3079>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S3071>/Filter'
+     *  Gain: '<S3069>/Derivative Gain'
+     *  Sum: '<S3071>/SumD'
+     */
+    rtb_FilterCoefficient_nkj = (rtP.ANG_S_D_CH3_6 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_n) * 100.0F;
+
+    /* DiscreteIntegrator: '<S3076>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status3_6'
+     */
+    if (((rtU.reset_status3_6 > 0.0F) && (rtDW.Integrator_PrevResetState_b <= 0))
+        || ((rtU.reset_status3_6 <= 0.0F) && (rtDW.Integrator_PrevResetState_b ==
+          1))) {
+      rtDW.Integrator_DSTATE_k = 0.0F;
+    }
+
+    /* Sum: '<S3085>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S3076>/Integrator'
+     *  Gain: '<S3081>/Proportional Gain'
+     */
+    u0 = (rtP.ANG_S_P_CH3_6 * rtb_Sum_cz + rtDW.Integrator_DSTATE_k) +
+      rtb_FilterCoefficient_nkj;
+
+    /* Saturate: '<S3083>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/ANG_OUT_CH3_6' */
+      rtY.ANG_OUT_CH3_6 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/ANG_OUT_CH3_6' */
+      rtY.ANG_OUT_CH3_6 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/ANG_OUT_CH3_6' */
+      rtY.ANG_OUT_CH3_6 = u0;
+    }
+
+    /* End of Saturate: '<S3083>/Saturation' */
+
+    /* Chart: '<S2988>/Chart1' incorporates:
+     *  Inport: '<Root>/ecd_CH3_6'
+     *  Inport: '<Root>/last_ecd_CH3_6'
+     *  Sum: '<S2988>/Sum3'
+     */
+    Chart1(rtU.ecd_CH3_6 - rtU.last_ecd_CH3_6, &rtDW.u2_b, &rtDW.sf_Chart1_c);
+
+    /* Outport: '<Root>/circle_out_CH3_6' incorporates:
+     *  Inport: '<Root>/circle_CH3_6'
+     *  Sum: '<S2988>/Sum4'
+     */
+    rtY.circle_out_CH3_6 = rtDW.u2_b + rtU.circle_CH3_6;
+
+    /* Update for DiscreteIntegrator: '<S3126>/Integrator' incorporates:
+     *  Gain: '<S3123>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_c += rtP.ANG_A_I_CH3_6 * rtb_FilterCoefficient_eu *
+      0.001F;
+
+    /* Update for DiscreteIntegrator: '<S3121>/Filter' */
+    rtDW.Filter_DSTATE_m += 0.001F * rtb_FilterCoefficient_ch;
+
+    /* Update for DiscreteIntegrator: '<S3071>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S3076>/Integrator'
+     *  Inport: '<Root>/reset_status3_6'
+     */
+    rtDW.Filter_DSTATE_n += 0.001F * rtb_FilterCoefficient_nkj;
+    if (rtU.reset_status3_6 > 0.0F) {
+      rtDW.Filter_PrevResetState_c = 1;
+      rtDW.Integrator_PrevResetState_b = 1;
+    } else {
+      if (rtU.reset_status3_6 < 0.0F) {
+        rtDW.Filter_PrevResetState_c = -1;
+      } else if (rtU.reset_status3_6 == 0.0F) {
+        rtDW.Filter_PrevResetState_c = 0;
+      } else {
+        rtDW.Filter_PrevResetState_c = 2;
+      }
+
+      if (rtU.reset_status3_6 < 0.0F) {
+        rtDW.Integrator_PrevResetState_b = -1;
+      } else if (rtU.reset_status3_6 == 0.0F) {
+        rtDW.Integrator_PrevResetState_b = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_b = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S3071>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S3076>/Integrator' incorporates:
+     *  Gain: '<S3073>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_k += rtP.ANG_S_I_CH3_6 * rtb_Sum_cz * 0.001F;
+
+    /* End of Outputs for SubSystem: '<S20>/If Action_speed Subsystem1' */
+    break;
+  }
+
+  /* End of SwitchCase: '<S20>/Switch Case' */
+
+  /* SwitchCase: '<S21>/Switch Case' incorporates:
+   *  Inport: '<Root>/status_CH3_7'
+   */
+  switch ((int32_T)rtU.status_CH3_7) {
+   case 1:
+    /* Outputs for IfAction SubSystem: '<S21>/If Action_speed Subsystem' incorporates:
+     *  ActionPort: '<S3143>/Action Port'
+     */
+    /* Sum: '<S3143>/Sum' incorporates:
+     *  Inport: '<Root>/speed_rpm_CH3_7'
+     *  Inport: '<Root>/target_CH3_7'
+     */
+    rtb_Sum_cz = rtU.target_CH3_7 - rtU.speed_rpm_CH3_7;
+
+    /* DiscreteIntegrator: '<S3174>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status3_7'
+     */
+    if (((rtU.reset_status3_7 > 0.0F) && (rtDW.Filter_PrevResetState_l <= 0)) ||
+        ((rtU.reset_status3_7 <= 0.0F) && (rtDW.Filter_PrevResetState_l == 1)))
+    {
+      rtDW.Filter_DSTATE_j = 0.0F;
+    }
+
+    /* Gain: '<S3182>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S3174>/Filter'
+     *  Gain: '<S3172>/Derivative Gain'
+     *  Sum: '<S3174>/SumD'
+     */
+    rtb_FilterCoefficient_eu = (rtP.SPD_D_CH3_7 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_j) * 100.0F;
+
+    /* DiscreteIntegrator: '<S3179>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status3_7'
+     */
+    if (((rtU.reset_status3_7 > 0.0F) && (rtDW.Integrator_PrevResetState_p <= 0))
+        || ((rtU.reset_status3_7 <= 0.0F) && (rtDW.Integrator_PrevResetState_p ==
+          1))) {
+      rtDW.Integrator_DSTATE_if = 0.0F;
+    }
+
+    /* Sum: '<S3188>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S3179>/Integrator'
+     *  Gain: '<S3184>/Proportional Gain'
+     */
+    u0 = (rtP.SPD_P_CH3_7 * rtb_Sum_cz + rtDW.Integrator_DSTATE_if) +
+      rtb_FilterCoefficient_eu;
+
+    /* Saturate: '<S3186>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH3_7' */
+      rtY.SPD_OUT_CH3_7 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/SPD_OUT_CH3_7' */
+      rtY.SPD_OUT_CH3_7 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/SPD_OUT_CH3_7' */
+      rtY.SPD_OUT_CH3_7 = u0;
+    }
+
+    /* End of Saturate: '<S3186>/Saturation' */
+
+    /* Update for DiscreteIntegrator: '<S3174>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S3179>/Integrator'
+     *  Inport: '<Root>/reset_status3_7'
+     */
+    rtDW.Filter_DSTATE_j += 0.001F * rtb_FilterCoefficient_eu;
+    if (rtU.reset_status3_7 > 0.0F) {
+      rtDW.Filter_PrevResetState_l = 1;
+      rtDW.Integrator_PrevResetState_p = 1;
+    } else {
+      if (rtU.reset_status3_7 < 0.0F) {
+        rtDW.Filter_PrevResetState_l = -1;
+      } else if (rtU.reset_status3_7 == 0.0F) {
+        rtDW.Filter_PrevResetState_l = 0;
+      } else {
+        rtDW.Filter_PrevResetState_l = 2;
+      }
+
+      if (rtU.reset_status3_7 < 0.0F) {
+        rtDW.Integrator_PrevResetState_p = -1;
+      } else if (rtU.reset_status3_7 == 0.0F) {
+        rtDW.Integrator_PrevResetState_p = 0;
+      } else {
+        rtDW.Integrator_PrevResetState_p = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S3174>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S3179>/Integrator' incorporates:
+     *  Gain: '<S3176>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_if += rtP.SPD_I_CH3_7 * rtb_Sum_cz * 0.001F;
+
+    /* End of Outputs for SubSystem: '<S21>/If Action_speed Subsystem' */
+    break;
+
+   case 2:
+    /* Outputs for IfAction SubSystem: '<S21>/If Action_speed Subsystem1' incorporates:
+     *  ActionPort: '<S3144>/Action Port'
+     */
+    /* Sum: '<S3144>/Sum' incorporates:
+     *  Gain: '<S3144>/Gain'
+     *  Inport: '<Root>/circle_CH3_7'
+     *  Inport: '<Root>/ecd_CH3_7'
+     *  Inport: '<Root>/target_CH3_7'
+     *  Sum: '<S3144>/Sum2'
+     */
+    rtb_FilterCoefficient_eu = rtU.target_CH3_7 - (8191.0F * rtU.circle_CH3_7 +
+      rtU.ecd_CH3_7);
+
+    /* Abs: '<S3144>/Abs' */
+    rtb_Sum_cz = (real32_T)fabs(rtb_FilterCoefficient_eu);
+
+    /* Switch: '<S3144>/Switch2' incorporates:
+     *  Constant: '<S3144>/Constant'
+     */
+    if (!(rtb_Sum_cz > rtP.DEADBAND_CH3_7)) {
+      rtb_FilterCoefficient_eu = 0.0F;
+    }
+
+    /* End of Switch: '<S3144>/Switch2' */
+
+    /* Gain: '<S3285>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S3277>/Filter'
+     *  Gain: '<S3275>/Derivative Gain'
+     *  Sum: '<S3277>/SumD'
+     */
+    rtb_FilterCoefficient_ch = (rtP.ANG_A_D_CH3_7 * rtb_FilterCoefficient_eu -
+      rtDW.Filter_DSTATE_p) * 100.0F;
+
+    /* Switch: '<S3144>/Switch1' incorporates:
+     *  Constant: '<S3144>/Constant'
+     *  Gain: '<S3144>/Multiply'
+     *  Inport: '<Root>/speed_rpm_CH3_7'
+     *  Saturate: '<S3289>/Saturation'
+     *  Sum: '<S3144>/Sum1'
+     */
+    if (rtb_Sum_cz > rtP.DEADBAND_CH3_7) {
+      /* Sum: '<S3291>/Sum' incorporates:
+       *  DiscreteIntegrator: '<S3282>/Integrator'
+       *  Gain: '<S3287>/Proportional Gain'
+       */
+      u0 = (rtP.ANG_A_P_CH3_7 * rtb_FilterCoefficient_eu +
+            rtDW.Integrator_DSTATE_i) + rtb_FilterCoefficient_ch;
+
+      /* Saturate: '<S3289>/Saturation' */
+      if (u0 > 16384.0F) {
+        u0 = 16384.0F;
+      } else if (u0 < -16384.0F) {
+        u0 = -16384.0F;
+      }
+
+      rtb_Sum_cz = rtP.TRANS_CH3_7 * u0 - rtU.speed_rpm_CH3_7;
+    } else {
+      rtb_Sum_cz = 0.0F;
+    }
+
+    /* End of Switch: '<S3144>/Switch1' */
+
+    /* DiscreteIntegrator: '<S3227>/Filter' incorporates:
+     *  Inport: '<Root>/reset_status3_7'
+     */
+    if (((rtU.reset_status3_7 > 0.0F) && (rtDW.Filter_PrevResetState <= 0)) ||
+        ((rtU.reset_status3_7 <= 0.0F) && (rtDW.Filter_PrevResetState == 1))) {
+      rtDW.Filter_DSTATE_i = 0.0F;
+    }
+
+    /* Gain: '<S3235>/Filter Coefficient' incorporates:
+     *  DiscreteIntegrator: '<S3227>/Filter'
+     *  Gain: '<S3225>/Derivative Gain'
+     *  Sum: '<S3227>/SumD'
+     */
+    rtb_FilterCoefficient_nkj = (rtP.ANG_S_D_CH3_7 * rtb_Sum_cz -
+      rtDW.Filter_DSTATE_i) * 100.0F;
+
+    /* DiscreteIntegrator: '<S3232>/Integrator' incorporates:
+     *  Inport: '<Root>/reset_status3_7'
+     */
+    if (((rtU.reset_status3_7 > 0.0F) && (rtDW.Integrator_PrevResetState <= 0)) ||
+        ((rtU.reset_status3_7 <= 0.0F) && (rtDW.Integrator_PrevResetState == 1)))
+    {
+      rtDW.Integrator_DSTATE_o = 0.0F;
+    }
+
+    /* Sum: '<S3241>/Sum' incorporates:
+     *  DiscreteIntegrator: '<S3232>/Integrator'
+     *  Gain: '<S3237>/Proportional Gain'
+     */
+    u0 = (rtP.ANG_S_P_CH3_7 * rtb_Sum_cz + rtDW.Integrator_DSTATE_o) +
+      rtb_FilterCoefficient_nkj;
+
+    /* Saturate: '<S3239>/Saturation' */
+    if (u0 > 16384.0F) {
+      /* Outport: '<Root>/ANG_OUT_CH3_7' */
+      rtY.ANG_OUT_CH3_7 = 16384.0F;
+    } else if (u0 < -16384.0F) {
+      /* Outport: '<Root>/ANG_OUT_CH3_7' */
+      rtY.ANG_OUT_CH3_7 = -16384.0F;
+    } else {
+      /* Outport: '<Root>/ANG_OUT_CH3_7' */
+      rtY.ANG_OUT_CH3_7 = u0;
+    }
+
+    /* End of Saturate: '<S3239>/Saturation' */
+
+    /* Chart: '<S3144>/Chart1' incorporates:
+     *  Inport: '<Root>/ecd_CH3_7'
+     *  Inport: '<Root>/last_ecd_CH3_7'
+     *  Sum: '<S3144>/Sum3'
+     */
+    Chart1(rtU.ecd_CH3_7 - rtU.last_ecd_CH3_7, &rtDW.u2, &rtDW.sf_Chart1_b);
+
+    /* Outport: '<Root>/circle_out_CH3_7' incorporates:
+     *  Inport: '<Root>/circle_CH3_7'
+     *  Sum: '<S3144>/Sum4'
+     */
+    rtY.circle_out_CH3_7 = rtDW.u2 + rtU.circle_CH3_7;
+
+    /* Update for DiscreteIntegrator: '<S3282>/Integrator' incorporates:
+     *  Gain: '<S3279>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_i += rtP.ANG_A_I_CH3_7 * rtb_FilterCoefficient_eu *
+      0.001F;
+
+    /* Update for DiscreteIntegrator: '<S3277>/Filter' */
+    rtDW.Filter_DSTATE_p += 0.001F * rtb_FilterCoefficient_ch;
+
+    /* Update for DiscreteIntegrator: '<S3227>/Filter' incorporates:
+     *  DiscreteIntegrator: '<S3232>/Integrator'
+     *  Inport: '<Root>/reset_status3_7'
+     */
+    rtDW.Filter_DSTATE_i += 0.001F * rtb_FilterCoefficient_nkj;
+    if (rtU.reset_status3_7 > 0.0F) {
+      rtDW.Filter_PrevResetState = 1;
+      rtDW.Integrator_PrevResetState = 1;
+    } else {
+      if (rtU.reset_status3_7 < 0.0F) {
+        rtDW.Filter_PrevResetState = -1;
+      } else if (rtU.reset_status3_7 == 0.0F) {
+        rtDW.Filter_PrevResetState = 0;
+      } else {
+        rtDW.Filter_PrevResetState = 2;
+      }
+
+      if (rtU.reset_status3_7 < 0.0F) {
+        rtDW.Integrator_PrevResetState = -1;
+      } else if (rtU.reset_status3_7 == 0.0F) {
+        rtDW.Integrator_PrevResetState = 0;
+      } else {
+        rtDW.Integrator_PrevResetState = 2;
+      }
+    }
+
+    /* End of Update for DiscreteIntegrator: '<S3227>/Filter' */
+
+    /* Update for DiscreteIntegrator: '<S3232>/Integrator' incorporates:
+     *  Gain: '<S3229>/Integral Gain'
+     */
+    rtDW.Integrator_DSTATE_o += rtP.ANG_S_I_CH3_7 * rtb_Sum_cz * 0.001F;
+
+    /* End of Outputs for SubSystem: '<S21>/If Action_speed Subsystem1' */
+    break;
+  }
+
+  /* End of SwitchCase: '<S21>/Switch Case' */
+
+  /* Update for DiscreteIntegrator: '<S3332>/Integrator' incorporates:
+   *  Gain: '<S3329>/Integral Gain'
+   *  Inport: '<Root>/distance'
+   */
+  rtDW.Integrator_DSTATE += rtP.POS_I * rtU.distance * 0.001F;
+
+  /* Update for DiscreteIntegrator: '<S3327>/Filter' */
+  rtDW.Filter_DSTATE += 0.001F * rtb_FilterCoefficient;
 }
 
 /* Model initialize function */
 void PID_MODEL_initialize(void)
 {
-  /* SystemInitialize for IfAction SubSystem: '<S8>/If Action_speed Subsystem1' */
+  /* SystemInitialize for IfAction SubSystem: '<S1>/If Action_speed Subsystem' */
+  /* InitializeConditions for DiscreteIntegrator: '<S54>/Filter' */
+  rtDW.Filter_PrevResetState_bi = 2;
 
-  /* SystemInitialize for Chart: '<S1066>/Chart1' */
-  Chart1_Init(&rtDW.u2_o);
+  /* InitializeConditions for DiscreteIntegrator: '<S59>/Integrator' */
+  rtDW.Integrator_PrevResetState_a2 = 2;
 
-  /* End of SystemInitialize for SubSystem: '<S8>/If Action_speed Subsystem1' */
+  /* End of SystemInitialize for SubSystem: '<S1>/If Action_speed Subsystem' */
 
   /* SystemInitialize for IfAction SubSystem: '<S1>/If Action_speed Subsystem1' */
+  /* InitializeConditions for DiscreteIntegrator: '<S107>/Filter' */
+  rtDW.Filter_PrevResetState_hk = 2;
 
-  /* SystemInitialize for Chart: '<S16>/Chart1' */
-  Chart1_Init(&rtDW.u2_ae);
+  /* InitializeConditions for DiscreteIntegrator: '<S112>/Integrator' */
+  rtDW.Integrator_PrevResetState_mx = 2;
+
+  /* SystemInitialize for Chart: '<S24>/Chart1' */
+  Chart1_Init(&rtDW.u2_nnb);
 
   /* End of SystemInitialize for SubSystem: '<S1>/If Action_speed Subsystem1' */
 
-  /* SystemInitialize for IfAction SubSystem: '<S2>/If Action_speed Subsystem1' */
+  /* SystemInitialize for IfAction SubSystem: '<S2>/If Action_speed Subsystem' */
+  /* InitializeConditions for DiscreteIntegrator: '<S210>/Filter' */
+  rtDW.Filter_PrevResetState_eo = 2;
 
-  /* SystemInitialize for Chart: '<S166>/Chart1' */
-  Chart1_Init(&rtDW.u2_m);
+  /* InitializeConditions for DiscreteIntegrator: '<S215>/Integrator' */
+  rtDW.Integrator_PrevResetState_np = 2;
+
+  /* End of SystemInitialize for SubSystem: '<S2>/If Action_speed Subsystem' */
+
+  /* SystemInitialize for IfAction SubSystem: '<S2>/If Action_speed Subsystem1' */
+  /* InitializeConditions for DiscreteIntegrator: '<S263>/Filter' */
+  rtDW.Filter_PrevResetState_a2 = 2;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S268>/Integrator' */
+  rtDW.Integrator_PrevResetState_dc = 2;
+
+  /* SystemInitialize for Chart: '<S180>/Chart1' */
+  Chart1_Init(&rtDW.u2_jxj);
 
   /* End of SystemInitialize for SubSystem: '<S2>/If Action_speed Subsystem1' */
 
-  /* SystemInitialize for IfAction SubSystem: '<S3>/If Action_speed Subsystem1' */
+  /* SystemInitialize for IfAction SubSystem: '<S3>/If Action_speed Subsystem' */
+  /* InitializeConditions for DiscreteIntegrator: '<S366>/Filter' */
+  rtDW.Filter_PrevResetState_ev = 2;
 
-  /* SystemInitialize for Chart: '<S316>/Chart1' */
-  Chart1_Init(&rtDW.u2_nv);
+  /* InitializeConditions for DiscreteIntegrator: '<S371>/Integrator' */
+  rtDW.Integrator_PrevResetState_l1 = 2;
+
+  /* End of SystemInitialize for SubSystem: '<S3>/If Action_speed Subsystem' */
+
+  /* SystemInitialize for IfAction SubSystem: '<S3>/If Action_speed Subsystem1' */
+  /* InitializeConditions for DiscreteIntegrator: '<S419>/Filter' */
+  rtDW.Filter_PrevResetState_na = 2;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S424>/Integrator' */
+  rtDW.Integrator_PrevResetState_pi = 2;
+
+  /* SystemInitialize for Chart: '<S336>/Chart1' */
+  Chart1_Init(&rtDW.u2_j2);
 
   /* End of SystemInitialize for SubSystem: '<S3>/If Action_speed Subsystem1' */
 
-  /* SystemInitialize for IfAction SubSystem: '<S4>/If Action_speed Subsystem1' */
+  /* SystemInitialize for IfAction SubSystem: '<S4>/If Action_speed Subsystem' */
+  /* InitializeConditions for DiscreteIntegrator: '<S522>/Filter' */
+  rtDW.Filter_PrevResetState_b0 = 2;
 
-  /* SystemInitialize for Chart: '<S466>/Chart1' */
-  Chart1_Init(&rtDW.u2_f);
+  /* InitializeConditions for DiscreteIntegrator: '<S527>/Integrator' */
+  rtDW.Integrator_PrevResetState_fz = 2;
+
+  /* End of SystemInitialize for SubSystem: '<S4>/If Action_speed Subsystem' */
+
+  /* SystemInitialize for IfAction SubSystem: '<S4>/If Action_speed Subsystem1' */
+  /* InitializeConditions for DiscreteIntegrator: '<S575>/Filter' */
+  rtDW.Filter_PrevResetState_gs = 2;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S580>/Integrator' */
+  rtDW.Integrator_PrevResetState_fb = 2;
+
+  /* SystemInitialize for Chart: '<S492>/Chart1' */
+  Chart1_Init(&rtDW.u2_a);
 
   /* End of SystemInitialize for SubSystem: '<S4>/If Action_speed Subsystem1' */
 
-  /* SystemInitialize for IfAction SubSystem: '<S5>/If Action_speed Subsystem1' */
+  /* SystemInitialize for IfAction SubSystem: '<S5>/If Action_speed Subsystem' */
+  /* InitializeConditions for DiscreteIntegrator: '<S678>/Filter' */
+  rtDW.Filter_PrevResetState_h = 2;
 
-  /* SystemInitialize for Chart: '<S616>/Chart1' */
+  /* InitializeConditions for DiscreteIntegrator: '<S683>/Integrator' */
+  rtDW.Integrator_PrevResetState_l = 2;
+
+  /* End of SystemInitialize for SubSystem: '<S5>/If Action_speed Subsystem' */
+
+  /* SystemInitialize for IfAction SubSystem: '<S5>/If Action_speed Subsystem1' */
+  /* InitializeConditions for DiscreteIntegrator: '<S731>/Filter' */
+  rtDW.Filter_PrevResetState_kt = 2;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S736>/Integrator' */
+  rtDW.Integrator_PrevResetState_a = 2;
+
+  /* SystemInitialize for Chart: '<S648>/Chart1' */
   Chart1_Init(&rtDW.u2_c);
 
   /* End of SystemInitialize for SubSystem: '<S5>/If Action_speed Subsystem1' */
 
-  /* SystemInitialize for IfAction SubSystem: '<S6>/If Action_speed Subsystem1' */
+  /* SystemInitialize for IfAction SubSystem: '<S6>/If Action_speed Subsystem' */
+  /* InitializeConditions for DiscreteIntegrator: '<S834>/Filter' */
+  rtDW.Filter_PrevResetState_fp = 2;
 
-  /* SystemInitialize for Chart: '<S766>/Chart1' */
-  Chart1_Init(&rtDW.u2_jm);
+  /* InitializeConditions for DiscreteIntegrator: '<S839>/Integrator' */
+  rtDW.Integrator_PrevResetState_ds = 2;
+
+  /* End of SystemInitialize for SubSystem: '<S6>/If Action_speed Subsystem' */
+
+  /* SystemInitialize for IfAction SubSystem: '<S6>/If Action_speed Subsystem1' */
+  /* InitializeConditions for DiscreteIntegrator: '<S887>/Filter' */
+  rtDW.Filter_PrevResetState_lp = 2;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S892>/Integrator' */
+  rtDW.Integrator_PrevResetState_je = 2;
+
+  /* SystemInitialize for Chart: '<S804>/Chart1' */
+  Chart1_Init(&rtDW.u2_nn);
 
   /* End of SystemInitialize for SubSystem: '<S6>/If Action_speed Subsystem1' */
 
-  /* SystemInitialize for IfAction SubSystem: '<S7>/If Action_speed Subsystem1' */
+  /* SystemInitialize for IfAction SubSystem: '<S7>/If Action_speed Subsystem' */
+  /* InitializeConditions for DiscreteIntegrator: '<S990>/Filter' */
+  rtDW.Filter_PrevResetState_kk = 2;
 
-  /* SystemInitialize for Chart: '<S916>/Chart1' */
-  Chart1_Init(&rtDW.u2_nr);
+  /* InitializeConditions for DiscreteIntegrator: '<S995>/Integrator' */
+  rtDW.Integrator_PrevResetState_od = 2;
+
+  /* End of SystemInitialize for SubSystem: '<S7>/If Action_speed Subsystem' */
+
+  /* SystemInitialize for IfAction SubSystem: '<S7>/If Action_speed Subsystem1' */
+  /* InitializeConditions for DiscreteIntegrator: '<S1043>/Filter' */
+  rtDW.Filter_PrevResetState_nc = 2;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S1048>/Integrator' */
+  rtDW.Integrator_PrevResetState_gr = 2;
+
+  /* SystemInitialize for Chart: '<S960>/Chart1' */
+  Chart1_Init(&rtDW.u2_f4);
 
   /* End of SystemInitialize for SubSystem: '<S7>/If Action_speed Subsystem1' */
 
-  /* SystemInitialize for IfAction SubSystem: '<S9>/If Action_speed Subsystem1' */
+  /* SystemInitialize for IfAction SubSystem: '<S8>/If Action_speed Subsystem' */
+  /* InitializeConditions for DiscreteIntegrator: '<S1146>/Filter' */
+  rtDW.Filter_PrevResetState_a = 2;
 
-  /* SystemInitialize for Chart: '<S1216>/Chart1' */
-  Chart1_Init(&rtDW.u2_a);
+  /* InitializeConditions for DiscreteIntegrator: '<S1151>/Integrator' */
+  rtDW.Integrator_PrevResetState_j = 2;
+
+  /* End of SystemInitialize for SubSystem: '<S8>/If Action_speed Subsystem' */
+
+  /* SystemInitialize for IfAction SubSystem: '<S8>/If Action_speed Subsystem1' */
+  /* InitializeConditions for DiscreteIntegrator: '<S1199>/Filter' */
+  rtDW.Filter_PrevResetState_k3 = 2;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S1204>/Integrator' */
+  rtDW.Integrator_PrevResetState_k5 = 2;
+
+  /* SystemInitialize for Chart: '<S1116>/Chart1' */
+  Chart1_Init(&rtDW.u2_f);
+
+  /* End of SystemInitialize for SubSystem: '<S8>/If Action_speed Subsystem1' */
+
+  /* SystemInitialize for IfAction SubSystem: '<S9>/If Action_speed Subsystem' */
+  /* InitializeConditions for DiscreteIntegrator: '<S1302>/Filter' */
+  rtDW.Filter_PrevResetState_lr = 2;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S1307>/Integrator' */
+  rtDW.Integrator_PrevResetState_dv = 2;
+
+  /* End of SystemInitialize for SubSystem: '<S9>/If Action_speed Subsystem' */
+
+  /* SystemInitialize for IfAction SubSystem: '<S9>/If Action_speed Subsystem1' */
+  /* InitializeConditions for DiscreteIntegrator: '<S1355>/Filter' */
+  rtDW.Filter_PrevResetState_mx = 2;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S1360>/Integrator' */
+  rtDW.Integrator_PrevResetState_d0 = 2;
+
+  /* SystemInitialize for Chart: '<S1272>/Chart1' */
+  Chart1_Init(&rtDW.u2_k);
 
   /* End of SystemInitialize for SubSystem: '<S9>/If Action_speed Subsystem1' */
 
-  /* SystemInitialize for IfAction SubSystem: '<S10>/If Action_speed Subsystem1' */
+  /* SystemInitialize for IfAction SubSystem: '<S10>/If Action_speed Subsystem' */
+  /* InitializeConditions for DiscreteIntegrator: '<S1458>/Filter' */
+  rtDW.Filter_PrevResetState_k = 2;
 
-  /* SystemInitialize for Chart: '<S1366>/Chart1' */
-  Chart1_Init(&rtDW.u2_ge);
+  /* InitializeConditions for DiscreteIntegrator: '<S1463>/Integrator' */
+  rtDW.Integrator_PrevResetState_o2 = 2;
+
+  /* End of SystemInitialize for SubSystem: '<S10>/If Action_speed Subsystem' */
+
+  /* SystemInitialize for IfAction SubSystem: '<S10>/If Action_speed Subsystem1' */
+  /* InitializeConditions for DiscreteIntegrator: '<S1511>/Filter' */
+  rtDW.Filter_PrevResetState_m = 2;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S1516>/Integrator' */
+  rtDW.Integrator_PrevResetState_dj = 2;
+
+  /* SystemInitialize for Chart: '<S1428>/Chart1' */
+  Chart1_Init(&rtDW.u2_or);
 
   /* End of SystemInitialize for SubSystem: '<S10>/If Action_speed Subsystem1' */
 
-  /* SystemInitialize for IfAction SubSystem: '<S11>/If Action_speed Subsystem1' */
+  /* SystemInitialize for IfAction SubSystem: '<S11>/If Action_speed Subsystem' */
+  /* InitializeConditions for DiscreteIntegrator: '<S1614>/Filter' */
+  rtDW.Filter_PrevResetState_lf = 2;
 
-  /* SystemInitialize for Chart: '<S1516>/Chart1' */
-  Chart1_Init(&rtDW.u2_j);
+  /* InitializeConditions for DiscreteIntegrator: '<S1619>/Integrator' */
+  rtDW.Integrator_PrevResetState_d = 2;
+
+  /* End of SystemInitialize for SubSystem: '<S11>/If Action_speed Subsystem' */
+
+  /* SystemInitialize for IfAction SubSystem: '<S11>/If Action_speed Subsystem1' */
+  /* InitializeConditions for DiscreteIntegrator: '<S1667>/Filter' */
+  rtDW.Filter_PrevResetState_i = 2;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S1672>/Integrator' */
+  rtDW.Integrator_PrevResetState_ih = 2;
+
+  /* SystemInitialize for Chart: '<S1584>/Chart1' */
+  Chart1_Init(&rtDW.u2_o);
 
   /* End of SystemInitialize for SubSystem: '<S11>/If Action_speed Subsystem1' */
 
-  /* SystemInitialize for IfAction SubSystem: '<S12>/If Action_speed Subsystem1' */
+  /* SystemInitialize for IfAction SubSystem: '<S12>/If Action_speed Subsystem' */
+  /* InitializeConditions for DiscreteIntegrator: '<S1770>/Filter' */
+  rtDW.Filter_PrevResetState_o = 2;
 
-  /* SystemInitialize for Chart: '<S1666>/Chart1' */
-  Chart1_Init(&rtDW.u2_n);
+  /* InitializeConditions for DiscreteIntegrator: '<S1775>/Integrator' */
+  rtDW.Integrator_PrevResetState_f = 2;
+
+  /* End of SystemInitialize for SubSystem: '<S12>/If Action_speed Subsystem' */
+
+  /* SystemInitialize for IfAction SubSystem: '<S12>/If Action_speed Subsystem1' */
+  /* InitializeConditions for DiscreteIntegrator: '<S1823>/Filter' */
+  rtDW.Filter_PrevResetState_f3 = 2;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S1828>/Integrator' */
+  rtDW.Integrator_PrevResetState_bsc = 2;
+
+  /* SystemInitialize for Chart: '<S1740>/Chart1' */
+  Chart1_Init(&rtDW.u2_n2);
 
   /* End of SystemInitialize for SubSystem: '<S12>/If Action_speed Subsystem1' */
 
-  /* SystemInitialize for IfAction SubSystem: '<S13>/If Action_speed Subsystem1' */
+  /* SystemInitialize for IfAction SubSystem: '<S13>/If Action_speed Subsystem' */
+  /* InitializeConditions for DiscreteIntegrator: '<S1926>/Filter' */
+  rtDW.Filter_PrevResetState_g = 2;
 
-  /* SystemInitialize for Chart: '<S1816>/Chart1' */
-  Chart1_Init(&rtDW.u2_g);
+  /* InitializeConditions for DiscreteIntegrator: '<S1931>/Integrator' */
+  rtDW.Integrator_PrevResetState_mq = 2;
+
+  /* End of SystemInitialize for SubSystem: '<S13>/If Action_speed Subsystem' */
+
+  /* SystemInitialize for IfAction SubSystem: '<S13>/If Action_speed Subsystem1' */
+  /* InitializeConditions for DiscreteIntegrator: '<S1979>/Filter' */
+  rtDW.Filter_PrevResetState_f = 2;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S1984>/Integrator' */
+  rtDW.Integrator_PrevResetState_ny = 2;
+
+  /* SystemInitialize for Chart: '<S1896>/Chart1' */
+  Chart1_Init(&rtDW.u2_h);
 
   /* End of SystemInitialize for SubSystem: '<S13>/If Action_speed Subsystem1' */
 
-  /* SystemInitialize for IfAction SubSystem: '<S14>/If Action_speed Subsystem1' */
+  /* SystemInitialize for IfAction SubSystem: '<S14>/If Action_speed Subsystem' */
+  /* InitializeConditions for DiscreteIntegrator: '<S2082>/Filter' */
+  rtDW.Filter_PrevResetState_ng = 2;
 
-  /* SystemInitialize for Chart: '<S1966>/Chart1' */
-  Chart1_Init(&rtDW.u2);
+  /* InitializeConditions for DiscreteIntegrator: '<S2087>/Integrator' */
+  rtDW.Integrator_PrevResetState_i = 2;
+
+  /* End of SystemInitialize for SubSystem: '<S14>/If Action_speed Subsystem' */
+
+  /* SystemInitialize for IfAction SubSystem: '<S14>/If Action_speed Subsystem1' */
+  /* InitializeConditions for DiscreteIntegrator: '<S2135>/Filter' */
+  rtDW.Filter_PrevResetState_lt = 2;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S2140>/Integrator' */
+  rtDW.Integrator_PrevResetState_k = 2;
+
+  /* SystemInitialize for Chart: '<S2052>/Chart1' */
+  Chart1_Init(&rtDW.u2_e);
 
   /* End of SystemInitialize for SubSystem: '<S14>/If Action_speed Subsystem1' */
+
+  /* SystemInitialize for IfAction SubSystem: '<S15>/If Action_speed Subsystem' */
+  /* InitializeConditions for DiscreteIntegrator: '<S2238>/Filter' */
+  rtDW.Filter_PrevResetState_b5 = 2;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S2243>/Integrator' */
+  rtDW.Integrator_PrevResetState_ge = 2;
+
+  /* End of SystemInitialize for SubSystem: '<S15>/If Action_speed Subsystem' */
+
+  /* SystemInitialize for IfAction SubSystem: '<S15>/If Action_speed Subsystem1' */
+  /* InitializeConditions for DiscreteIntegrator: '<S2291>/Filter' */
+  rtDW.Filter_PrevResetState_p = 2;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S2296>/Integrator' */
+  rtDW.Integrator_PrevResetState_c = 2;
+
+  /* SystemInitialize for Chart: '<S2208>/Chart1' */
+  Chart1_Init(&rtDW.u2_jx);
+
+  /* End of SystemInitialize for SubSystem: '<S15>/If Action_speed Subsystem1' */
+
+  /* SystemInitialize for IfAction SubSystem: '<S16>/If Action_speed Subsystem' */
+  /* InitializeConditions for DiscreteIntegrator: '<S2394>/Filter' */
+  rtDW.Filter_PrevResetState_j2 = 2;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S2399>/Integrator' */
+  rtDW.Integrator_PrevResetState_bq = 2;
+
+  /* End of SystemInitialize for SubSystem: '<S16>/If Action_speed Subsystem' */
+
+  /* SystemInitialize for IfAction SubSystem: '<S16>/If Action_speed Subsystem1' */
+  /* InitializeConditions for DiscreteIntegrator: '<S2447>/Filter' */
+  rtDW.Filter_PrevResetState_b = 2;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S2452>/Integrator' */
+  rtDW.Integrator_PrevResetState_mv = 2;
+
+  /* SystemInitialize for Chart: '<S2364>/Chart1' */
+  Chart1_Init(&rtDW.u2_m);
+
+  /* End of SystemInitialize for SubSystem: '<S16>/If Action_speed Subsystem1' */
+
+  /* SystemInitialize for IfAction SubSystem: '<S17>/If Action_speed Subsystem' */
+  /* InitializeConditions for DiscreteIntegrator: '<S2550>/Filter' */
+  rtDW.Filter_PrevResetState_j = 2;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S2555>/Integrator' */
+  rtDW.Integrator_PrevResetState_bs = 2;
+
+  /* End of SystemInitialize for SubSystem: '<S17>/If Action_speed Subsystem' */
+
+  /* SystemInitialize for IfAction SubSystem: '<S17>/If Action_speed Subsystem1' */
+  /* InitializeConditions for DiscreteIntegrator: '<S2603>/Filter' */
+  rtDW.Filter_PrevResetState_el = 2;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S2608>/Integrator' */
+  rtDW.Integrator_PrevResetState_e = 2;
+
+  /* SystemInitialize for Chart: '<S2520>/Chart1' */
+  Chart1_Init(&rtDW.u2_n);
+
+  /* End of SystemInitialize for SubSystem: '<S17>/If Action_speed Subsystem1' */
+
+  /* SystemInitialize for IfAction SubSystem: '<S18>/If Action_speed Subsystem' */
+  /* InitializeConditions for DiscreteIntegrator: '<S2706>/Filter' */
+  rtDW.Filter_PrevResetState_e2 = 2;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S2711>/Integrator' */
+  rtDW.Integrator_PrevResetState_n = 2;
+
+  /* End of SystemInitialize for SubSystem: '<S18>/If Action_speed Subsystem' */
+
+  /* SystemInitialize for IfAction SubSystem: '<S18>/If Action_speed Subsystem1' */
+  /* InitializeConditions for DiscreteIntegrator: '<S2759>/Filter' */
+  rtDW.Filter_PrevResetState_d = 2;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S2764>/Integrator' */
+  rtDW.Integrator_PrevResetState_g = 2;
+
+  /* SystemInitialize for Chart: '<S2676>/Chart1' */
+  Chart1_Init(&rtDW.u2_j);
+
+  /* End of SystemInitialize for SubSystem: '<S18>/If Action_speed Subsystem1' */
+
+  /* SystemInitialize for IfAction SubSystem: '<S19>/If Action_speed Subsystem' */
+  /* InitializeConditions for DiscreteIntegrator: '<S2862>/Filter' */
+  rtDW.Filter_PrevResetState_n = 2;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S2867>/Integrator' */
+  rtDW.Integrator_PrevResetState_py = 2;
+
+  /* End of SystemInitialize for SubSystem: '<S19>/If Action_speed Subsystem' */
+
+  /* SystemInitialize for IfAction SubSystem: '<S19>/If Action_speed Subsystem1' */
+  /* InitializeConditions for DiscreteIntegrator: '<S2915>/Filter' */
+  rtDW.Filter_PrevResetState_e = 2;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S2920>/Integrator' */
+  rtDW.Integrator_PrevResetState_m = 2;
+
+  /* SystemInitialize for Chart: '<S2832>/Chart1' */
+  Chart1_Init(&rtDW.u2_p);
+
+  /* End of SystemInitialize for SubSystem: '<S19>/If Action_speed Subsystem1' */
+
+  /* SystemInitialize for IfAction SubSystem: '<S20>/If Action_speed Subsystem' */
+  /* InitializeConditions for DiscreteIntegrator: '<S3018>/Filter' */
+  rtDW.Filter_PrevResetState_lk = 2;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S3023>/Integrator' */
+  rtDW.Integrator_PrevResetState_o = 2;
+
+  /* End of SystemInitialize for SubSystem: '<S20>/If Action_speed Subsystem' */
+
+  /* SystemInitialize for IfAction SubSystem: '<S20>/If Action_speed Subsystem1' */
+  /* InitializeConditions for DiscreteIntegrator: '<S3071>/Filter' */
+  rtDW.Filter_PrevResetState_c = 2;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S3076>/Integrator' */
+  rtDW.Integrator_PrevResetState_b = 2;
+
+  /* SystemInitialize for Chart: '<S2988>/Chart1' */
+  Chart1_Init(&rtDW.u2_b);
+
+  /* End of SystemInitialize for SubSystem: '<S20>/If Action_speed Subsystem1' */
+
+  /* SystemInitialize for IfAction SubSystem: '<S21>/If Action_speed Subsystem' */
+  /* InitializeConditions for DiscreteIntegrator: '<S3174>/Filter' */
+  rtDW.Filter_PrevResetState_l = 2;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S3179>/Integrator' */
+  rtDW.Integrator_PrevResetState_p = 2;
+
+  /* End of SystemInitialize for SubSystem: '<S21>/If Action_speed Subsystem' */
+
+  /* SystemInitialize for IfAction SubSystem: '<S21>/If Action_speed Subsystem1' */
+  /* InitializeConditions for DiscreteIntegrator: '<S3227>/Filter' */
+  rtDW.Filter_PrevResetState = 2;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S3232>/Integrator' */
+  rtDW.Integrator_PrevResetState = 2;
+
+  /* SystemInitialize for Chart: '<S3144>/Chart1' */
+  Chart1_Init(&rtDW.u2);
+
+  /* End of SystemInitialize for SubSystem: '<S21>/If Action_speed Subsystem1' */
 }
 
 /*

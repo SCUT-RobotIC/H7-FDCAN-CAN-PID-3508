@@ -6,13 +6,17 @@ uint8_t mode_6020 = CLOSE_6020;
 
 extern FDCAN_HandleTypeDef hfdcan1; // CAN????1
 extern FDCAN_HandleTypeDef hfdcan2;
+extern FDCAN_HandleTypeDef hfdcan3;
+
 uint8_t CAN_RECEIVE[3];
 
 motor_measure_t can1_motor[8];
 motor_measure_t can2_motor[8];
+motor_measure_t can3_motor[8];
+
 motor_measure_t *motor_data_can1[8];
 motor_measure_t *motor_data_can2[8];
-
+motor_measure_t *motor_data_can3[8];
 
 
 static uint8_t can_send_data[8]; 
@@ -31,9 +35,10 @@ void bsp_can_init(void)
 	can_filter_init();
 	HAL_FDCAN_Start(&hfdcan1);                               //open FDCAN
 	HAL_FDCAN_Start(&hfdcan2);
-//	HAL_FDCAN_Start(&hfdcan3);
+	HAL_FDCAN_Start(&hfdcan3);
 	HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO0_WATERMARK, 0);
 	HAL_FDCAN_ActivateNotification(&hfdcan2, FDCAN_IT_RX_FIFO0_WATERMARK, 0);
+	HAL_FDCAN_ActivateNotification(&hfdcan3, FDCAN_IT_RX_FIFO0_WATERMARK, 0);
 //	HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_BUFFER_NEW_MESSAGE, 0);
 }
 /**
@@ -65,6 +70,9 @@ void can_filter_init(void)
 	HAL_FDCAN_ConfigGlobalFilter(&hfdcan2,FDCAN_REJECT,FDCAN_REJECT,FDCAN_REJECT_REMOTE,FDCAN_REJECT_REMOTE);
 	HAL_FDCAN_ConfigFifoWatermark(&hfdcan2, FDCAN_CFG_RX_FIFO0, 1);
 
+	HAL_FDCAN_ConfigFilter(&hfdcan3,&fdcan_filter); 		 				
+	HAL_FDCAN_ConfigGlobalFilter(&hfdcan3,FDCAN_REJECT,FDCAN_REJECT,FDCAN_REJECT_REMOTE,FDCAN_REJECT_REMOTE);
+	HAL_FDCAN_ConfigFifoWatermark(&hfdcan3, FDCAN_CFG_RX_FIFO0, 1);
 }
 
 
@@ -197,6 +205,10 @@ motor_measure_t *get_can2_motor(uint8_t i)
 {
   return &can2_motor[(i)];
 }
+motor_measure_t *get_can3_motor(uint8_t i)
+{
+  return &can3_motor[(i)];
+}
 
 
 void motor_state_update()
@@ -220,6 +232,15 @@ void motor_state_update()
   motor_data_can2[6] = get_can2_motor(6);
   motor_data_can2[7] = get_can2_motor(7);
 	
+	motor_data_can3[0] = get_can3_motor(0);
+  motor_data_can3[1] = get_can3_motor(1);
+  motor_data_can3[2] = get_can3_motor(2);
+  motor_data_can3[3] = get_can3_motor(3);
+  motor_data_can3[4] = get_can3_motor(4);
+  motor_data_can3[5] = get_can3_motor(5);
+  motor_data_can3[6] = get_can3_motor(6);
+  motor_data_can3[7] = get_can3_motor(7);
+	
 }
 
 
@@ -229,6 +250,10 @@ __weak void fdcan1_rx_callback(void)
 
 }
 __weak void fdcan2_rx_callback(void)
+{
+
+}
+__weak void fdcan3_rx_callback(void)
 {
 
 }
@@ -242,6 +267,10 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 		if (hfdcan == &hfdcan2)
     {
 		fdcan2_rx_callback();
+    }
+		if (hfdcan == &hfdcan3)
+    {
+		fdcan3_rx_callback();
     }
 }
 

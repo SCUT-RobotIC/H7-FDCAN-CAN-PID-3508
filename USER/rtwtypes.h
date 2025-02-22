@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'PID_MODEL'.
  *
- * Model version                  : 2.18
- * Simulink Coder version         : 23.2 (R2023b) 01-Aug-2023
- * C/C++ source code generated on : Mon Apr 22 19:38:11 2024
+ * Model version                  : 4.4
+ * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
+ * C/C++ source code generated on : Sat Feb 22 20:33:40 2025
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex-M
