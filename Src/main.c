@@ -146,8 +146,9 @@ int main(void)
   PID_Angle_A_Para_Init(1, 1 , 0.3 , 0 , 0);
 	rtP.TRANS_CH1_1=0.5;
 	
-	PID_Angle_S_Para_Init(2, 1 , 1 , 1 , 0.01);
-  PID_Angle_A_Para_Init(2, 1 , 1 , 1 , 0.1);
+	
+	PID_Angle_S_Para_Init(2, 1 , 10 , 3 , 0.01);
+  PID_Angle_A_Para_Init(2, 1 , 0.3 , 0 , 0);
 	
 	PID_Angle_S_Para_Init(2, 3 , 5 , 3 , 0.01);
   PID_Angle_A_Para_Init(2, 3 , 1.5 , 1 , 0.1);
@@ -164,7 +165,7 @@ int main(void)
 	
 	Set_6020_Mode( 0 );
 	set_mode( ANG, VEL, VEL, VEL, VEL, VEL, VEL,
-            VEL, VEL, VEL, VEL, ANG, ANG, ANG,
+            ANG, VEL, VEL, VEL, ANG, ANG, ANG,
 					  ANG, VEL, VEL, VEL, ANG, ANG, ANG ); 
 	dm_motor_init();
 	dm_motor_enable(&hfdcan1,&motor[Motor1]);
