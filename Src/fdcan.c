@@ -256,9 +256,9 @@ void HAL_FDCAN_MspInit(FDCAN_HandleTypeDef* fdcanHandle)
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
     /* FDCAN2 interrupt Init */
-    HAL_NVIC_SetPriority(FDCAN2_IT0_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(FDCAN2_IT0_IRQn, 1, 0);
     HAL_NVIC_EnableIRQ(FDCAN2_IT0_IRQn);
-    HAL_NVIC_SetPriority(FDCAN2_IT1_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(FDCAN2_IT1_IRQn, 1, 0);
     HAL_NVIC_EnableIRQ(FDCAN2_IT1_IRQn);
     HAL_NVIC_SetPriority(FDCAN_CAL_IRQn, 0, 0);
     HAL_NVIC_EnableIRQ(FDCAN_CAL_IRQn);

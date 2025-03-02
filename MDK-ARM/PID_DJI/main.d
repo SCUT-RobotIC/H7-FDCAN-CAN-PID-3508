@@ -37,6 +37,7 @@ pid_dji\main.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h
 pid_dji\main.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h
 pid_dji\main.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h
 pid_dji\main.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h
+pid_dji\main.o: ../Inc/dma.h
 pid_dji\main.o: ../Inc/fdcan.h
 pid_dji\main.o: ../Inc/tim.h
 pid_dji\main.o: ../Inc/usart.h
@@ -49,3 +50,4 @@ pid_dji\main.o: ../USER/motorctrl.h
 pid_dji\main.o: D:\keil\ARM\ARMCC\Bin\..\include\stdio.h
 pid_dji\main.o: ../USER/dm_motor_drv.h
 pid_dji\main.o: ../USER/dm_motor_ctrl.h
+pid_dji\main.o: ../USER/UPPER_LOCATION.h

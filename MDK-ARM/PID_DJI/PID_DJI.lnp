@@ -2,6 +2,7 @@
 "pid_dji\startup_stm32h723xx.o"
 "pid_dji\main.o"
 "pid_dji\gpio.o"
+"pid_dji\dma.o"
 "pid_dji\fdcan.o"
 "pid_dji\tim.o"
 "pid_dji\usart.o"

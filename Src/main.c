@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "dma.h"
 #include "fdcan.h"
 #include "tim.h"
 #include "usart.h"
@@ -34,6 +35,7 @@
 #include "math.h"
 #include "dm_motor_drv.h"
 #include "dm_motor_ctrl.h"
+#include "UPPER_LOCATION.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -58,7 +60,7 @@ vehicle_state vehicle_test={
 0,0,0,0
 };
 
-
+uint8_t USART3_RX_BUF[100];
 uint8_t rx_datatemp[8];
 
 /* USER CODE END PM */
@@ -114,13 +116,16 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_FDCAN1_Init();
+  MX_DMA_Init();
   MX_TIM6_Init();
   MX_FDCAN2_Init();
   MX_USART2_UART_Init();
   MX_FDCAN3_Init();
+  MX_USART3_UART_Init();
+  MX_FDCAN1_Init();
   /* USER CODE BEGIN 2 */
 	HAL_TIM_Base_Start_IT(&htim6);
+	HAL_UART_Receive_DMA(&huart3, USART3_RX_BUF, 1);
   can_filter_init();
 	bsp_can_init();
 	PID_MODEL_initialize();
@@ -178,7 +183,7 @@ int main(void)
 		set_target(1,1,8191*100);
 		set_target(2,1,8191*100);
 		set_target(3,1,8191*100);
-		//ctrlmotor(vehicle_test.Vx,vehicle_test.Vy,vehicle_test.omega,vehicle_test.Park);
+		ctrlmotor(vehicle_test.Vx,vehicle_test.Vy,vehicle_test.omega,vehicle_test.Park);
 
     /* USER CODE END WHILE */
 
@@ -260,6 +265,32 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		HAL_GPIO_WritePin(GPIOD,GPIO_PIN_15,(GPIO_PinState)1);
 
   }
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+    static uint8_t index = 0;
+    static uint8_t buffer[16];
+
+    if (huart->Instance == USART3)
+    {
+				if(index == 0 && USART3_RX_BUF[0]!=0xA5){
+					HAL_UART_Receive_DMA(&huart3, USART3_RX_BUF, 1);
+					return;
+				}
+        buffer[index++] = USART3_RX_BUF[0];
+
+        if (index == 16)
+        {
+            index = 0;
+            if (buffer[0] == 0xA5 && buffer[15] == 0x5A) 
+            {
+								Receive();
+            }
+        }
+
+        HAL_UART_Receive_DMA(&huart3, USART3_RX_BUF, 1);
+    }
 }
 /* USER CODE END 4 */
 

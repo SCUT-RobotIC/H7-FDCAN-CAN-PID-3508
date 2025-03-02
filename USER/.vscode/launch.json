@@ -1,0 +1,24 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "cppdbg",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": false,
+      "externalConsole": true,
+      "cwd": "e:/RC/2025RC_elec_ctrl/helm_3_wheel/DJI_DM/dm_ok/H7-FDCAN-CAN-PID-3508/USER",
+      "program": "e:/RC/2025RC_elec_ctrl/helm_3_wheel/DJI_DM/dm_ok/H7-FDCAN-CAN-PID-3508/USER/build/Debug/outDebug",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    }
+  ]
+}
