@@ -802,6 +802,11 @@
               <FileType>1</FileType>
               <FilePath>..\USER\UPPER_LOCATION.c</FilePath>
             </File>
+            <File>
+              <FileName>sbus.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\sbus.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

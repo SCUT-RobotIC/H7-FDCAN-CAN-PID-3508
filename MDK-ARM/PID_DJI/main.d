@@ -51,3 +51,5 @@ pid_dji\main.o: D:\keil\ARM\ARMCC\Bin\..\include\stdio.h
 pid_dji\main.o: ../USER/dm_motor_drv.h
 pid_dji\main.o: ../USER/dm_motor_ctrl.h
 pid_dji\main.o: ../USER/UPPER_LOCATION.h
+pid_dji\main.o: D:\keil\ARM\ARMCC\Bin\..\include\string.h
+pid_dji\main.o: ../USER/sbus.h

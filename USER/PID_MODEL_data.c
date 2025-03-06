@@ -735,21 +735,21 @@ P rtP = {
    *   '<S1740>/Switch1'
    *   '<S1740>/Switch2'
    */
-  500.0F,
+  10.0F,
 
   /* Variable: DEADBAND_CH2_6
    * Referenced by:
    *   '<S1896>/Switch1'
    *   '<S1896>/Switch2'
    */
-  500.0F,
+  10.0F,
 
   /* Variable: DEADBAND_CH2_7
    * Referenced by:
    *   '<S2052>/Switch1'
    *   '<S2052>/Switch2'
    */
-  500.0F,
+  10.0F,
 
   /* Variable: DEADBAND_CH3_1
    * Referenced by:

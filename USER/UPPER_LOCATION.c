@@ -4,7 +4,7 @@
 #define PI 3.1415926
 TGT_COOR TC;
 REAL_COOR RC;
-extern uint8_t USART3_RX_BUF[100];
+extern uint8_t UART7_RX_BUF[100];
 extern motor_measure_t *motor_data[8];
 uint8_t data[10];
 
@@ -45,20 +45,20 @@ double a1, a2, a3, a4, a5, a6;
 //}
 void Receive()
 {
-  RC.x = (USART3_RX_BUF[2] << 8) | USART3_RX_BUF[1];
-  RC.y = (USART3_RX_BUF[4] << 8) | USART3_RX_BUF[3];
-  RC.theta = (USART3_RX_BUF[6] << 8) | USART3_RX_BUF[5];
+  RC.x = (UART7_RX_BUF[2] << 8) | UART7_RX_BUF[1];
+  RC.y = (UART7_RX_BUF[4] << 8) | UART7_RX_BUF[3];
+  RC.theta = ((float)((UART7_RX_BUF[6] << 8) | UART7_RX_BUF[5]))/10;
 	
 	RC.xll=RC.xlast;
 	RC.yll=RC.ylast;
 	
   RC.xlast = RC.x;
   RC.ylast = RC.y;
-  TC.x = (USART3_RX_BUF[8] << 8) | USART3_RX_BUF[7];
-  TC.y = (USART3_RX_BUF[10] << 8) | USART3_RX_BUF[9];
-  TC.theta = (USART3_RX_BUF[12] << 8) | USART3_RX_BUF[11];
+  TC.x = (UART7_RX_BUF[8] << 8) | UART7_RX_BUF[7];
+  TC.y = (UART7_RX_BUF[10] << 8) | UART7_RX_BUF[9];
+  TC.theta = (UART7_RX_BUF[12] << 8) | UART7_RX_BUF[11];
 
-  RC.action = (USART3_RX_BUF[14] << 8) | USART3_RX_BUF[13];
+  RC.action = (UART7_RX_BUF[14] << 8) | UART7_RX_BUF[13];
 }
 void Reach_TGT()
 {

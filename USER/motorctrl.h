@@ -44,6 +44,8 @@ typedef struct
 {
 	int dir;
 	double thetal;
+	double thetan_cal_last;
+	double thetan_cal;
 	double thetan;
 	double thetas;
 	double err;

@@ -3,7 +3,7 @@
 
 
 #define PI 3.1415926
-#define MAXVEL 6000
+#define MAXVEL 4000
 ang_dir MotorSignal[3];
 extern FDCAN_HandleTypeDef hfdcan1; // CAN����1
 extern FDCAN_HandleTypeDef hfdcan2;
@@ -19,7 +19,33 @@ int dirflag=0;
 
 
 void ctrlmotor(double Vx, double Vy, double omega,int brake) {
-  MotorSignal[0].thetan = atan2(Vy, Vx + omega) * 180 / PI;
+	if(fabs(Vx)<40)
+		Vx=0;
+	if(fabs(Vy)<40)
+		Vy=0;
+	if(fabs(omega)<40)
+		omega=0;
+	if(brake==1)
+	{
+		rtU.target_CH2_1=0;
+		rtU.target_CH2_2=0;
+		rtU.target_CH2_3=0;//驻停必要操作
+		set_target(2,5,(-((int)(MotorSignal[0].thetas)/360)*360)*8191/(360)-90*8191/360+5771);
+		set_target(2,6,(-((int)(MotorSignal[0].thetas)/360)*360)*8191/(360)-60*8191/360+2346);
+		set_target(2,7,(-((int)(MotorSignal[0].thetas)/360)*360)*8191/(360)+60*8191/360+3057);
+		return;
+	}
+	if(Vx==0&&Vy==0&&omega==0){
+		set_target(2,1,0);
+		set_target(2,2,0);
+		set_target(2,3,0);
+		return;
+	}
+
+	Vx=5000/400*Vx;
+	Vy=5000/400*Vy;
+	omega=5000/400*omega;
+  MotorSignal[0].thetan = atan2(Vy, Vx - omega) * 180 / PI;
   MotorSignal[1].thetan = atan2(Vy - omega * cos(30.0 * PI / 180.0), Vx + omega * sin(30.0 * PI / 180.0)) * 180 / PI;
   MotorSignal[2].thetan = atan2(Vy + omega * cos(30.0 * PI / 180.0), Vx + omega * sin(30.0 * PI / 180.0)) * 180 / PI;
 	for(int i=0;i<3;i++){
@@ -33,57 +59,46 @@ void ctrlmotor(double Vx, double Vy, double omega,int brake) {
       cala_d(i);
 		  MotorSignal[i].thetal=MotorSignal[i].thetan;				
 	 }
-	 	if(brake==0)
-    {
-			set_target(2,5,MotorSignal[0].thetas*8191/(360));
-			set_target(2,6,MotorSignal[1].thetas*8191/(360));
-			set_target(2,7,MotorSignal[2].thetas*8191/(360));
-	 		while( (fabs(sqrt(pow(Vx-omega,2)+pow(Vy,2))*mult)>MAXVEL)||
-	 					(fabs(sqrt(pow((Vx+omega*sin(30.0*PI/180.0)),2)+pow((Vy-omega*cos(30.0*PI/180.0)),2))*mult)>MAXVEL)||
-	 					(fabs(sqrt(pow((Vx+omega*sin(30.0*PI/180.0)),2)+pow((Vy+omega*cos(30.0*PI/180.0)),2))*mult)>MAXVEL))
-	 		{
-	 			mult=0.98*mult;
-	 		}
-	 		rtU.status_CH1_1=1;
-	 		rtU.status_CH1_2=1;
-	 		rtU.status_CH1_3=1;
-	 		if((fabs(motor_data_can2[4]->ecd+motor_data_can2[4]->circle*8191-rtU.target_CH2_5)<45*8191/360&&
+	set_target(2,5,-MotorSignal[0].thetas*8191/(360)+5771);
+	set_target(2,6,-MotorSignal[1].thetas*8191/(360)+2346);
+	set_target(2,7,-MotorSignal[2].thetas*8191/(360)+3097);
+	 while( (fabs(sqrt(pow(Vx-omega,2)+pow(Vy,2))*mult)>MAXVEL)||
+	 			(fabs(sqrt(pow((Vx+omega*sin(30.0*PI/180.0)),2)+pow((Vy-omega*cos(30.0*PI/180.0)),2))*mult)>MAXVEL)||
+	 			(fabs(sqrt(pow((Vx+omega*sin(30.0*PI/180.0)),2)+pow((Vy+omega*cos(30.0*PI/180.0)),2))*mult)>MAXVEL))
+	 {
+	 	mult=0.98*mult;
+	 }
+	 rtU.status_CH1_1=1;
+	 rtU.status_CH1_2=1;
+	 rtU.status_CH1_3=1;
+	 if((fabs(motor_data_can2[4]->ecd+motor_data_can2[4]->circle*8191-rtU.target_CH2_5)<45*8191/360&&
 		 fabs(motor_data_can2[5]->ecd+motor_data_can2[5]->circle*8191-rtU.target_CH2_6)<45*8191/360&&
 		 fabs(motor_data_can2[6]->ecd+motor_data_can2[6]->circle*8191-rtU.target_CH2_7)<45*8191/360)
 		 ||omega!=0){
 				if(MotorSignal[0].dir==1)
-					set_target(1,1,-sqrt(pow(Vx-omega,2)+pow(Vy,2))*mult);
+					set_target(2,1,-sqrt(pow(Vx-omega,2)+pow(Vy,2))*mult);
 				else
-					set_target(1,1,sqrt(pow(Vx-omega,2)+pow(Vy,2))*mult);
+					set_target(2,1,sqrt(pow(Vx-omega,2)+pow(Vy,2))*mult);
 		
 				if(MotorSignal[1].dir==1)	
-					set_target(1,2,-sqrt(pow((Vx+omega*sin(30.0*PI/180.0)),2)+pow((Vy-omega*cos(30.0*PI/180.0)),2))*mult);
+					set_target(2,2,-sqrt(pow((Vx+omega*sin(30.0*PI/180.0)),2)+pow((Vy-omega*cos(30.0*PI/180.0)),2))*mult);
 				else
-					set_target(1,2,sqrt(pow((Vx+omega*sin(30.0*PI/180.0)),2)+pow((Vy-omega*cos(30.0*PI/180.0)),2))*mult);
+					set_target(2,2,sqrt(pow((Vx+omega*sin(30.0*PI/180.0)),2)+pow((Vy-omega*cos(30.0*PI/180.0)),2))*mult);
 		
 				if(MotorSignal[2].dir==1)
-					set_target(1,3,-sqrt(pow((Vx+omega*sin(30.0*PI/180.0)),2)+pow((Vy+omega*cos(30.0*PI/180.0)),2))*mult);	
+					set_target(2,3,-sqrt(pow((Vx+omega*sin(30.0*PI/180.0)),2)+pow((Vy+omega*cos(30.0*PI/180.0)),2))*mult);	
 				else
-					set_target(1,3,sqrt(pow((Vx+omega*sin(30.0*PI/180.0)),2)+pow((Vy+omega*cos(30.0*PI/180.0)),2))*mult);	
-			}
+					set_target(2,3,sqrt(pow((Vx+omega*sin(30.0*PI/180.0)),2)+pow((Vy+omega*cos(30.0*PI/180.0)),2))*mult);	
 	
 	 	}
-	 		else
-	 		{
-        rtU.target_CH1_1=0;
-				rtU.target_CH1_2=0;
-				rtU.target_CH1_3=0;//驻停必要操作
-				set_target(2,5,(((int)MotorSignal[0].thetas)/360+90)*360*8191/(360));
-				set_target(2,6,((((int)MotorSignal[0].thetas)/360)*360+120-90)*8191/(360));
-	 		  set_target(2,7,((((int)MotorSignal[0].thetas)/360)*360+60-90)*8191/(360));
-	 		}
+
 	
 	 mult=1;
 }
 
 void cala_d(int i){
 		//second & third quadrants,set direction and target theta		
-	if(MotorSignal[i].thetan<=-90)
+	if(MotorSignal[i].thetan<-90)
 	{
 			  MotorSignal[i].thetan=MotorSignal[i].thetan+180;
 				MotorSignal[i].dir=1;
@@ -114,14 +129,18 @@ void cala_d(int i){
 	}
 	else{
 		MotorSignal[i].err=MotorSignal[i].err1;
-		MotorSignal[i].dir=1-MotorSignal[i].dir;
 	}
 	MotorSignal[i].thetas+=MotorSignal[i].err;
 	//thetas on the left half plane means we should have an reverse direction 
-	if((((int)MotorSignal[i].thetas%360<=270&&(int)MotorSignal[i].thetas%360>90)
-	||((int)MotorSignal[i].thetas%360<=-90&&(int)MotorSignal[i].thetas%360>-270))){
-			MotorSignal[i].dir=1-MotorSignal[i].dir;
-		}
+			MotorSignal[i].thetan_cal=fabs(fabs((int)MotorSignal[i].thetas%360-MotorSignal[i].thetan)-180);
+		MotorSignal[i].thetan_cal_last=fabs(fabs((int)MotorSignal[i].thetas%360-MotorSignal[i].thetan)+180);
+	if((fabs(fabs((int)MotorSignal[i].thetas%360-MotorSignal[i].thetan)-180)<=1)||
+		fabs(fabs((int)MotorSignal[i].thetas%360-MotorSignal[i].thetan)+180)<=1)
+	{
+
+		MotorSignal[i].dir=1-MotorSignal[i].dir;
+	}
+		
 
 
 }

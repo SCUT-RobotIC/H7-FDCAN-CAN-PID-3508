@@ -38,6 +38,7 @@
 "pid_dji\pid_model.o"
 "pid_dji\pid_model_data.o"
 "pid_dji\upper_location.o"
+"pid_dji\sbus.o"
 --library_type=microlib --strict --scatter "PID_DJI\PID_DJI.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

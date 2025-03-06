@@ -19,7 +19,7 @@ typedef struct
 {
 	int16_t x;
 	int16_t y;
-	int16_t theta;
+	float theta;
 
 	int16_t xlast;
 	int16_t ylast;

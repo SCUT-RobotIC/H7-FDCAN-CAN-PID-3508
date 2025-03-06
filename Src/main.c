@@ -36,14 +36,18 @@
 #include "dm_motor_drv.h"
 #include "dm_motor_ctrl.h"
 #include "UPPER_LOCATION.h"
+#include "stdio.h"
+#include "string.h"
+#include "sbus.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 extern motor_t motor[num];
-extern FDCAN_HandleTypeDef hfdcan1;
-extern FDCAN_HandleTypeDef hfdcan2;
 extern uint8_t CAN_RECEIVE[3];
+extern TGT_COOR TC;
+extern REAL_COOR RC;
+extern double deadband;
 #define VEL      1
 #define ANG      2
 
@@ -60,16 +64,20 @@ vehicle_state vehicle_test={
 0,0,0,0
 };
 
-uint8_t USART3_RX_BUF[100];
+static uint8_t index[2] = {0};
+static uint8_t buffer[100];
+char UART7_TX_BUF[100];
+uint8_t UART7_RX_BUF[100];
+uint8_t USART2_RX_BUF[100];
 uint8_t rx_datatemp[8];
-
+int cnt[10];
+int PinState=0;
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-int cnt[10];
-int PinState=0;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -123,9 +131,11 @@ int main(void)
   MX_FDCAN3_Init();
   MX_USART3_UART_Init();
   MX_FDCAN1_Init();
+  MX_UART7_Init();
   /* USER CODE BEGIN 2 */
 	HAL_TIM_Base_Start_IT(&htim6);
-	HAL_UART_Receive_DMA(&huart3, USART3_RX_BUF, 1);
+	HAL_UART_Receive_IT(&huart2, buffer, 1);
+	HAL_UART_Receive_IT(&huart7, buffer+1, 1);
   can_filter_init();
 	bsp_can_init();
 	PID_MODEL_initialize();
@@ -139,7 +149,7 @@ int main(void)
 	PID_Speed_Para_Init(2, 2, 10 , 3 , 0.01);
 	PID_Speed_Para_Init(2, 3, 10 , 3 , 0.01);
 	PID_Speed_Para_Init(2, 4, 10 , 3 , 0.01);
-	PID_Speed_Para_Init(2, 5, 10 , 3 , 0.01);
+
 	
 	PID_Speed_Para_Init(3, 1, 10 , 3 , 0.01);
 	PID_Speed_Para_Init(3, 2, 10 , 3 , 0.01);
@@ -159,30 +169,40 @@ int main(void)
   PID_Angle_A_Para_Init(2, 3 , 1.5 , 1 , 0.1);
 	
 	PID_Angle_S_Para_Init(2, 5 , 50 , 5 , 0.1);
-  PID_Angle_A_Para_Init(2, 5 , 0.5 , 0.5 , 0);
+  PID_Angle_A_Para_Init(2, 5 , 0.7 , 0 , 0);
 	PID_Angle_S_Para_Init(2, 6 , 50 , 5 , 0.1);
-  PID_Angle_A_Para_Init(2, 6 , 0.5 , 0.5 , 0);
+  PID_Angle_A_Para_Init(2, 6 , 0.7 , 0 , 0);
 	PID_Angle_S_Para_Init(2, 7 , 50 , 5 , 0.1);
-  PID_Angle_A_Para_Init(2, 7 , 0.5 , 0.5 , 0);
+  PID_Angle_A_Para_Init(2, 7 , 0.7 , 0 , 0);
 	
 	PID_Angle_S_Para_Init(3, 1 , 10 , 3 , 0.01);
   PID_Angle_A_Para_Init(3, 1 , 0.3 , 0 , 0);
 	
 	Set_6020_Mode( 0 );
-	set_mode( ANG, VEL, VEL, VEL, VEL, VEL, VEL,
-            ANG, VEL, VEL, VEL, ANG, ANG, ANG,
+	set_mode( VEL, VEL, VEL, VEL, VEL, VEL, VEL,
+            VEL, VEL, VEL, VEL, ANG, ANG, ANG,
 					  ANG, VEL, VEL, VEL, ANG, ANG, ANG ); 
 	dm_motor_init();
 	dm_motor_enable(&hfdcan1,&motor[Motor1]);
+	memset(UART7_TX_BUF,0,sizeof(UART7_TX_BUF));
+	rtU.target_CH2_5=5848;
+	rtU.target_CH2_6=2384;
+	rtU.target_CH2_7=3055;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		set_target(1,1,8191*100);
-		set_target(2,1,8191*100);
-		set_target(3,1,8191*100);
+//		set_target(1,1,8191*100);
+//		set_target(2,1,8191*100);
+//		set_target(3,1,8191*100);
+		if(SBUS_CH.ConnectState==1){
+			vehicle_test.Vx=SBUS_CH.CH1-1002;
+			vehicle_test.Vy=SBUS_CH.CH2-1002;
+			vehicle_test.omega=SBUS_CH.CH4-1002;
+			vehicle_test.Park=(SBUS_CH.CH6>800);
+		}
 		ctrlmotor(vehicle_test.Vx,vehicle_test.Vy,vehicle_test.omega,vehicle_test.Park);
 
     /* USER CODE END WHILE */
@@ -256,7 +276,15 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   if (htim->Instance == TIM6)
   {
     cnt[0]++;
+		if(RC.action==1)
+		{ 
+			int buff_len;
+			memset(UART7_TX_BUF,0,buff_len);
+			buff_len = sprintf(UART7_TX_BUF,"fg %f \r\n",(float)deadband);
+			HAL_UART_Transmit_DMA(&huart7,(uint8_t *)UART7_TX_BUF,buff_len);
+		}
 		dm_motor_ctrl_send(&hfdcan1,&motor[Motor1]);
+			
 		get_msgn();
 		assign_output();
     motor_state_update();
@@ -269,27 +297,46 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-    static uint8_t index = 0;
-    static uint8_t buffer[16];
 
-    if (huart->Instance == USART3)
+	
+		 if (huart->Instance == USART2)
     {
-				if(index == 0 && USART3_RX_BUF[0]!=0xA5){
-					HAL_UART_Receive_DMA(&huart3, USART3_RX_BUF, 1);
+				if(index[0] == 0 && buffer[0]!=0x0F){
+					HAL_UART_Receive_IT(&huart2, buffer, 1);
 					return;
 				}
-        buffer[index++] = USART3_RX_BUF[0];
+        USART2_RX_BUF[index[0]++] = buffer[0];
 
-        if (index == 16)
+        if (index[0] == 24)
         {
-            index = 0;
-            if (buffer[0] == 0xA5 && buffer[15] == 0x5A) 
+            index[0] = 0;
+            if (USART2_RX_BUF[0] == 0x0F && USART2_RX_BUF[23] == 0x00) 
+            {
+								update_sbus(USART2_RX_BUF);
+            }
+        }
+
+        HAL_UART_Receive_IT(&huart2, buffer, 1);
+    }
+		
+    if (huart->Instance == UART7)
+    {
+				if(index[1] == 0 && buffer[1]!=0xA5){
+					HAL_UART_Receive_IT(&huart7, buffer+1, 1);
+					return;
+				}
+        UART7_RX_BUF[index[1]++] = buffer[1];
+
+        if (index[1] == 16)
+        {
+            index[1] = 0;
+            if (UART7_RX_BUF[0] == 0xA5 && UART7_RX_BUF[15] == 0x5A) 
             {
 								Receive();
             }
         }
 
-        HAL_UART_Receive_DMA(&huart3, USART3_RX_BUF, 1);
+        HAL_UART_Receive_IT(&huart7, buffer+1, 1);
     }
 }
 /* USER CODE END 4 */
