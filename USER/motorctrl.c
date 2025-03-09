@@ -3,7 +3,7 @@
 
 
 #define PI 3.1415926
-#define MAXVEL 4000
+#define MAXVEL 3000
 ang_dir MotorSignal[3];
 extern FDCAN_HandleTypeDef hfdcan1; // CAN����1
 extern FDCAN_HandleTypeDef hfdcan2;
@@ -401,91 +401,96 @@ void set_mode(int mode_CH1_1, int mode_CH1_2, int mode_CH1_3, int mode_CH1_4, in
 }
 
 void set_reset_status(){	
-	if((fabs(rtU.target_CH1_1-motor_data_can1[0]->speed_rpm)<200&&rtU.status_CH1_1==1)||
-		(fabs(rtU.target_CH1_1-motor_data_can1[0]->circle*8191-motor_data_can1[0]->ecd)<500&&rtU.status_CH1_1==2))
+	if(rtU.ang_err<2)
+		rtU.reset_status_ang=1-rtU.reset_status_ang;
+	if(rtU.distance<50)
+		rtU.reset_status_dist=1-rtU.reset_status_dist;
+	
+	if(//(fabs(rtU.target_CH1_1-motor_data_can1[0]->speed_rpm)<20&&rtU.status_CH1_1==1)||
+		(fabs(rtU.target_CH1_1-motor_data_can1[0]->circle*8191-motor_data_can1[0]->ecd)<20&&rtU.status_CH1_1==2))
 		rtU.reset_status1_1=1-rtU.reset_status1_1;
 	
-	if((fabs(rtU.target_CH1_2-motor_data_can1[1]->speed_rpm)<200&&rtU.status_CH1_2==1)||
-		(fabs(rtU.target_CH1_2-motor_data_can1[1]->circle*8191-motor_data_can1[1]->ecd)<500&&rtU.status_CH1_2==2))
+	if(//(fabs(rtU.target_CH1_2-motor_data_can1[1]->speed_rpm)<20&&rtU.status_CH1_2==1)||
+		(fabs(rtU.target_CH1_2-motor_data_can1[1]->circle*8191-motor_data_can1[1]->ecd)<20&&rtU.status_CH1_2==2))
 		rtU.reset_status1_2=1-rtU.reset_status1_2;
 	
-	if((fabs(rtU.target_CH1_3-motor_data_can1[2]->speed_rpm)<200&&rtU.status_CH1_3==1)||
-		(fabs(rtU.target_CH1_3-motor_data_can1[2]->circle*8191-motor_data_can1[2]->ecd)<500&&rtU.status_CH1_3==2))
+	if(//(fabs(rtU.target_CH1_3-motor_data_can1[2]->speed_rpm)<20&&rtU.status_CH1_3==1)||
+		(fabs(rtU.target_CH1_3-motor_data_can1[2]->circle*8191-motor_data_can1[2]->ecd)<20&&rtU.status_CH1_3==2))
 		rtU.reset_status1_3=1-rtU.reset_status1_3;
 	
-	if((fabs(rtU.target_CH1_4-motor_data_can1[3]->speed_rpm)<200&&rtU.status_CH1_4==1)||
-		(fabs(rtU.target_CH1_4-motor_data_can1[3]->circle*8191-motor_data_can1[3]->ecd)<500&&rtU.status_CH1_4==2))
+	if(//(fabs(rtU.target_CH1_4-motor_data_can1[3]->speed_rpm)<20&&rtU.status_CH1_4==1)||
+		(fabs(rtU.target_CH1_4-motor_data_can1[3]->circle*8191-motor_data_can1[3]->ecd)<20&&rtU.status_CH1_4==2))
 		rtU.reset_status1_4=1-rtU.reset_status1_4;
 	
-	if((fabs(rtU.target_CH1_5-motor_data_can1[4]->speed_rpm)<200&&rtU.status_CH1_5==1)||
-		(fabs(rtU.target_CH1_5-motor_data_can1[4]->circle*8191-motor_data_can1[4]->ecd)<500&&rtU.status_CH1_5==2))
+	if(//(fabs(rtU.target_CH1_5-motor_data_can1[4]->speed_rpm)<20&&rtU.status_CH1_5==1)||
+		(fabs(rtU.target_CH1_5-motor_data_can1[4]->circle*8191-motor_data_can1[4]->ecd)<20&&rtU.status_CH1_5==2))
 		rtU.reset_status1_5=1-rtU.reset_status1_5;
 	
-	if((fabs(rtU.target_CH1_6-motor_data_can1[5]->speed_rpm)<200&&rtU.status_CH1_6==1)||
-		(fabs(rtU.target_CH1_6-motor_data_can1[5]->circle*8191-motor_data_can1[5]->ecd)<500&&rtU.status_CH1_6==2))
+	if(//(fabs(rtU.target_CH1_6-motor_data_can1[5]->speed_rpm)<20&&rtU.status_CH1_6==1)||
+		(fabs(rtU.target_CH1_6-motor_data_can1[5]->circle*8191-motor_data_can1[5]->ecd)<20&&rtU.status_CH1_6==2))
 		rtU.reset_status1_6=1-rtU.reset_status1_6;
 	
-	if((fabs(rtU.target_CH1_7-motor_data_can1[6]->speed_rpm)<200&&rtU.status_CH1_7==1)||
-		(fabs(rtU.target_CH1_7-motor_data_can1[6]->circle*8191-motor_data_can1[6]->ecd)<500&&rtU.status_CH1_7==2))
+	if(//(fabs(rtU.target_CH1_7-motor_data_can1[6]->speed_rpm)<20&&rtU.status_CH1_7==1)||
+		(fabs(rtU.target_CH1_7-motor_data_can1[6]->circle*8191-motor_data_can1[6]->ecd)<20&&rtU.status_CH1_7==2))
 		rtU.reset_status1_7=1-rtU.reset_status1_7;
 	
 							
 							
-	if((fabs(rtU.target_CH2_1-motor_data_can2[0]->speed_rpm)<200&&rtU.status_CH2_1==1)||
-		(fabs(rtU.target_CH2_1-motor_data_can2[0]->circle*8191-motor_data_can2[0]->ecd)<500&&rtU.status_CH2_1==2))
+	if(//(fabs(rtU.target_CH2_1-motor_data_can2[0]->speed_rpm)<20&&rtU.status_CH2_1==1)||
+		(fabs(rtU.target_CH2_1-motor_data_can2[0]->circle*8191-motor_data_can2[0]->ecd)<20&&rtU.status_CH2_1==2))
 		rtU.reset_status2_1=1-rtU.reset_status2_1;
 	
-	if((fabs(rtU.target_CH2_2-motor_data_can2[1]->speed_rpm)<200&&rtU.status_CH2_2==1)||
-		(fabs(rtU.target_CH2_2-motor_data_can2[1]->circle*8191-motor_data_can2[1]->ecd)<500&&rtU.status_CH2_2==2))
+	if(//(fabs(rtU.target_CH2_2-motor_data_can2[1]->speed_rpm)<20&&rtU.status_CH2_2==1)||
+		(fabs(rtU.target_CH2_2-motor_data_can2[1]->circle*8191-motor_data_can2[1]->ecd)<20&&rtU.status_CH2_2==2))
 		rtU.reset_status2_2=1-rtU.reset_status2_2;
 	
-	if((fabs(rtU.target_CH2_3-motor_data_can2[2]->speed_rpm)<200&&rtU.status_CH2_3==1)||
-		(fabs(rtU.target_CH2_3-motor_data_can2[2]->circle*8191-motor_data_can2[2]->ecd)<500&&rtU.status_CH2_3==2))
+	if(//(fabs(rtU.target_CH2_3-motor_data_can2[2]->speed_rpm)<20&&rtU.status_CH2_3==1)||
+		(fabs(rtU.target_CH2_3-motor_data_can2[2]->circle*8191-motor_data_can2[2]->ecd)<20&&rtU.status_CH2_3==2))
 		rtU.reset_status2_3=1-rtU.reset_status2_3;
 	
-	if((fabs(rtU.target_CH2_4-motor_data_can2[3]->speed_rpm)<200&&rtU.status_CH2_4==1)||
-		(fabs(rtU.target_CH2_4-motor_data_can2[3]->circle*8191-motor_data_can2[3]->ecd)<500&&rtU.status_CH2_4==2))
+	if(//(fabs(rtU.target_CH2_4-motor_data_can2[3]->speed_rpm)<20&&rtU.status_CH2_4==1)||
+		(fabs(rtU.target_CH2_4-motor_data_can2[3]->circle*8191-motor_data_can2[3]->ecd)<20&&rtU.status_CH2_4==2))
 		rtU.reset_status2_4=1-rtU.reset_status2_4;
 	
-	if((fabs(rtU.target_CH2_5-motor_data_can2[4]->speed_rpm)<200&&rtU.status_CH2_5==1)||
-		(fabs(rtU.target_CH2_5-motor_data_can2[4]->circle*8191-motor_data_can2[4]->ecd)<500&&rtU.status_CH2_5==2))
+	if(//(fabs(rtU.target_CH2_5-motor_data_can2[4]->speed_rpm)<20&&rtU.status_CH2_5==1)||
+		(fabs(rtU.target_CH2_5-motor_data_can2[4]->circle*8191-motor_data_can2[4]->ecd)<3&&rtU.status_CH2_5==2))
 		rtU.reset_status2_5=1-rtU.reset_status2_5;
 	
-	if((fabs(rtU.target_CH2_6-motor_data_can2[5]->speed_rpm)<200&&rtU.status_CH2_6==1)||
-		(fabs(rtU.target_CH2_6-motor_data_can2[5]->circle*8191-motor_data_can2[5]->ecd)<500&&rtU.status_CH2_6==2))
+	if(//(fabs(rtU.target_CH2_6-motor_data_can2[5]->speed_rpm)<20&&rtU.status_CH2_6==1)||
+		(fabs(rtU.target_CH2_6-motor_data_can2[5]->circle*8191-motor_data_can2[5]->ecd)<3&&rtU.status_CH2_6==2))
 		rtU.reset_status2_6=1-rtU.reset_status2_6;
 	
-	if((fabs(rtU.target_CH2_7-motor_data_can2[6]->speed_rpm)<200&&rtU.status_CH2_7==1)||
-		(fabs(rtU.target_CH2_7-motor_data_can2[6]->circle*8191-motor_data_can2[6]->ecd)<500&&rtU.status_CH2_7==2))
+	if(//(fabs(rtU.target_CH2_7-motor_data_can2[6]->speed_rpm)<20&&rtU.status_CH2_7==1)||
+		(fabs(rtU.target_CH2_7-motor_data_can2[6]->circle*8191-motor_data_can2[6]->ecd)<3&&rtU.status_CH2_7==2))
 		rtU.reset_status2_7=1-rtU.reset_status2_7;
 
 	
-	if((fabs(rtU.target_CH3_1-motor_data_can3[0]->speed_rpm)<200&&rtU.status_CH3_1==1)||
-		(fabs(rtU.target_CH3_1-motor_data_can3[0]->circle*8191-motor_data_can3[0]->ecd)<500&&rtU.status_CH3_1==2))
+	if(//(fabs(rtU.target_CH3_1-motor_data_can3[0]->speed_rpm)<20&&rtU.status_CH3_1==1)||
+		(fabs(rtU.target_CH3_1-motor_data_can3[0]->circle*8191-motor_data_can3[0]->ecd)<20&&rtU.status_CH3_1==2))
 		rtU.reset_status3_1=1-rtU.reset_status3_1;
 	
-	if((fabs(rtU.target_CH3_2-motor_data_can3[1]->speed_rpm)<200&&rtU.status_CH3_2==1)||
-		(fabs(rtU.target_CH3_2-motor_data_can3[1]->circle*8191-motor_data_can3[1]->ecd)<500&&rtU.status_CH3_2==2))
+	if(//(fabs(rtU.target_CH3_2-motor_data_can3[1]->speed_rpm)<20&&rtU.status_CH3_2==1)||
+		(fabs(rtU.target_CH3_2-motor_data_can3[1]->circle*8191-motor_data_can3[1]->ecd)<20&&rtU.status_CH3_2==2))
 		rtU.reset_status3_2=1-rtU.reset_status3_2;
 	
-	if((fabs(rtU.target_CH3_3-motor_data_can3[2]->speed_rpm)<200&&rtU.status_CH3_3==1)||
-		(fabs(rtU.target_CH3_3-motor_data_can3[2]->circle*8191-motor_data_can3[2]->ecd)<500&&rtU.status_CH3_3==2))
+	if(//(fabs(rtU.target_CH3_3-motor_data_can3[2]->speed_rpm)<20&&rtU.status_CH3_3==1)||
+		(fabs(rtU.target_CH3_3-motor_data_can3[2]->circle*8191-motor_data_can3[2]->ecd)<20&&rtU.status_CH3_3==2))
 		rtU.reset_status3_3=1-rtU.reset_status3_3;
 	
-	if((fabs(rtU.target_CH3_4-motor_data_can3[3]->speed_rpm)<200&&rtU.status_CH3_4==1)||
-		(fabs(rtU.target_CH3_4-motor_data_can3[3]->circle*8191-motor_data_can3[3]->ecd)<500&&rtU.status_CH3_4==2))
+	if(//(fabs(rtU.target_CH3_4-motor_data_can3[3]->speed_rpm)<20&&rtU.status_CH3_4==1)||
+		(fabs(rtU.target_CH3_4-motor_data_can3[3]->circle*8191-motor_data_can3[3]->ecd)<20&&rtU.status_CH3_4==2))
 		rtU.reset_status3_4=1-rtU.reset_status3_4;
 	
-	if((fabs(rtU.target_CH3_5-motor_data_can3[4]->speed_rpm)<200&&rtU.status_CH3_5==1)||
-		(fabs(rtU.target_CH3_5-motor_data_can3[4]->circle*8191-motor_data_can3[4]->ecd)<500&&rtU.status_CH3_5==2))
+	if(//(fabs(rtU.target_CH3_5-motor_data_can3[4]->speed_rpm)<20&&rtU.status_CH3_5==1)||
+		(fabs(rtU.target_CH3_5-motor_data_can3[4]->circle*8191-motor_data_can3[4]->ecd)<20&&rtU.status_CH3_5==2))
 		rtU.reset_status3_5=1-rtU.reset_status3_5;
 	
-  if((fabs(rtU.target_CH3_6-motor_data_can3[5]->speed_rpm)<200&&rtU.status_CH3_6==1)||
-		(fabs(rtU.target_CH3_6-motor_data_can3[5]->circle*8191-motor_data_can3[5]->ecd)<500&&rtU.status_CH3_6==2))
+  if(//(fabs(rtU.target_CH3_6-motor_data_can3[5]->speed_rpm)<20&&rtU.status_CH3_6==1)||
+		(fabs(rtU.target_CH3_6-motor_data_can3[5]->circle*8191-motor_data_can3[5]->ecd)<20&&rtU.status_CH3_6==2))
 		rtU.reset_status3_6=1-rtU.reset_status3_6;
 	
-	if((fabs(rtU.target_CH3_7-motor_data_can3[6]->speed_rpm)<200&&rtU.status_CH3_7==1)||
-		(fabs(rtU.target_CH3_7-motor_data_can3[6]->circle*8191-motor_data_can3[6]->ecd)<500&&rtU.status_CH3_7==2))
+	if(//(fabs(rtU.target_CH3_7-motor_data_can3[6]->speed_rpm)<20&&rtU.status_CH3_7==1)||
+		(fabs(rtU.target_CH3_7-motor_data_can3[6]->circle*8191-motor_data_can3[6]->ecd)<20&&rtU.status_CH3_7==2))
 		rtU.reset_status3_7=1-rtU.reset_status3_7;
 
 }

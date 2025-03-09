@@ -66,40 +66,43 @@ void Reach_TGT()
 	RC.distlast=RC.dist;
   RC.dist = sqrt(pow(TC.y - RC.y, 2) + pow((TC.x - RC.x), 2));
 	rtU.distance=RC.dist;
+	rtU.ang_err=RC.theta;
 	rtP.POS_P=1;
 	rtP.POS_I=0.1;
 	rtP.POS_D=0;
-	
+	rtP.POS_A_P=1;
+	rtP.POS_A_I=0;
+	rtP.POS_A_D=0;
   TC.XYtheta = atan2(TC.y - RC.y, TC.x - RC.x) * 180 / PI;
 
-  if (fabs((double)RC.dist) >= deadband && fabs((double)RC.dist) < 300)
-  {
-		factors1=2;
-    RC.dist = 1300 / factors1;
-  }
-	else if(fabs((double)RC.dist) >300)
-	{
-		factors1=4;
-	}
-  if (fabs((double)RC.dist) > top)
-  {
+//  if (fabs((double)RC.dist) >= deadband && fabs((double)RC.dist) < 300)
+//  {
+//		factors1=2;
+//    RC.dist = 1300 / factors1;
+//  }
+//	else if(fabs((double)RC.dist) >300)
+//	{
+//		factors1=4;
+//	}
+//  if (fabs((double)RC.dist) > top)
+//  {
 
-    RC.dist = top;
-  }
+//    RC.dist = top;
+//  }
 
-  RC.RE_theta = TC.XYtheta - RC.theta;
-  if (fabs((double)RC.RE_theta) < 1)
-  {
-    RC.RE_theta = 0;
-  }
-  if (fabs((double)RC.dist) < deadband)
-  {
-		RC.Vx=0;
-		RC.Vy=0;
-  }else{
-  RC.Vx = (rtY.vel_out) *cos(RC.RE_theta * PI / 180)* factors1;
-  RC.Vy = (rtY.vel_out) *sin(RC.RE_theta * PI / 180)* factors1;
-	}
+//  RC.RE_theta = TC.XYtheta - RC.theta;
+//  if (fabs((double)RC.RE_theta) < 1)
+//  {
+//    RC.RE_theta = 0;
+//  }
+//  if (fabs((double)RC.dist) < deadband)
+//  {
+//		RC.Vx=0;
+//		RC.Vy=0;
+//  }else{
+  RC.Vx = (rtY.vel_out) *cos(RC.RE_theta * PI / 180);
+  RC.Vy = (rtY.vel_out) *sin(RC.RE_theta * PI / 180);
+//	}
   //  a1=cos(RC.RE_theta*PI/180);
   //	a2=sin(RC.RE_theta*PI/180);
   //	    if(RC.omega!=0)
@@ -113,27 +116,27 @@ void Reach_TGT()
     TC.theta = TC.theta + 360;
   TC.theta = TC.theta % 360;
 
-  if (fabs((double)TC.theta - RC.theta) > 3)
-    RC.omega = (TC.theta - RC.theta) * factors2;
-  else
-    RC.omega = 0;
-
-  if (fabs((double)RC.omega) > 5000)
-  {
-    if (RC.omega > 0)
-      RC.omega = 5000;
-    else
-      RC.omega = -5000;
-  }
-  else if (fabs((double)RC.omega) < 650)
-  {
-    if (RC.omega > 0)
-      RC.omega = 650;
-    else if (RC.omega < 0)
-      RC.omega = -650;
-    else
-      RC.omega = 0;
-  }
-  RC.omega = -RC.omega;
+//  if (fabs((double)TC.theta - RC.theta) > 3)
+//    RC.omega = (TC.theta - RC.theta) * factors2;
+//  else
+//    RC.omega = 0;
+	RC.omega=rtY.omega_out;
+//  if (fabs((double)RC.omega) > 5000)
+//  {
+//    if (RC.omega > 0)
+//      RC.omega = 5000;
+//    else
+//      RC.omega = -5000;
+//  }
+//  else if (fabs((double)RC.omega) < 650)
+//  {
+//    if (RC.omega > 0)
+//      RC.omega = 650;
+//    else if (RC.omega < 0)
+//      RC.omega = -650;
+//    else
+//      RC.omega = 0;
+//  }
+//  RC.omega = -RC.omega;
 } // 最后把RC.Vx，RC.Vy，RC.omege三个参数放进main接收就行
 

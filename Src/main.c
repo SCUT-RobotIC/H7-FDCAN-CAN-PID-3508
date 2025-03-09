@@ -48,6 +48,9 @@ extern uint8_t CAN_RECEIVE[3];
 extern TGT_COOR TC;
 extern REAL_COOR RC;
 extern double deadband;
+extern motor_measure_t *motor_data_can1[8];
+extern motor_measure_t *motor_data_can2[8];
+extern motor_measure_t *motor_data_can3[8];
 #define VEL      1
 #define ANG      2
 
@@ -145,10 +148,10 @@ int main(void)
 	PID_Speed_Para_Init(1, 4, 10 , 3 , 0.01);
 	PID_Speed_Para_Init(1, 5, 10 , 3 , 0.01);
 	
-	PID_Speed_Para_Init(2, 1, 10 , 3 , 0.01);
-	PID_Speed_Para_Init(2, 2, 10 , 3 , 0.01);
-	PID_Speed_Para_Init(2, 3, 10 , 3 , 0.01);
-	PID_Speed_Para_Init(2, 4, 10 , 3 , 0.01);
+	PID_Speed_Para_Init(2, 1, 20 , 8 , 0.01);
+	PID_Speed_Para_Init(2, 2, 20 , 8 , 0.01);
+	PID_Speed_Para_Init(2, 3, 20 , 8 , 0.01);
+
 
 	
 	PID_Speed_Para_Init(3, 1, 10 , 3 , 0.01);
@@ -168,12 +171,12 @@ int main(void)
 	PID_Angle_S_Para_Init(2, 3 , 5 , 3 , 0.01);
   PID_Angle_A_Para_Init(2, 3 , 1.5 , 1 , 0.1);
 	
-	PID_Angle_S_Para_Init(2, 5 , 50 , 5 , 0.1);
-  PID_Angle_A_Para_Init(2, 5 , 0.7 , 0 , 0);
-	PID_Angle_S_Para_Init(2, 6 , 50 , 5 , 0.1);
-  PID_Angle_A_Para_Init(2, 6 , 0.7 , 0 , 0);
-	PID_Angle_S_Para_Init(2, 7 , 50 , 5 , 0.1);
-  PID_Angle_A_Para_Init(2, 7 , 0.7 , 0 , 0);
+	PID_Angle_S_Para_Init(2, 5 , 100 , 30 , 0.1);
+  PID_Angle_A_Para_Init(2, 5 , 1.0 , 0 , 0);
+	PID_Angle_S_Para_Init(2, 6 , 100 , 30 , 0.1);
+  PID_Angle_A_Para_Init(2, 6 , 1.0 , 0 , 0);
+	PID_Angle_S_Para_Init(2, 7 , 100 , 30 , 0.1);
+  PID_Angle_A_Para_Init(2, 7 , 1.0 , 0 , 0);
 	
 	PID_Angle_S_Para_Init(3, 1 , 10 , 3 , 0.01);
   PID_Angle_A_Para_Init(3, 1 , 0.3 , 0 , 0);
@@ -185,9 +188,12 @@ int main(void)
 	dm_motor_init();
 	dm_motor_enable(&hfdcan1,&motor[Motor1]);
 	memset(UART7_TX_BUF,0,sizeof(UART7_TX_BUF));
-	rtU.target_CH2_5=5848;
-	rtU.target_CH2_6=2384;
-	rtU.target_CH2_7=3055;
+	while(motor_data_can2[4]->activate)
+		rtU.target_CH2_5=5848;
+	while(motor_data_can2[5]->activate)
+		rtU.target_CH2_6=2384;
+	while(motor_data_can2[6]->activate)
+		rtU.target_CH2_7=3055;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -195,7 +201,13 @@ int main(void)
   while (1)
   {
 //		set_target(1,1,8191*100);
-//		set_target(2,1,8191*100);
+//		set_target(2,1,vehicle_test.Vx);
+//		set_target(2,2,vehicle_test.Vx);
+//		set_target(2,3,vehicle_test.Vx);
+//		vehicle_test.Vy=rtU.speed_rpm_CH2_1;
+//		vehicle_test.omega=rtU.speed_rpm_CH2_2;
+//		vehicle_test.Park=rtU.speed_rpm_CH2_3;
+		
 //		set_target(3,1,8191*100);
 		if(SBUS_CH.ConnectState==1){
 			vehicle_test.Vx=SBUS_CH.CH1-1002;
@@ -280,16 +292,18 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		{ 
 			int buff_len;
 			memset(UART7_TX_BUF,0,buff_len);
-			buff_len = sprintf(UART7_TX_BUF,"fg %f \r\n",(float)deadband);
+			buff_len = sprintf(UART7_TX_BUF,"%f\r\n",(float)deadband);
 			HAL_UART_Transmit_DMA(&huart7,(uint8_t *)UART7_TX_BUF,buff_len);
 		}
 		dm_motor_ctrl_send(&hfdcan1,&motor[Motor1]);
-			
+		
+		Reach_TGT();
 		get_msgn();
 		assign_output();
     motor_state_update();
 		set_reset_status();
 		PID_MODEL_step();
+
 		HAL_GPIO_WritePin(GPIOD,GPIO_PIN_15,(GPIO_PinState)1);
 
   }
@@ -333,6 +347,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
             if (UART7_RX_BUF[0] == 0xA5 && UART7_RX_BUF[15] == 0x5A) 
             {
 								Receive();
+
+								HAL_UART_Transmit_DMA(&huart7,UART7_RX_BUF,16);
             }
         }
 
