@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'PID_MODEL'.
  *
- * Model version                  : 4.7
+ * Model version                  : 4.8
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Fri Mar  7 20:17:33 2025
+ * C/C++ source code generated on : Sun Mar  9 21:39:46 2025
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex-M
@@ -128,8 +128,22 @@ void PID_MODEL_step(void)
   real32_T rtb_FilterCoefficient_hh;
   real32_T rtb_FilterCoefficient_jq;
   real32_T rtb_FilterCoefficient_lb;
+  real32_T rtb_Integrator_ow;
+  real32_T rtb_Switch1;
   real32_T rtb_Switch2_ft;
   real32_T u0;
+
+  /* Switch: '<Root>/Switch2' incorporates:
+   *  Constant: '<Root>/Constant'
+   *  Inport: '<Root>/distance'
+   */
+  if (rtU.distance > 50.0F) {
+    rtb_Integrator_ow = rtU.distance;
+  } else {
+    rtb_Integrator_ow = 0.0F;
+  }
+
+  /* End of Switch: '<Root>/Switch2' */
 
   /* DiscreteIntegrator: '<S3333>/Integrator' incorporates:
    *  Inport: '<Root>/reset_status_dist'
@@ -151,18 +165,16 @@ void PID_MODEL_step(void)
   /* Gain: '<S3336>/Filter Coefficient' incorporates:
    *  DiscreteIntegrator: '<S3328>/Filter'
    *  Gain: '<S3326>/Derivative Gain'
-   *  Inport: '<Root>/distance'
    *  Sum: '<S3328>/SumD'
    */
-  rtb_FilterCoefficient = (rtP.POS_D * rtU.distance - rtDW.Filter_DSTATE) *
+  rtb_FilterCoefficient = (rtP.POS_D * rtb_Integrator_ow - rtDW.Filter_DSTATE) *
     100.0F;
 
   /* Sum: '<S3342>/Sum' incorporates:
    *  DiscreteIntegrator: '<S3333>/Integrator'
    *  Gain: '<S3338>/Proportional Gain'
-   *  Inport: '<Root>/distance'
    */
-  u0 = (rtP.POS_P * rtU.distance + rtDW.Integrator_DSTATE) +
+  u0 = (rtP.POS_P * rtb_Integrator_ow + rtDW.Integrator_DSTATE) +
     rtb_FilterCoefficient;
 
   /* Saturate: '<S3340>/Saturation' */
@@ -178,6 +190,18 @@ void PID_MODEL_step(void)
   }
 
   /* End of Saturate: '<S3340>/Saturation' */
+
+  /* Switch: '<Root>/Switch1' incorporates:
+   *  Constant: '<Root>/Constant1'
+   *  Inport: '<Root>/ang_err'
+   */
+  if (rtU.ang_err > 1.0F) {
+    rtb_Switch1 = rtU.ang_err;
+  } else {
+    rtb_Switch1 = 0.0F;
+  }
+
+  /* End of Switch: '<Root>/Switch1' */
 
   /* DiscreteIntegrator: '<S3383>/Integrator' incorporates:
    *  Inport: '<Root>/reset_status_ang'
@@ -199,18 +223,16 @@ void PID_MODEL_step(void)
   /* Gain: '<S3386>/Filter Coefficient' incorporates:
    *  DiscreteIntegrator: '<S3378>/Filter'
    *  Gain: '<S3376>/Derivative Gain'
-   *  Inport: '<Root>/ang_err'
    *  Sum: '<S3378>/SumD'
    */
-  rtb_FilterCoefficient_lb = (rtP.POS_A_D * rtU.ang_err - rtDW.Filter_DSTATE_l) *
+  rtb_FilterCoefficient_lb = (rtP.POS_A_D * rtb_Switch1 - rtDW.Filter_DSTATE_l) *
     100.0F;
 
   /* Sum: '<S3392>/Sum' incorporates:
    *  DiscreteIntegrator: '<S3383>/Integrator'
    *  Gain: '<S3388>/Proportional Gain'
-   *  Inport: '<Root>/ang_err'
    */
-  u0 = (rtP.POS_A_P * rtU.ang_err + rtDW.Integrator_DSTATE_e) +
+  u0 = (rtP.POS_A_P * rtb_Switch1 + rtDW.Integrator_DSTATE_e) +
     rtb_FilterCoefficient_lb;
 
   /* Saturate: '<S3390>/Saturation' */
@@ -6068,10 +6090,9 @@ void PID_MODEL_step(void)
   /* Update for DiscreteIntegrator: '<S3333>/Integrator' incorporates:
    *  DiscreteIntegrator: '<S3328>/Filter'
    *  Gain: '<S3330>/Integral Gain'
-   *  Inport: '<Root>/distance'
    *  Inport: '<Root>/reset_status_dist'
    */
-  rtDW.Integrator_DSTATE += rtP.POS_I * rtU.distance * 0.001F;
+  rtDW.Integrator_DSTATE += rtP.POS_I * rtb_Integrator_ow * 0.001F;
   if (rtU.reset_status_dist > 0.0F) {
     rtDW.Integrator_PrevResetState = 1;
     rtDW.Filter_PrevResetState = 1;
@@ -6101,10 +6122,9 @@ void PID_MODEL_step(void)
   /* Update for DiscreteIntegrator: '<S3383>/Integrator' incorporates:
    *  DiscreteIntegrator: '<S3378>/Filter'
    *  Gain: '<S3380>/Integral Gain'
-   *  Inport: '<Root>/ang_err'
    *  Inport: '<Root>/reset_status_ang'
    */
-  rtDW.Integrator_DSTATE_e += rtP.POS_A_I * rtU.ang_err * 0.001F;
+  rtDW.Integrator_DSTATE_e += rtP.POS_A_I * rtb_Switch1 * 0.001F;
   if (rtU.reset_status_ang > 0.0F) {
     rtDW.Integrator_PrevResetState_k = 1;
     rtDW.Filter_PrevResetState_p = 1;

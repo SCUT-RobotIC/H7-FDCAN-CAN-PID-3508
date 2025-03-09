@@ -53,7 +53,7 @@ extern motor_measure_t *motor_data_can2[8];
 extern motor_measure_t *motor_data_can3[8];
 #define VEL      1
 #define ANG      2
-
+uint8_t active_can[10];
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -188,11 +188,27 @@ int main(void)
 	dm_motor_init();
 	dm_motor_enable(&hfdcan1,&motor[Motor1]);
 	memset(UART7_TX_BUF,0,sizeof(UART7_TX_BUF));
-	while(motor_data_can2[4]->activate)
+	
+	while(1){
+		active_can[0]=motor_data_can2[4]->activate;
+		if(active_can[0])
+			break;
+	}
+		;
 		rtU.target_CH2_5=5848;
-	while(motor_data_can2[5]->activate)
+	while(1){
+		active_can[1]=motor_data_can2[5]->activate;
+		if(active_can[1])
+			break;
+	}
+		;
 		rtU.target_CH2_6=2384;
-	while(motor_data_can2[6]->activate)
+	while(1){
+		active_can[2]=motor_data_can2[6]->activate;
+		if(active_can[2])
+			break;
+	}
+		;
 		rtU.target_CH2_7=3055;
   /* USER CODE END 2 */
 

@@ -67,10 +67,10 @@ void Reach_TGT()
   RC.dist = sqrt(pow(TC.y - RC.y, 2) + pow((TC.x - RC.x), 2));
 	rtU.distance=RC.dist;
 	rtU.ang_err=RC.theta;
-	rtP.POS_P=1;
-	rtP.POS_I=0.1;
+	rtP.POS_P=50;
+	rtP.POS_I=5;
 	rtP.POS_D=0;
-	rtP.POS_A_P=1;
+	rtP.POS_A_P=200;
 	rtP.POS_A_I=0;
 	rtP.POS_A_D=0;
   TC.XYtheta = atan2(TC.y - RC.y, TC.x - RC.x) * 180 / PI;
