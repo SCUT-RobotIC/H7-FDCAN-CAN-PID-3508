@@ -194,21 +194,21 @@ int main(void)
 		if(active_can[0])
 			break;
 	}
-		;
+
 		rtU.target_CH2_5=5848;
 	while(1){
 		active_can[1]=motor_data_can2[5]->activate;
 		if(active_can[1])
 			break;
 	}
-		;
+
 		rtU.target_CH2_6=2384;
 	while(1){
 		active_can[2]=motor_data_can2[6]->activate;
 		if(active_can[2])
 			break;
 	}
-		;
+
 		rtU.target_CH2_7=3055;
   /* USER CODE END 2 */
 
