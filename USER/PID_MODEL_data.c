@@ -9,7 +9,7 @@
  *
  * Model version                  : 4.8
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Sun Mar  9 21:39:46 2025
+ * C/C++ source code generated on : Mon Mar 10 17:17:40 2025
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex-M
@@ -653,6 +653,11 @@ P rtP = {
    */
   0.0F,
 
+  /* Variable: DEADBAND_ANG
+   * Referenced by: '<Root>/Switch1'
+   */
+  20.0F,
+
   /* Variable: DEADBAND_CH1_1
    * Referenced by:
    *   '<S25>/Switch1'
@@ -799,6 +804,11 @@ P rtP = {
    *   '<S3145>/Switch2'
    */
   20.0F,
+
+  /* Variable: DEADBAND_POS
+   * Referenced by: '<Root>/Switch2'
+   */
+  10.0F,
 
   /* Variable: DEADBAND_spr_CH1_1
    * Referenced by: '<S24>/Switch2'

@@ -22,6 +22,9 @@
 #include "stm32h7xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "UPPER_LOCATION.h"
+#include "sbus.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -69,7 +72,11 @@ extern UART_HandleTypeDef huart7;
 extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
 /* USER CODE BEGIN EV */
-
+extern uint8_t buffer[100];
+extern char UART7_TX_BUF[100];
+extern uint8_t UART7_RX_BUF[100];
+extern uint8_t USART2_RX_BUF[100];
+extern uint8_t uart_index[2];
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -346,7 +353,23 @@ void USART2_IRQHandler(void)
   /* USER CODE END USART2_IRQn 0 */
   HAL_UART_IRQHandler(&huart2);
   /* USER CODE BEGIN USART2_IRQn 1 */
+//				if(uart_index[0] == 0 && buffer[0]!=0x0F){
+//					HAL_UART_Receive_IT(&huart2, buffer, 1);
+//				}else
+//				{
+//        USART2_RX_BUF[uart_index[0]++] = buffer[0];
 
+//        if (uart_index[0] == 24)
+//        {
+//            uart_index[0] = 0;
+//            if (USART2_RX_BUF[0] == 0x0F && USART2_RX_BUF[23] == 0x00) 
+//            {
+//								update_sbus(USART2_RX_BUF);
+//            }
+//        }
+
+//        HAL_UART_Receive_IT(&huart2, buffer, 1);
+//			}
   /* USER CODE END USART2_IRQn 1 */
 }
 
@@ -400,9 +423,29 @@ void UART7_IRQHandler(void)
 {
   /* USER CODE BEGIN UART7_IRQn 0 */
 
+    
   /* USER CODE END UART7_IRQn 0 */
   HAL_UART_IRQHandler(&huart7);
   /* USER CODE BEGIN UART7_IRQn 1 */
+//if(uart_index[1] == 0 && buffer[1]!=0xA5){
+//					HAL_UART_Receive_IT(&huart7, buffer+1, 1);
+//			
+//				}else{
+//        UART7_RX_BUF[uart_index[1]++] = buffer[1];
+
+//        if (uart_index[1] == 16)
+//        {
+//            uart_index[1] = 0;
+//            if (UART7_RX_BUF[0] == 0xA5 && UART7_RX_BUF[15] == 0x5A) 
+//            {
+//								Receive();
+
+//								HAL_UART_Transmit_DMA(&huart7,UART7_RX_BUF,16);
+//            }
+//        }
+
+//        HAL_UART_Receive_IT(&huart7, buffer+1, 1);
+//			}
 
   /* USER CODE END UART7_IRQn 1 */
 }

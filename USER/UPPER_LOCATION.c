@@ -4,7 +4,7 @@
 #define PI 3.1415926
 TGT_COOR TC;
 REAL_COOR RC;
-extern uint8_t UART7_RX_BUF[100];
+extern uint8_t UART2_RX_BUF[100];
 extern motor_measure_t *motor_data[8];
 uint8_t data[10];
 
@@ -15,50 +15,35 @@ double por=2.5;
 double deadband = 50;
 double top = 4000;
 double a1, a2, a3, a4, a5, a6;
+typedef struct {
+	double p_pos;
+	double i_pos;
+	double d_pos;
+	double p_ang;
+	double i_ang;
+	double d_ang;
+}PID_PARA;
 
-// void Receive(uint8_T RX, uint8_T RY, uint8_T Rtheta, uint8_T TX, uint8_T TY, uint8_T Ttheta ,
-//	           uint8_T RX1,uint8_T RY1,uint8_T Rtheta1,uint8_T TX1,uint8_T TY1,uint8_T Ttheta1){
+PID_PARA PID={0.5,0.01,0.00,
+0.37,0,0};
 
 
-//	RC.theta=(Rtheta << 8) | Rtheta1;
-//	RC.x=    (RX << 8)     | RX1;
-//	RC.y=    (RY << 8)     | RY1;
-//	TC.x=    (TX << 8)     | TX1;
-//	TC.y=    (TY << 8)     | TY1;
-//	TC.theta=(Ttheta << 8) |Ttheta1;
-
-////
-////	RC.theta= Rtheta;
-////	RC.x=     RX;
-////	RC.y=     RY;
-////	TC.x=     TX;
-////	TC.y=     TY;
-////	TC.theta=Ttheta;
-////
-////
-////	RC.theta = (RC.theta & 0x8000) ? (RC.theta | 0xFFFF0000) : RC.theta;
-////  RC.x = (RC.x & 0x8000) ? (RC.x | 0xFFFF0000) : RC.x;
-////  RC.y = (RC.y & 0x8000) ? (RC.y | 0xFFFF0000) : RC.y;
-////  TC.x = (TC.x & 0x8000) ? (TC.x | 0xFFFF0000) : TC.x;
-////  TC.y = (TC.y & 0x8000) ? (TC.y | 0xFFFF0000) : TC.y;
-////  TC.theta = (TC.theta & 0x8000) ? (TC.theta | 0xFFFF0000) : TC.theta;
-//}
 void Receive()
 {
-  RC.x = (UART7_RX_BUF[2] << 8) | UART7_RX_BUF[1];
-  RC.y = (UART7_RX_BUF[4] << 8) | UART7_RX_BUF[3];
-  RC.theta = ((float)((UART7_RX_BUF[6] << 8) | UART7_RX_BUF[5]))/10;
+  RC.x = (UART2_RX_BUF[2] << 8) | UART2_RX_BUF[1];
+  RC.y = (UART2_RX_BUF[4] << 8) | UART2_RX_BUF[3];
+  RC.theta = (((UART2_RX_BUF[6] << 8) | UART2_RX_BUF[5]));
 	
 	RC.xll=RC.xlast;
 	RC.yll=RC.ylast;
 	
   RC.xlast = RC.x;
   RC.ylast = RC.y;
-  TC.x = (UART7_RX_BUF[8] << 8) | UART7_RX_BUF[7];
-  TC.y = (UART7_RX_BUF[10] << 8) | UART7_RX_BUF[9];
-  TC.theta = (UART7_RX_BUF[12] << 8) | UART7_RX_BUF[11];
+  TC.x = (UART2_RX_BUF[8] << 8) | UART2_RX_BUF[7];
+  TC.y = (UART2_RX_BUF[10] << 8) | UART2_RX_BUF[9];
+  TC.theta = (UART2_RX_BUF[12] << 8) | UART2_RX_BUF[11];
 
-  RC.action = (UART7_RX_BUF[14] << 8) | UART7_RX_BUF[13];
+  RC.action = (UART2_RX_BUF[14] << 8) | UART2_RX_BUF[13];
 }
 void Reach_TGT()
 {
@@ -66,15 +51,15 @@ void Reach_TGT()
 	RC.distlast=RC.dist;
   RC.dist = sqrt(pow(TC.y - RC.y, 2) + pow((TC.x - RC.x), 2));
 	rtU.distance=RC.dist;
-	rtU.ang_err=RC.theta;
-	rtP.POS_P=50;
-	rtP.POS_I=5;
-	rtP.POS_D=0;
-	rtP.POS_A_P=200;
-	rtP.POS_A_I=0;
-	rtP.POS_A_D=0;
-  TC.XYtheta = atan2(TC.y - RC.y, TC.x - RC.x) * 180 / PI;
 
+	rtP.POS_P	=	PID.p_pos;
+	rtP.POS_I	=	PID.i_pos;
+	rtP.POS_D	=	PID.d_pos;	
+	rtP.POS_A_P=PID.p_ang;
+	rtP.POS_A_I=PID.i_ang;
+	rtP.POS_A_D=PID.d_ang;
+  TC.XYtheta = atan2(TC.y - RC.y, TC.x - RC.x) * 1800 / PI;
+	deadband=rtP.DEADBAND_POS;
 //  if (fabs((double)RC.dist) >= deadband && fabs((double)RC.dist) < 300)
 //  {
 //		factors1=2;
@@ -90,7 +75,7 @@ void Reach_TGT()
 //    RC.dist = top;
 //  }
 
-//  RC.RE_theta = TC.XYtheta - RC.theta;
+
 //  if (fabs((double)RC.RE_theta) < 1)
 //  {
 //    RC.RE_theta = 0;
@@ -100,8 +85,8 @@ void Reach_TGT()
 //		RC.Vx=0;
 //		RC.Vy=0;
 //  }else{
-  RC.Vx = (rtY.vel_out) *cos(RC.RE_theta * PI / 180);
-  RC.Vy = (rtY.vel_out) *sin(RC.RE_theta * PI / 180);
+  RC.Vx = (rtY.vel_out) *cos(RC.RE_theta * PI / 1800);
+  RC.Vy = (rtY.vel_out) *sin(RC.RE_theta * PI / 1800);
 //	}
   //  a1=cos(RC.RE_theta*PI/180);
   //	a2=sin(RC.RE_theta*PI/180);
@@ -110,12 +95,15 @@ void Reach_TGT()
   //			RC.Vx=0;
   //			RC.Vy=0;
   //		}
-  if (TC.theta - RC.theta > 181)
-    TC.theta = TC.theta - 360;
-  if (TC.theta - RC.theta < -181)
-    TC.theta = TC.theta + 360;
-  TC.theta = TC.theta % 360;
-
+	if(RC.theta>1800)
+		RC.theta-=3600;
+  if (TC.theta - RC.theta > 1810)
+    TC.theta = TC.theta - 3600;
+  if (TC.theta - RC.theta < -1810)
+    TC.theta = TC.theta + 3600;
+  TC.theta = TC.theta % 3600;
+	rtU.ang_err=TC.theta-RC.theta;
+	RC.RE_theta = TC.XYtheta - RC.theta;
 //  if (fabs((double)TC.theta - RC.theta) > 3)
 //    RC.omega = (TC.theta - RC.theta) * factors2;
 //  else

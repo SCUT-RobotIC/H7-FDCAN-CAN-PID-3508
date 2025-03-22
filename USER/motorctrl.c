@@ -1,9 +1,12 @@
 #include "motorctrl.h"
 #include "UPPER_LOCATION.h"
-
+#include "sbus.h"
 
 #define PI 3.1415926
-#define MAXVEL 3000
+#define MAXVEL 4000
+#define m6020_2_1_brake 5771-90*8191/360
+#define m6020_2_2_brake 3021-30*8191/360
+#define m6020_2_3_brake	3057+30*8191/360
 ang_dir MotorSignal[3];
 extern FDCAN_HandleTypeDef hfdcan1; // CAN����1
 extern FDCAN_HandleTypeDef hfdcan2;
@@ -16,23 +19,39 @@ double tor_output[3*8] = {0};
 int BrakeAng[4] = {0};
 double mult = 1;
 int dirflag=0;
-
+int Vel_Deadband[3]={20,20,20};
+enum {
+Dead_Vx,Dead_Vy,Dead_Omega
+};
 
 void ctrlmotor(double Vx, double Vy, double omega,int brake) {
-	if(fabs(Vx)<40)
-		Vx=0;
-	if(fabs(Vy)<40)
-		Vy=0;
-	if(fabs(omega)<40)
-		omega=0;
+	
+		if(fabs(Vx)<Vel_Deadband[Dead_Vx])
+			Vx=0;
+		if(fabs(Vy)<Vel_Deadband[Dead_Vy])
+			Vy=0;
+		if(fabs(omega)<Vel_Deadband[Dead_Omega])
+			omega=0;
+	
 	if(brake==1)
 	{
 		rtU.target_CH2_1=0;
 		rtU.target_CH2_2=0;
 		rtU.target_CH2_3=0;//驻停必要操作
-		set_target(2,5,(-((int)(MotorSignal[0].thetas)/360)*360)*8191/(360)-90*8191/360+5771);
-		set_target(2,6,(-((int)(MotorSignal[0].thetas)/360)*360)*8191/(360)-60*8191/360+2346);
-		set_target(2,7,(-((int)(MotorSignal[0].thetas)/360)*360)*8191/(360)+60*8191/360+3057);
+		if((int)MotorSignal[0].thetas%360>180)
+			set_target(2,5,(-((int)(MotorSignal[0].thetas)/360)*360)*8191/(360)-8191+m6020_2_1_brake);
+		else
+			set_target(2,5,(-((int)(MotorSignal[0].thetas)/360)*360)*8191/(360)+m6020_2_1_brake);
+		
+		if((int)MotorSignal[1].thetas%360>180)
+			set_target(2,6,(-((int)(MotorSignal[1].thetas)/360)*360)*8191/(360)-8191+m6020_2_2_brake);
+		else
+			set_target(2,6,(-((int)(MotorSignal[1].thetas)/360)*360)*8191/(360)+m6020_2_2_brake);
+		
+		if((int)MotorSignal[2].thetas%360>180)
+			set_target(2,7,(-((int)(MotorSignal[2].thetas)/360)*360)*8191/(360)-8191+m6020_2_3_brake);
+		else
+			set_target(2,7,(-((int)(MotorSignal[2].thetas)/360)*360)*8191/(360)+m6020_2_3_brake);
 		return;
 	}
 	if(Vx==0&&Vy==0&&omega==0){
@@ -60,7 +79,7 @@ void ctrlmotor(double Vx, double Vy, double omega,int brake) {
 		  MotorSignal[i].thetal=MotorSignal[i].thetan;				
 	 }
 	set_target(2,5,-MotorSignal[0].thetas*8191/(360)+5771);
-	set_target(2,6,-MotorSignal[1].thetas*8191/(360)+2346);
+	set_target(2,6,-MotorSignal[1].thetas*8191/(360)+3021);
 	set_target(2,7,-MotorSignal[2].thetas*8191/(360)+3097);
 	 while( (fabs(sqrt(pow(Vx-omega,2)+pow(Vy,2))*mult)>MAXVEL)||
 	 			(fabs(sqrt(pow((Vx+omega*sin(30.0*PI/180.0)),2)+pow((Vy-omega*cos(30.0*PI/180.0)),2))*mult)>MAXVEL)||
@@ -401,9 +420,9 @@ void set_mode(int mode_CH1_1, int mode_CH1_2, int mode_CH1_3, int mode_CH1_4, in
 }
 
 void set_reset_status(){	
-	if(rtU.ang_err<2)
+	if(fabs(rtU.ang_err)<15)
 		rtU.reset_status_ang=1-rtU.reset_status_ang;
-	if(rtU.distance<50)
+	if(fabs(rtU.distance)<30)
 		rtU.reset_status_dist=1-rtU.reset_status_dist;
 	
 	if(//(fabs(rtU.target_CH1_1-motor_data_can1[0]->speed_rpm)<20&&rtU.status_CH1_1==1)||

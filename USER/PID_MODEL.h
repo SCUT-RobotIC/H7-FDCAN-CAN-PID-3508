@@ -9,7 +9,7 @@
  *
  * Model version                  : 4.8
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Sun Mar  9 21:39:46 2025
+ * C/C++ source code generated on : Mon Mar 10 17:17:40 2025
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex-M
@@ -912,6 +912,9 @@ struct P_ {
   real32_T ANG_S_P_CH3_7;              /* Variable: ANG_S_P_CH3_7
                                         * Referenced by: '<S3238>/Proportional Gain'
                                         */
+  real32_T DEADBAND_ANG;               /* Variable: DEADBAND_ANG
+                                        * Referenced by: '<Root>/Switch1'
+                                        */
   real32_T DEADBAND_CH1_1;             /* Variable: DEADBAND_CH1_1
                                         * Referenced by:
                                         *   '<S25>/Switch1'
@@ -1016,6 +1019,9 @@ struct P_ {
                                         * Referenced by:
                                         *   '<S3145>/Switch1'
                                         *   '<S3145>/Switch2'
+                                        */
+  real32_T DEADBAND_POS;               /* Variable: DEADBAND_POS
+                                        * Referenced by: '<Root>/Switch2'
                                         */
   real32_T DEADBAND_spr_CH1_1;         /* Variable: DEADBAND_spr_CH1_1
                                         * Referenced by: '<S24>/Switch2'

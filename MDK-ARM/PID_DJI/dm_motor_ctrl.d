@@ -33,6 +33,7 @@ pid_dji\dm_motor_ctrl.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_flash
 pid_dji\dm_motor_ctrl.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_hsem.h
 pid_dji\dm_motor_ctrl.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_i2c.h
 pid_dji\dm_motor_ctrl.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_i2c_ex.h
+pid_dji\dm_motor_ctrl.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_iwdg.h
 pid_dji\dm_motor_ctrl.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pwr.h
 pid_dji\dm_motor_ctrl.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pwr_ex.h
 pid_dji\dm_motor_ctrl.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h

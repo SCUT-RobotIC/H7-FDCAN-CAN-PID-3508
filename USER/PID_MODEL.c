@@ -9,7 +9,7 @@
  *
  * Model version                  : 4.8
  * Simulink Coder version         : 24.1 (R2024a) 19-Nov-2023
- * C/C++ source code generated on : Sun Mar  9 21:39:46 2025
+ * C/C++ source code generated on : Mon Mar 10 17:17:40 2025
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex-M
@@ -129,15 +129,16 @@ void PID_MODEL_step(void)
   real32_T rtb_FilterCoefficient_jq;
   real32_T rtb_FilterCoefficient_lb;
   real32_T rtb_Integrator_ow;
-  real32_T rtb_Switch1;
+  real32_T rtb_Switch1_bt;
   real32_T rtb_Switch2_ft;
   real32_T u0;
 
   /* Switch: '<Root>/Switch2' incorporates:
+   *  Abs: '<Root>/Abs'
    *  Constant: '<Root>/Constant'
    *  Inport: '<Root>/distance'
    */
-  if (rtU.distance > 50.0F) {
+  if ((real32_T)fabs(rtU.distance) > rtP.DEADBAND_POS) {
     rtb_Integrator_ow = rtU.distance;
   } else {
     rtb_Integrator_ow = 0.0F;
@@ -192,13 +193,14 @@ void PID_MODEL_step(void)
   /* End of Saturate: '<S3340>/Saturation' */
 
   /* Switch: '<Root>/Switch1' incorporates:
+   *  Abs: '<Root>/Abs1'
    *  Constant: '<Root>/Constant1'
    *  Inport: '<Root>/ang_err'
    */
-  if (rtU.ang_err > 1.0F) {
-    rtb_Switch1 = rtU.ang_err;
+  if ((real32_T)fabs(rtU.ang_err) > rtP.DEADBAND_ANG) {
+    rtb_Switch1_bt = rtU.ang_err;
   } else {
-    rtb_Switch1 = 0.0F;
+    rtb_Switch1_bt = 0.0F;
   }
 
   /* End of Switch: '<Root>/Switch1' */
@@ -225,14 +227,14 @@ void PID_MODEL_step(void)
    *  Gain: '<S3376>/Derivative Gain'
    *  Sum: '<S3378>/SumD'
    */
-  rtb_FilterCoefficient_lb = (rtP.POS_A_D * rtb_Switch1 - rtDW.Filter_DSTATE_l) *
-    100.0F;
+  rtb_FilterCoefficient_lb = (rtP.POS_A_D * rtb_Switch1_bt -
+    rtDW.Filter_DSTATE_l) * 100.0F;
 
   /* Sum: '<S3392>/Sum' incorporates:
    *  DiscreteIntegrator: '<S3383>/Integrator'
    *  Gain: '<S3388>/Proportional Gain'
    */
-  u0 = (rtP.POS_A_P * rtb_Switch1 + rtDW.Integrator_DSTATE_e) +
+  u0 = (rtP.POS_A_P * rtb_Switch1_bt + rtDW.Integrator_DSTATE_e) +
     rtb_FilterCoefficient_lb;
 
   /* Saturate: '<S3390>/Saturation' */
@@ -6124,7 +6126,7 @@ void PID_MODEL_step(void)
    *  Gain: '<S3380>/Integral Gain'
    *  Inport: '<Root>/reset_status_ang'
    */
-  rtDW.Integrator_DSTATE_e += rtP.POS_A_I * rtb_Switch1 * 0.001F;
+  rtDW.Integrator_DSTATE_e += rtP.POS_A_I * rtb_Switch1_bt * 0.001F;
   if (rtU.reset_status_ang > 0.0F) {
     rtDW.Integrator_PrevResetState_k = 1;
     rtDW.Filter_PrevResetState_p = 1;
